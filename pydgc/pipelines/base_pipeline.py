@@ -2,6 +2,7 @@
 import time
 import os.path as osp
 import traceback
+from argparse import Namespace
 
 import torch
 import numpy as np
@@ -19,13 +20,18 @@ from ..utils import load_dataset_specific_cfg, setup_seed, get_formatted_time, d
 
 
 class BasePipeline(ABC):
-    def __init__(self, cfg_file_path: str, dataset_name: str):
+    def __init__(self, args: Namespace):
         """
-        :param cfg_file_path: path of config
-        :param dataset_name: name of dataset
+        Standardized pipeline for deep graph clustering
+
+        :param args: command line arguments for setting values frequently changed
         """
-        self.cfg_file_path = cfg_file_path
-        self.dataset_name = dataset_name
+        self.args = args
+        self.cfg_file_path = "config.yaml" if not hasattr(args, "cfg_file_path") else args.cfg_file_path
+        if hasattr(args, "dataset_name"):
+            self.dataset_name = args.dataset_name
+        else:
+            raise ValueError("Please specify dataset name! You can specify it in run.py or use --dataset_name!")
         self.cfg = None
         self.logger = None
         self.device = None
@@ -44,6 +50,14 @@ class BasePipeline(ABC):
         if isinstance(cfg, CN):
             self.cfg = cfg
         self.cfg.dataset.name = self.dataset_name
+        if hasattr(self.args, 'drop_edge'):
+            self.cfg.dataset.augmentation.drop_edge = float(self.args.drop_edge)
+        if hasattr(self.args, 'drop_feature'):
+            self.cfg.dataset.augmentation.drop_feature = float(self.args.drop_feature)
+        if hasattr(self.args, 'add_edge'):
+            self.cfg.dataset.augmentation.add_edge = float(self.args.add_edge)
+        if hasattr(self.args, 'add_noise'):
+            self.cfg.dataset.augmentation.add_noise = float(self.args.add_noise)
 
     def load_logger(self):
         log_file = osp.join(self.cfg.logger.dir, f'{get_formatted_time()}.log')

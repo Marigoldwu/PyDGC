@@ -2,14 +2,9 @@
 from pydgc.pipelines import GAESSCPipeline
 from pydgc.utils import parse_arguments
 
-datasets = ["ACM"]
+datasets = ["WIKI", "CORA", "ACM", "CITE", "DBLP", "PUBMED", "ARXIV", "BLOG", "FLICKR", "ROMAN", "USPS_3", "HHAR_3"]
 
-for datasets in datasets:
-    args_default = {
-        'cfg_file_path': 'config.yaml',
-        'dataset_name': datasets
-    }
-    args = parse_arguments(args_default)
-
+for dataset in datasets:
+    args = parse_arguments(dataset)
     pipeline = GAESSCPipeline(args)
     pipeline.run()
