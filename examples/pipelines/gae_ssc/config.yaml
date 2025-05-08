@@ -1,0 +1,188 @@
+ACM:
+    device: cuda
+    logger:
+        name: ACM
+        mode: both
+        dir: ./log/ACM/
+    dataset:
+        dir: ../data/ACM/
+        augmentation:
+            add_self_loops: true
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+    model:
+        gnn_type: gcn
+        dims: [ 256, 16 ]
+        act: relu
+        act_last: false
+    train:
+        pretrain:
+            seed: 0
+            rounds: 1
+            dir: ./pretrain/ACM/
+            max_epoch: 30
+            lr: 1e-3
+        seed: 0
+        rounds: 1
+        max_epoch: 20
+        lr: 1e-3
+        alpha: 1e-3
+    visualize:
+        tsne: false
+        umap: false
+        heatmap: false
+        loss: false
+        dir: ./visualization/ACM/
+        when: end
+    evaluate:
+        each: true
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+CITE:
+    device: cuda
+    logger:
+        name: CITE
+        mode: both
+        dir: ./log/CITE/
+    dataset:
+        dir: ../data/CITE/
+        augmentation:
+            add_self_loops: true
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+    model:
+        gnn_type: gcn
+        dims: [ 256, 16 ]
+        act: relu
+        act_last: false
+    train:
+        pretrain:
+            seed: -1
+            rounds: 1
+            dir: ./pretrain/CITE/
+            max_epoch: 50
+            lr: 1e-3
+            weight_decay: 5e-3
+        seed: -1
+        rounds: 10
+        max_epoch: 50
+        lr: 1e-3
+        weight_decay: 5e-3
+        alpha: 10
+    visualize:
+        tsne: false
+        umap: false
+        heatmap: false
+        loss: false
+    evaluate:
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+CORA:
+    device: cuda
+    logger:
+        name: CORA
+        mode: both
+        dir: ./log/CORA/
+    dataset:
+        dir: ../data/CORA/
+        augmentation:
+            add_self_loops: true
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+    model:
+        gnn_type: gcn
+        dims: [ 256, 16 ]
+        act: relu
+        act_last: false
+    train:
+        pretrain:
+            seed: -1
+            rounds: 1
+            dir: ./pretrain/CORA/
+            max_epoch: 50
+            lr: 1e-3
+            weight_decay: 5e-3
+        seed: -1
+        rounds: 10
+        max_epoch: 50
+        lr: 1e-3
+        weight_decay: 5e-3
+        alpha: 10
+    visualize:
+        tsne: false
+        umap: false
+        heatmap: false
+        loss: false
+    evaluate:
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+DBLP:
+    device: cuda
+    logger:
+        name: DBLP
+        mode: both
+        dir: ./log/DBLP/
+    dataset:
+        dir: ../data/DBLP/
+        augmentation:
+            add_self_loops: true
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+    model:
+        gnn_type: gcn
+        dims: [ 256, 16 ]
+        act: relu
+        act_last: false
+    train:
+        pretrain:
+            seed: -1
+            rounds: 1
+            dir: ./pretrain/DBLP/
+            max_epoch: 50
+            lr: 1e-3
+            weight_decay: 5e-3
+        seed: -1
+        rounds: 10
+        max_epoch: 50
+        lr: 1e-3
+        weight_decay: 5e-3
+        alpha: 10
+    visualize:
+        tsne: false
+        umap: false
+        heatmap: false
+        loss: false
+    evaluate:
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true

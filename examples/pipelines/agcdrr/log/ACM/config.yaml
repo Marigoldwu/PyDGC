@@ -1,0 +1,49 @@
+dataset:
+    augmentation:
+        add_edge: 0.0
+        add_noise: 0.0
+        add_self_loops: true
+        drop_edge: 0.0
+        drop_feature: 0.0
+        pca_dim: 50
+    dir: ../data/ACM/
+    n_clusters: 3
+    num_features: 1870
+    num_nodes: 3025
+device: cuda
+evaluate:
+    acc: true
+    ari: true
+    com: true
+    each: true
+    f1: true
+    gre: true
+    hom: true
+    nmi: true
+    pur: true
+    sc: true
+logger:
+    dir: ./log/ACM/
+    mode: both
+    name: ACM
+model:
+    dims:
+    - 50
+    - 1000
+    - 500
+    - 500
+    - 500
+train:
+    lr: 5e-4
+    max_epoch: 200
+    reg_lambda: 1
+    rounds: 1
+    seed: 0
+    view_lr: 1e-4
+visualize:
+    dir: ./visualization/ACM/
+    heatmap: false
+    loss: true
+    tsne: true
+    umap: false
+    when: end

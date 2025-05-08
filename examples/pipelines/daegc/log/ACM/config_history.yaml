@@ -1,0 +1,46 @@
+dataset:
+    add_self_loops: true
+    dense_adj: true
+    dir: ../data/ACM/
+    n_clusters: 3
+    t: 2
+device: cuda
+evaluate:
+    acc: true
+    ari: true
+    com: true
+    each: true
+    f1: true
+    hom: true
+    nmi: true
+    pur: true
+logger:
+    dir: ./log/ACM/
+    mode: both
+    name: ACM
+model:
+    dims:
+    - 1870
+    - 256
+    - 16
+train:
+    gamma: 10
+    lr: 1e-3
+    max_epoch: 50
+    pretrain:
+        dir: ./pretrain/ACM/
+        lr: 1e-3
+        max_epoch: 50
+        rounds: 1
+        seed: 0
+        weight_decay: 5e-3
+    rounds: 1
+    seed: 0
+    weight_decay: 5e-3
+visualize:
+    dir: ./visualization/ACM/
+    heatmap: false
+    loss: true
+    tsne: true
+    umap: false
+    when: end

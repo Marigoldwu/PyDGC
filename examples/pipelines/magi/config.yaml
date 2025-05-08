@@ -1,0 +1,99 @@
+CORA:
+    device: cuda
+    logger:
+        name: CORA
+        mode: both
+        dir: ./log/CORA/
+    dataset:
+        dir: ../data/CORA/
+        augmentation:
+            add_self_loops: false
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+        wt: 100
+        wl: 2
+    model:
+        dims:
+            encoder: [512]
+            projection:
+        dropout: 0.5
+        tau: 0.3
+        ns: 0.5
+    train:
+        seed: -1
+        rounds: 1
+        max_epoch: 1
+        lr: 5e-4
+        weight_decay: 1e-3
+    visualize:
+        tsne: true
+        umap: false
+        heatmap: false
+        loss: true
+        dir: ./visualization/CORA/
+        when: end
+    evaluate:
+        each: true
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+        sc: true
+        gre: true
+ARXIV:
+    device: cuda
+    logger:
+        name: CORA
+        mode: both
+        dir: ./log/ARXIV/
+    dataset:
+        dir: ../data/ARXIV/
+        augmentation:
+            add_self_loops: false
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+        wt: 20
+        wl: 5
+        size: [10, 10]
+    model:
+        dims:
+            encoder: [1024, 256]
+            projection:
+        dropout: 0
+        tau: 0.9
+        ns: 0.1
+    train:
+        seed: -1
+        rounds: 1
+        max_epoch: 1
+        batchsize: 2048
+        lr: 5e-4
+        weight_decay: 0
+        kmeans:
+            device: cuda
+            batch: -1
+    visualize:
+        tsne: true
+        umap: false
+        heatmap: false
+        loss: true
+        dir: ./visualization/ARXIV/
+        when: end
+    evaluate:
+        each: true
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+        sc: true
+        gre: true

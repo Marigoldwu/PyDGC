@@ -1,0 +1,46 @@
+dataset:
+    add_self_loops: true
+    dense_adj: true
+    dir: ../data/CITE/
+    n_clusters: 6
+    t: 2
+device: cuda
+evaluate:
+    acc: true
+    ari: true
+    com: true
+    each: true
+    f1: true
+    hom: true
+    nmi: true
+    pur: true
+logger:
+    dir: ./log/CITE/
+    mode: both
+    name: CITE
+model:
+    dims:
+    - 3703
+    - 256
+    - 16
+train:
+    gamma: 10
+    lr: 1e-4
+    max_epoch: 100
+    pretrain:
+        dir: ./pretrain/CITE/
+        lr: 5e-3
+        max_epoch: 30
+        rounds: 1
+        seed: -1
+        weight_decay: 5e-3
+    rounds: 10
+    seed: -1
+    weight_decay: 5e-3
+visualize:
+    dir: ./visualization/CITE/
+    heatmap: false
+    loss: false
+    tsne: false
+    umap: false
+    when: end

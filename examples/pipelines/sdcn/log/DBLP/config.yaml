@@ -1,0 +1,48 @@
+dataset:
+    add_self_loops: true
+    dir: ../data/DBLP/
+    n_clusters: 4
+device: cuda
+evaluate:
+    acc: true
+    ari: true
+    com: true
+    each: true
+    f1: true
+    hom: true
+    nmi: true
+    pur: true
+logger:
+    dir: ./log/DBLP/
+    mode: both
+    name: DBLP
+model:
+    act: relu
+    act_last: false
+    dims:
+    - 334
+    - 500
+    - 500
+    - 2000
+    - 10
+train:
+    alpha: 0.1
+    beta: 0.01
+    lr: 1e-3
+    max_epoch: 50
+    pretrain:
+        dir: ./pretrain/DBLP/
+        lr: 1e-3
+        max_epoch: 30
+        rounds: 1
+        seed: 325
+    rounds: 10
+    seed: -1
+    sigma: 0.5
+visualize:
+    dir: ./visualization/DBLP/
+    heatmap: false
+    loss: true
+    tsne: true
+    umap: false
+    when: end
