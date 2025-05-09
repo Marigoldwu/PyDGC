@@ -1,3 +1,129 @@
+WIKI:
+    device: cuda
+    logger:
+        name: ACM
+        mode: both
+        dir: ./log/ACM/
+    dataset:
+        dir: ../data/ACM/
+        augmentation:
+            add_self_loops: false
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+            pca_dim: 100
+        alpha_value: 0.2
+    model:
+        dims:
+            ae: [ 128, 256, 512, 20 ]
+            igae: [ 128, 256, 20]
+        v: 1.0
+    train:
+        pretrain:
+            ae:
+                dir: ./pretrain/ACM/
+                max_epoch: 30
+                lr: 1e-3
+            igae:
+                dir: ./pretrain/ACM/
+                max_epoch: 30
+                lr: 1e-3
+                gamma_value: 0.1
+            both:
+                dir: ./pretrain/ACM/
+                max_epoch: 100
+                lr: 1e-3
+                alpha: 0.1
+                beta: 0.01
+                omega: 0.1
+        seed: 1
+        rounds: 1
+        max_epoch: 400
+        lr: 1e-4
+        gamma_value: 1000
+        lambda_value: 10
+    visualize:
+        tsne: true
+        umap: true
+        heatmap: true
+        loss: true
+        dir: ./visualization/ACM/
+        when: end
+    evaluate:
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+        sc: true
+        gre: true
+CORA:
+    device: cuda
+    logger:
+        name: ACM
+        mode: both
+        dir: ./log/ACM/
+    dataset:
+        dir: ../data/ACM/
+        augmentation:
+            add_self_loops: false
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+            pca_dim: 100
+        alpha_value: 0.2
+    model:
+        dims:
+            ae: [ 128, 256, 512, 20 ]
+            igae: [ 128, 256, 20]
+        v: 1.0
+    train:
+        pretrain:
+            ae:
+                dir: ./pretrain/ACM/
+                max_epoch: 30
+                lr: 1e-3
+            igae:
+                dir: ./pretrain/ACM/
+                max_epoch: 30
+                lr: 1e-3
+                gamma_value: 0.1
+            both:
+                dir: ./pretrain/ACM/
+                max_epoch: 100
+                lr: 1e-3
+                alpha: 0.1
+                beta: 0.01
+                omega: 0.1
+        seed: 1
+        rounds: 1
+        max_epoch: 400
+        lr: 1e-4
+        gamma_value: 1000
+        lambda_value: 10
+    visualize:
+        tsne: true
+        umap: true
+        heatmap: true
+        loss: true
+        dir: ./visualization/ACM/
+        when: end
+    evaluate:
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+        sc: true
+        gre: true
 ACM:
     device: cuda
     logger:
@@ -45,13 +171,580 @@ ACM:
         lambda_value: 10
     visualize:
         tsne: true
-        umap: false
-        heatmap: false
+        umap: true
+        heatmap: true
         loss: true
         dir: ./visualization/ACM/
         when: end
     evaluate:
-        each: true
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+        sc: true
+        gre: true
+CITE:
+    device: cuda
+    logger:
+        name: ACM
+        mode: both
+        dir: ./log/ACM/
+    dataset:
+        dir: ../data/ACM/
+        augmentation:
+            add_self_loops: false
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+            pca_dim: 100
+        alpha_value: 0.2
+    model:
+        dims:
+            ae: [ 128, 256, 512, 20 ]
+            igae: [ 128, 256, 20]
+        v: 1.0
+    train:
+        pretrain:
+            ae:
+                dir: ./pretrain/ACM/
+                max_epoch: 30
+                lr: 1e-3
+            igae:
+                dir: ./pretrain/ACM/
+                max_epoch: 30
+                lr: 1e-3
+                gamma_value: 0.1
+            both:
+                dir: ./pretrain/ACM/
+                max_epoch: 100
+                lr: 1e-3
+                alpha: 0.1
+                beta: 0.01
+                omega: 0.1
+        seed: 1
+        rounds: 1
+        max_epoch: 400
+        lr: 1e-4
+        gamma_value: 1000
+        lambda_value: 10
+    visualize:
+        tsne: true
+        umap: true
+        heatmap: true
+        loss: true
+        dir: ./visualization/ACM/
+        when: end
+    evaluate:
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+        sc: true
+        gre: true
+DBLP:
+    device: cuda
+    logger:
+        name: ACM
+        mode: both
+        dir: ./log/ACM/
+    dataset:
+        dir: ../data/ACM/
+        augmentation:
+            add_self_loops: false
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+            pca_dim: 100
+        alpha_value: 0.2
+    model:
+        dims:
+            ae: [ 128, 256, 512, 20 ]
+            igae: [ 128, 256, 20]
+        v: 1.0
+    train:
+        pretrain:
+            ae:
+                dir: ./pretrain/ACM/
+                max_epoch: 30
+                lr: 1e-3
+            igae:
+                dir: ./pretrain/ACM/
+                max_epoch: 30
+                lr: 1e-3
+                gamma_value: 0.1
+            both:
+                dir: ./pretrain/ACM/
+                max_epoch: 100
+                lr: 1e-3
+                alpha: 0.1
+                beta: 0.01
+                omega: 0.1
+        seed: 1
+        rounds: 1
+        max_epoch: 400
+        lr: 1e-4
+        gamma_value: 1000
+        lambda_value: 10
+    visualize:
+        tsne: true
+        umap: true
+        heatmap: true
+        loss: true
+        dir: ./visualization/ACM/
+        when: end
+    evaluate:
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+        sc: true
+        gre: true
+PUBMED:
+    device: cuda
+    logger:
+        name: ACM
+        mode: both
+        dir: ./log/ACM/
+    dataset:
+        dir: ../data/ACM/
+        augmentation:
+            add_self_loops: false
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+            pca_dim: 100
+        alpha_value: 0.1
+    model:
+        dims:
+            ae: [ 128, 256, 512, 20 ]
+            igae: [ 128, 256, 20]
+        v: 1.0
+    train:
+        pretrain:
+            ae:
+                dir: ./pretrain/ACM/
+                max_epoch: 30
+                lr: 1e-3
+            igae:
+                dir: ./pretrain/ACM/
+                max_epoch: 30
+                lr: 1e-3
+                gamma_value: 0.1
+            both:
+                dir: ./pretrain/ACM/
+                max_epoch: 100
+                lr: 1e-3
+                alpha: 0.1
+                beta: 0.01
+                omega: 0.1
+        seed: 1
+        rounds: 1
+        max_epoch: 400
+        lr: 1e-4
+        gamma_value: 1000
+        lambda_value: 10
+    visualize:
+        tsne: true
+        umap: true
+        heatmap: true
+        loss: true
+        dir: ./visualization/ACM/
+        when: end
+    evaluate:
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+        sc: true
+        gre: true
+ARXIV:
+    device: cuda
+    logger:
+        name: ACM
+        mode: both
+        dir: ./log/ACM/
+    dataset:
+        dir: ../data/ACM/
+        augmentation:
+            add_self_loops: false
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+            pca_dim: 100
+        alpha_value: 0.2
+    model:
+        dims:
+            ae: [ 128, 256, 512, 20 ]
+            igae: [ 128, 256, 20]
+        v: 1.0
+    train:
+        pretrain:
+            ae:
+                dir: ./pretrain/ACM/
+                max_epoch: 30
+                lr: 1e-3
+            igae:
+                dir: ./pretrain/ACM/
+                max_epoch: 30
+                lr: 1e-3
+                gamma_value: 0.1
+            both:
+                dir: ./pretrain/ACM/
+                max_epoch: 100
+                lr: 1e-3
+                alpha: 0.1
+                beta: 0.01
+                omega: 0.1
+        seed: 1
+        rounds: 1
+        max_epoch: 400
+        lr: 1e-4
+        gamma_value: 1000
+        lambda_value: 10
+    visualize:
+        tsne: true
+        umap: true
+        heatmap: true
+        loss: true
+        dir: ./visualization/ACM/
+        when: end
+    evaluate:
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+        sc: true
+        gre: true
+BLOG:
+    device: cuda
+    logger:
+        name: ACM
+        mode: both
+        dir: ./log/ACM/
+    dataset:
+        dir: ../data/ACM/
+        augmentation:
+            add_self_loops: false
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+            pca_dim: 100
+        alpha_value: 0.2
+    model:
+        dims:
+            ae: [ 128, 256, 512, 20 ]
+            igae: [ 128, 256, 20]
+        v: 1.0
+    train:
+        pretrain:
+            ae:
+                dir: ./pretrain/ACM/
+                max_epoch: 30
+                lr: 1e-3
+            igae:
+                dir: ./pretrain/ACM/
+                max_epoch: 30
+                lr: 1e-3
+                gamma_value: 0.1
+            both:
+                dir: ./pretrain/ACM/
+                max_epoch: 100
+                lr: 1e-3
+                alpha: 0.1
+                beta: 0.01
+                omega: 0.1
+        seed: 1
+        rounds: 1
+        max_epoch: 400
+        lr: 1e-4
+        gamma_value: 1000
+        lambda_value: 10
+    visualize:
+        tsne: true
+        umap: true
+        heatmap: true
+        loss: true
+        dir: ./visualization/ACM/
+        when: end
+    evaluate:
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+        sc: true
+        gre: true
+FLICKR:
+    device: cuda
+    logger:
+        name: ACM
+        mode: both
+        dir: ./log/ACM/
+    dataset:
+        dir: ../data/ACM/
+        augmentation:
+            add_self_loops: false
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+            pca_dim: 100
+        alpha_value: 0.2
+    model:
+        dims:
+            ae: [ 128, 256, 512, 20 ]
+            igae: [ 128, 256, 20]
+        v: 1.0
+    train:
+        pretrain:
+            ae:
+                dir: ./pretrain/ACM/
+                max_epoch: 30
+                lr: 1e-3
+            igae:
+                dir: ./pretrain/ACM/
+                max_epoch: 30
+                lr: 1e-3
+                gamma_value: 0.1
+            both:
+                dir: ./pretrain/ACM/
+                max_epoch: 100
+                lr: 1e-3
+                alpha: 0.1
+                beta: 0.01
+                omega: 0.1
+        seed: 1
+        rounds: 1
+        max_epoch: 400
+        lr: 1e-4
+        gamma_value: 1000
+        lambda_value: 10
+    visualize:
+        tsne: true
+        umap: true
+        heatmap: true
+        loss: true
+        dir: ./visualization/ACM/
+        when: end
+    evaluate:
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+        sc: true
+        gre: true
+ROMAN:
+    device: cuda
+    logger:
+        name: ACM
+        mode: both
+        dir: ./log/ACM/
+    dataset:
+        dir: ../data/ACM/
+        augmentation:
+            add_self_loops: false
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+            pca_dim: 100
+        alpha_value: 0.2
+    model:
+        dims:
+            ae: [ 128, 256, 512, 20 ]
+            igae: [ 128, 256, 20]
+        v: 1.0
+    train:
+        pretrain:
+            ae:
+                dir: ./pretrain/ACM/
+                max_epoch: 30
+                lr: 1e-3
+            igae:
+                dir: ./pretrain/ACM/
+                max_epoch: 30
+                lr: 1e-3
+                gamma_value: 0.1
+            both:
+                dir: ./pretrain/ACM/
+                max_epoch: 100
+                lr: 1e-3
+                alpha: 0.1
+                beta: 0.01
+                omega: 0.1
+        seed: 1
+        rounds: 1
+        max_epoch: 400
+        lr: 1e-4
+        gamma_value: 1000
+        lambda_value: 10
+    visualize:
+        tsne: true
+        umap: true
+        heatmap: true
+        loss: true
+        dir: ./visualization/ACM/
+        when: end
+    evaluate:
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+        sc: true
+        gre: true
+USPS_3:
+    device: cuda
+    logger:
+        name: ACM
+        mode: both
+        dir: ./log/ACM/
+    dataset:
+        dir: ../data/ACM/
+        augmentation:
+            add_self_loops: false
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+            pca_dim: 100
+        alpha_value: 0.2
+    model:
+        dims:
+            ae: [ 128, 256, 512, 20 ]
+            igae: [ 128, 256, 20]
+        v: 1.0
+    train:
+        pretrain:
+            ae:
+                dir: ./pretrain/ACM/
+                max_epoch: 30
+                lr: 1e-3
+            igae:
+                dir: ./pretrain/ACM/
+                max_epoch: 30
+                lr: 1e-3
+                gamma_value: 0.1
+            both:
+                dir: ./pretrain/ACM/
+                max_epoch: 100
+                lr: 1e-3
+                alpha: 0.1
+                beta: 0.01
+                omega: 0.1
+        seed: 1
+        rounds: 1
+        max_epoch: 400
+        lr: 1e-4
+        gamma_value: 1000
+        lambda_value: 10
+    visualize:
+        tsne: true
+        umap: true
+        heatmap: true
+        loss: true
+        dir: ./visualization/ACM/
+        when: end
+    evaluate:
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+        sc: true
+        gre: true
+HHAR_3:
+    device: cuda
+    logger:
+        name: ACM
+        mode: both
+        dir: ./log/ACM/
+    dataset:
+        dir: ../data/ACM/
+        augmentation:
+            add_self_loops: false
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+            pca_dim: 100
+        alpha_value: 0.2
+    model:
+        dims:
+            ae: [ 128, 256, 512, 20 ]
+            igae: [ 128, 256, 20]
+        v: 1.0
+    train:
+        pretrain:
+            ae:
+                dir: ./pretrain/ACM/
+                max_epoch: 30
+                lr: 1e-3
+            igae:
+                dir: ./pretrain/ACM/
+                max_epoch: 30
+                lr: 1e-3
+                gamma_value: 0.1
+            both:
+                dir: ./pretrain/ACM/
+                max_epoch: 100
+                lr: 1e-3
+                alpha: 0.1
+                beta: 0.01
+                omega: 0.1
+        seed: 1
+        rounds: 1
+        max_epoch: 400
+        lr: 1e-4
+        gamma_value: 1000
+        lambda_value: 10
+    visualize:
+        tsne: true
+        umap: true
+        heatmap: true
+        loss: true
+        dir: ./visualization/ACM/
+        when: end
+    evaluate:
+        each: false
         acc: true
         nmi: true
         ari: true

@@ -1,3 +1,101 @@
+WIKI:
+    device: cuda
+    logger:
+        name: WIKI
+        mode: both
+        dir: ./log/WIKI/
+    dataset:
+        dir: ../data/WIKI/
+        add_self_loops: true
+        augmentation:
+            add_self_loops: true
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+    model:
+        dims: [ 500, 500, 2000, 10 ]
+        act: relu
+        act_last: false
+    train:
+        pretrain:
+            seed: -1
+            rounds: 1
+            dir: ./pretrain/WIKI/
+            max_epoch: 30
+            lr: 1e-3
+        seed: -1
+        rounds: 10
+        max_epoch: 50
+        lr: 1e-3
+        alpha: 0.1
+        beta: 0.01
+        sigma: 0.5
+    visualize:
+        tsne: true
+        umap: true
+        heatmap: true
+        loss: true
+        dir: ./visualization/WIKI/
+        when: end
+    evaluate:
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+CORA:
+    device: cuda
+    logger:
+        name: CORA
+        mode: both
+        dir: ./log/CORA/
+    dataset:
+        dir: ../data/CORA/
+        add_self_loops: true
+        augmentation:
+            add_self_loops: true
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+    model:
+        dims: [ 500, 500, 2000, 10 ]
+        act: relu
+        act_last: false
+    train:
+        pretrain:
+            seed: -1
+            rounds: 1
+            dir: ./pretrain/CORA/
+            max_epoch: 30
+            lr: 1e-3
+        seed: -1
+        rounds: 10
+        max_epoch: 50
+        lr: 1e-3
+        alpha: 0.1
+        beta: 0.01
+        sigma: 0.5
+    visualize:
+        tsne: true
+        umap: true
+        heatmap: true
+        loss: true
+        dir: ./visualization/CORA/
+        when: end
+    evaluate:
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
 ACM:
     device: cuda
     logger:
@@ -33,13 +131,13 @@ ACM:
         sigma: 0.5
     visualize:
         tsne: true
-        umap: false
-        heatmap: false
+        umap: true
+        heatmap: true
         loss: true
         dir: ./visualization/ACM/
         when: end
     evaluate:
-        each: true
+        each: false
         acc: true
         nmi: true
         ari: true
@@ -55,6 +153,7 @@ CITE:
         dir: ./log/CITE/
     dataset:
         dir: ../data/CITE/
+        add_self_loops: true
         augmentation:
             add_self_loops: true
             drop_edge: 0.0
@@ -81,61 +180,13 @@ CITE:
         sigma: 0.5
     visualize:
         tsne: true
-        umap: false
-        heatmap: false
+        umap: true
+        heatmap: true
         loss: true
         dir: ./visualization/CITE/
         when: end
     evaluate:
-        each: true
-        acc: true
-        nmi: true
-        ari: true
-        f1: true
-        hom: true
-        com: true
-        pur: true
-CORA:
-    device: cuda
-    logger:
-        name: CORA
-        mode: both
-        dir: ./log/CORA/
-    dataset:
-        dir: ../data/CORA/
-        augmentation:
-            add_self_loops: true
-            drop_edge: 0.0
-            drop_feature: 0.0
-            add_edge: 0.0
-            add_noise: 0.0
-    model:
-        dims: [ 500, 500, 2000, 10 ]
-        act: relu
-        act_last: false
-    train:
-        pretrain:
-            seed: 0
-            rounds: 1
-            dir: ./pretrain/CORA/
-            max_epoch: 30
-            lr: 1e-3
-        seed: -1
-        rounds: 10
-        max_epoch: 50
-        lr: 1e-3
-        alpha: 0.1
-        beta: 0.01
-        sigma: 0.5
-    visualize:
-        tsne: true
-        umap: false
-        heatmap: false
-        loss: true
-        dir: ./visualization/CORA/
-        when: end
-    evaluate:
-        each: true
+        each: false
         acc: true
         nmi: true
         ari: true
@@ -151,6 +202,7 @@ DBLP:
         dir: ./log/DBLP/
     dataset:
         dir: ../data/DBLP/
+        add_self_loops: true
         augmentation:
             add_self_loops: true
             drop_edge: 0.0
@@ -163,7 +215,7 @@ DBLP:
         act_last: false
     train:
         pretrain:
-            seed: 325
+            seed: -1
             rounds: 1
             dir: ./pretrain/DBLP/
             max_epoch: 30
@@ -177,13 +229,356 @@ DBLP:
         sigma: 0.5
     visualize:
         tsne: true
-        umap: false
-        heatmap: false
+        umap: true
+        heatmap: true
         loss: true
         dir: ./visualization/DBLP/
         when: end
     evaluate:
-        each: true
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+PUBMED:
+    device: cuda
+    logger:
+        name: PUBMED
+        mode: both
+        dir: ./log/PUBMED/
+    dataset:
+        dir: ../data/PUBMED/
+        add_self_loops: true
+        augmentation:
+            add_self_loops: true
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+    model:
+        dims: [ 500, 500, 2000, 10 ]
+        act: relu
+        act_last: false
+    train:
+        pretrain:
+            seed: -1
+            rounds: 1
+            dir: ./pretrain/PUBMED/
+            max_epoch: 30
+            lr: 1e-3
+        seed: -1
+        rounds: 10
+        max_epoch: 50
+        lr: 1e-3
+        alpha: 0.1
+        beta: 0.01
+        sigma: 0.5
+    visualize:
+        tsne: true
+        umap: true
+        heatmap: true
+        loss: true
+        dir: ./visualization/PUBMED/
+        when: end
+    evaluate:
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+ARXIV:
+    device: cuda
+    logger:
+        name: ARXIV
+        mode: both
+        dir: ./log/ARXIV/
+    dataset:
+        dir: ../data/ARXIV/
+        add_self_loops: true
+        augmentation:
+            add_self_loops: true
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+    model:
+        dims: [ 500, 500, 2000, 10 ]
+        act: relu
+        act_last: false
+    train:
+        pretrain:
+            seed: -1
+            rounds: 1
+            dir: ./pretrain/ARXIV/
+            max_epoch: 30
+            lr: 1e-3
+        seed: -1
+        rounds: 10
+        max_epoch: 50
+        lr: 1e-3
+        alpha: 0.1
+        beta: 0.01
+        sigma: 0.5
+    visualize:
+        tsne: true
+        umap: true
+        heatmap: true
+        loss: true
+        dir: ./visualization/ARXIV/
+        when: end
+    evaluate:
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+BLOG:
+    device: cuda
+    logger:
+        name: BLOG
+        mode: both
+        dir: ./log/BLOG/
+    dataset:
+        dir: ../data/BLOG/
+        add_self_loops: true
+        augmentation:
+            add_self_loops: true
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+    model:
+        dims: [ 500, 500, 2000, 10 ]
+        act: relu
+        act_last: false
+    train:
+        pretrain:
+            seed: -1
+            rounds: 1
+            dir: ./pretrain/BLOG/
+            max_epoch: 30
+            lr: 1e-3
+        seed: -1
+        rounds: 10
+        max_epoch: 50
+        lr: 1e-3
+        alpha: 0.1
+        beta: 0.01
+        sigma: 0.5
+    visualize:
+        tsne: true
+        umap: true
+        heatmap: true
+        loss: true
+        dir: ./visualization/BLOG/
+        when: end
+    evaluate:
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+FLICKR:
+    device: cuda
+    logger:
+        name: FLICKR
+        mode: both
+        dir: ./log/FLICKR/
+    dataset:
+        dir: ../data/FLICKR/
+        add_self_loops: true
+        augmentation:
+            add_self_loops: true
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+    model:
+        dims: [ 500, 500, 2000, 10 ]
+        act: relu
+        act_last: false
+    train:
+        pretrain:
+            seed: -1
+            rounds: 1
+            dir: ./pretrain/FLICKR/
+            max_epoch: 30
+            lr: 1e-3
+        seed: -1
+        rounds: 10
+        max_epoch: 50
+        lr: 1e-3
+        alpha: 0.1
+        beta: 0.01
+        sigma: 0.5
+    visualize:
+        tsne: true
+        umap: true
+        heatmap: true
+        loss: true
+        dir: ./visualization/FLICKR/
+        when: end
+    evaluate:
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+ROMAN:
+    device: cuda
+    logger:
+        name: ROMAN
+        mode: both
+        dir: ./log/ROMAN/
+    dataset:
+        dir: ../data/ROMAN/
+        add_self_loops: true
+        augmentation:
+            add_self_loops: true
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+    model:
+        dims: [ 500, 500, 2000, 10 ]
+        act: relu
+        act_last: false
+    train:
+        pretrain:
+            seed: -1
+            rounds: 1
+            dir: ./pretrain/ROMAN/
+            max_epoch: 30
+            lr: 1e-3
+        seed: -1
+        rounds: 10
+        max_epoch: 50
+        lr: 1e-3
+        alpha: 0.1
+        beta: 0.01
+        sigma: 0.5
+    visualize:
+        tsne: true
+        umap: true
+        heatmap: true
+        loss: true
+        dir: ./visualization/ROMAN/
+        when: end
+    evaluate:
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+USPS_3:
+    device: cuda
+    logger:
+        name: USPS_3
+        mode: both
+        dir: ./log/USPS_3/
+    dataset:
+        dir: ../data/USPS/
+        add_self_loops: true
+        augmentation:
+            add_self_loops: true
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+    model:
+        dims: [ 500, 500, 2000, 10 ]
+        act: relu
+        act_last: false
+    train:
+        pretrain:
+            seed: -1
+            rounds: 1
+            dir: ./pretrain/USPS_3/
+            max_epoch: 30
+            lr: 1e-3
+        seed: -1
+        rounds: 10
+        max_epoch: 200
+        lr: 1e-3
+        alpha: 0.1
+        beta: 0.01
+        sigma: 0.5
+    visualize:
+        tsne: true
+        umap: true
+        heatmap: true
+        loss: true
+        dir: ./visualization/USPS_3/
+        when: end
+    evaluate:
+        each: false
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: true
+        com: true
+        pur: true
+HHAR_3:
+    device: cuda
+    logger:
+        name: HHAR_3
+        mode: both
+        dir: ./log/HHAR_3/
+    dataset:
+        dir: ../data/HHAR/
+        add_self_loops: true
+        augmentation:
+            add_self_loops: true
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+    model:
+        dims: [ 500, 500, 2000, 10 ]
+        act: relu
+        act_last: false
+    train:
+        pretrain:
+            seed: -1
+            rounds: 1
+            dir: ./pretrain/HHAR_3/
+            max_epoch: 30
+            lr: 1e-3
+        seed: -1
+        rounds: 10
+        max_epoch: 200
+        lr: 1e-3
+        alpha: 0.1
+        beta: 0.01
+        sigma: 0.5
+    visualize:
+        tsne: true
+        umap: true
+        heatmap: true
+        loss: true
+        dir: ./visualization/HHAR_3/
+        when: end
+    evaluate:
+        each: false
         acc: true
         nmi: true
         ari: true

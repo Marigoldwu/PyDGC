@@ -486,13 +486,13 @@ HHAR_3:
         reg_lambda: 1
     visualize:
         tsne: true
-        umap: false
-        heatmap: false
+        umap: true
+        heatmap: true
         loss: true
         dir: ./visualization/HHAR_3/
         when: end
     evaluate:
-        each: true
+        each: false
         acc: true
         nmi: true
         ari: true

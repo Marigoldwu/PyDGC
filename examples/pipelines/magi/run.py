@@ -8,7 +8,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 from pydgc.pipelines import MAGIPipeline
 from pydgc.utils import parse_arguments
 
-datasets = ["WIKI", "CORA", "ACM", "CITE", "DBLP", "PUBMED", "ARXIV", "BLOG", "FLICKR", "ROMAN", "USPS_3", "HHAR_3"]
+datasets = ["WIKI", "CORA", "ACM", "CITE", "DBLP", "BLOG", "FLICKR", "USPS_3", "HHAR_3", "PUBMED", "ROMAN", "ARXIV"]
 
 FULL = ["wiki", "cora", "acm", "cite", "dblp", "pubmed", "blog", "flickr", "roman", "usps", "hhar"]
 BATCH = ["arxiv"]
