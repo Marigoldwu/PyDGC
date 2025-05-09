@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 sys.path.append(root)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 from pydgc.pipelines import CCGCPipeline
