@@ -43,6 +43,7 @@ class BasePipeline(ABC):
         self.loss_curve = []
         self.embeddings = None
         self.times = []
+        self.current_round = 0
 
     def load_config(self):
         """load config from yaml"""
@@ -78,6 +79,7 @@ class BasePipeline(ABC):
                 data = dataset
             else:
                 data = dataset[0]
+            data.x = data.x.float()
             self.cfg.dataset.num_nodes = data.num_nodes
             self.cfg.dataset.num_features = data.num_features
             num_edges = int((data.edge_index.shape[1]) / 2)
@@ -145,8 +147,9 @@ class BasePipeline(ABC):
             self.augment_data()
             if self.cfg.train.seed == -1:
                 # set seed to no. current round
-                for i in range(self.cfg.train.rounds):
-                    setup_seed(i)
+                for round_ in range(self.cfg.train.rounds):
+                    self.logger.flag(f"Round: {round_+1}/{self.cfg.train.rounds} Dataset: {self.dataset_name}")
+                    setup_seed(round_)
                     start = time.time()
 
                     model = self.build_model()
@@ -177,7 +180,8 @@ class BasePipeline(ABC):
             else:
                 # fixed seed with given seed
                 setup_seed(self.cfg.train.seed)
-                for i in range(self.cfg.train.rounds):
+                for round_ in range(self.cfg.train.rounds):
+                    self.logger.flag(f"Round: {round_+1}/{self.cfg.train.rounds} Dataset: {self.dataset_name}")
                     start = time.time()
 
                     model = self.build_model()

@@ -4,7 +4,6 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 from torch_geometric.data import Data
-from torch_geometric.utils import to_dense_adj
 from yacs.config import CfgNode as CN
 from torch.nn import Module, Parameter
 import scipy.sparse as sp
@@ -13,7 +12,7 @@ from torch.nn import Linear
 
 from pydgc.metrics import DGCMetric
 from pydgc.models import DGCModel
-from pydgc.utils import Logger, normalize_adj_torch
+from pydgc.utils import Logger
 
 
 def new_graph(edge_index, weight, n, device):
@@ -198,7 +197,7 @@ class AGCDRR(DGCModel):
         view_optimizer = torch.optim.Adam(self.view_learner.parameters(), lr=float(cfg.view_lr))
         optimizer = torch.optim.Adam(self.igae.parameters(), lr=float(cfg.lr))
         adj = data.adj.to(self.device)
-        x = data.x.to(self.device)
+        x = data.x.to(self.device).float()
 
         for epoch in range(1, cfg.max_epoch+1):
             self.view_learner.train()
@@ -259,7 +258,7 @@ class AGCDRR(DGCModel):
 
     def get_embedding(self, data) -> Tensor:
         adj = data.adj.to(self.device)
-        x = data.x.to(self.device)
+        x = data.x.to(self.device).float()
         with torch.no_grad():
             self.view_learner.eval()
             self.igae.eval()
