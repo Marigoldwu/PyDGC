@@ -21,7 +21,7 @@ class GATE(DGCModel):
     def __init__(self, logger: Logger, cfg: CN):
         super(GATE, self).__init__(logger, cfg)
         self.device = torch.device(cfg.device)
-        dims = self.cfg.model.dims
+        dims = cfg.model.dims.copy()
         dims.insert(0, self.cfg.dataset.num_features)
         self.gat_encoder = GATMEncoder(dims=dims).to(self.device)
         self.decoder = InnerProductDecoder().to(self.device)
@@ -43,9 +43,8 @@ class GATE(DGCModel):
         return hat_adj, embedding
 
     def loss(self, adj_label: Tensor, hat_adj: Tensor) -> Tensor:
-        # adj = torch.diagonal_scatter(adj, torch.zeros(adj.shape[0]), 0).to(self.device)
         adj_label = adj_label.to(self.device)
-        loss = F.binary_cross_entropy(hat_adj.view(-1), adj_label.view(-1))
+        loss = F.cross_entropy(hat_adj.view(-1), adj_label.view(-1))
         return loss
 
     def train_model(self, data: Data, cfg: CN = None, flag: str = "TRAIN GATE") -> List:

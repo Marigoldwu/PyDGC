@@ -19,7 +19,7 @@ class SDCN(DGCModel):
     def __init__(self, logger: Logger, cfg: CN):
         super(SDCN, self).__init__(logger, cfg)
         self.ae = AE(logger, cfg)
-        dims = self.cfg.model.dims
+        dims = self.cfg.model.dims.copy()
         dims.insert(0, self.cfg.dataset.num_features)
         self.gcn_1 = GCNConv(dims[0], dims[1], add_self_loops=cfg.dataset.augmentation.add_self_loops).to(self.device)
         self.gcn_2 = GCNConv(dims[1], dims[2], add_self_loops=cfg.dataset.augmentation.add_self_loops).to(self.device)

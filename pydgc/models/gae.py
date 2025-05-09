@@ -19,7 +19,7 @@ class GAE(DGCModel):
     def __init__(self, logger: Logger, cfg: CN):
         super(GAE, self).__init__(logger, cfg)
         self.device = torch.device(cfg.device)
-        dims = self.cfg.model.dims
+        dims = cfg.model.dims.copy()
         dims.insert(0, self.cfg.dataset.num_features)
         self.encoder = GNNEncoder(dims=dims, layer=self.cfg.model.gnn_type.lower(), act=self.cfg.model.act, act_last=self.cfg.model.act_last).to(self.device)
         self.decoder = InnerProductDecoder().to(self.device)
@@ -32,7 +32,7 @@ class GAE(DGCModel):
         self.decoder.reset_parameters()
 
     def forward(self, data):
-        x = data.x.to(self.device)
+        x = data.x.to(self.device).float()
         edge_index = data.edge_index.to(self.device)
         embedding = F.normalize(self.encoder(x, edge_index), p=2, dim=1)
         hat_adj = self.decoder(embedding)

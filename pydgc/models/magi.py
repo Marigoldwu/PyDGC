@@ -147,8 +147,8 @@ class MAGI(DGCModel):
 
     def __init__(self, logger: Logger, cfg: CN):
         super(MAGI, self).__init__(logger, cfg)
-        encoder_dims = cfg.model.dims.encoder
-        projection_dims = cfg.model.dims.projection
+        encoder_dims = cfg.model.dims.encoder.copy()
+        projection_dims = cfg.model.dims.projection.copy()
         encoder_dims.insert(0, cfg.dataset.num_features)
         self.encoder = Encoder(encoder_dims[0], encoder_dims[1:], base_model=GCNConv,
                                dropout=cfg.model.dropout, ns=cfg.model.ns).to(self.device)

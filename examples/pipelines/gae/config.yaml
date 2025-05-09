@@ -425,7 +425,7 @@ USPS_3:
         mode: both
         dir: ./log/USPS_3/
     dataset:
-        dir: ../data/USPS_3/
+        dir: ../data/USPS/
         augmentation:
             add_self_loops: true
             drop_edge: 0.0
@@ -467,7 +467,7 @@ HHAR_3:
         mode: both
         dir: ./log/HHAR_3/
     dataset:
-        dir: ../data/HHAR_3/
+        dir: ../data/HHAR/
         augmentation:
             add_self_loops: true
             drop_edge: 0.0

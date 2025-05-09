@@ -30,7 +30,7 @@ def sparse_mx_to_torch_sparse_tensor(sparse_mx):
 
 class DFCNPipeline(BasePipeline):
     def __init__(self, args: Namespace):
-        super(DFCNPipeline, self).__init__(args.cfg_file_path, args.dataset_name)
+        super(DFCNPipeline, self).__init__(args)
 
     def augment_data(self):
         """Data augmentation"""

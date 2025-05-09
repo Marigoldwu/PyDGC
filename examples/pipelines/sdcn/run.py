@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
+import os
+import sys
+root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(root)
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
 from pydgc.pipelines import SDCNPipeline
 from pydgc.utils import parse_arguments
 
-datasets = ["ACM"]
+datasets = ["WIKI", "CORA", "ACM", "CITE", "DBLP", "PUBMED", "ARXIV", "BLOG", "FLICKR", "ROMAN", "USPS_3", "HHAR_3"]
 
-for datasets in datasets:
-    args_default = {
-        'cfg_file_path': 'config.yaml',
-        'dataset_name': datasets,
-        'pretrain': False,
-        'flag': "PRETRAIN AE FOR SDCN"
-    }
-    args = parse_arguments(args_default)
-
+for dataset in datasets:
+    args = parse_arguments(dataset)
     pipeline = SDCNPipeline(args)
     pipeline.run(pretrain=args.pretrain, flag=args.flag)

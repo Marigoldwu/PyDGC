@@ -105,7 +105,7 @@ class ClusterAssignment(nn.Module):
 class RGAE(DGCModel):
     def __init__(self, logger: Logger, cfg: CN):
         super(RGAE, self).__init__(logger, cfg)
-        dims = cfg.model.dims
+        dims = cfg.model.dims.copy()
         dims.insert(0, cfg.dataset.num_features)
         # dims, activation, alpha
         if cfg.model.activation == "ReLU":

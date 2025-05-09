@@ -20,8 +20,10 @@ class AE(DGCModel):
 
     def __init__(self, logger: Logger, cfg: CN):
         super(AE, self).__init__(logger, cfg)
-        self.encoder = MLPEncoder(self.cfg.model.dims, self.cfg.model.act, self.cfg.model.act_last).to(self.device)
-        self.decoder = MLPDecoder(self.cfg.model.dims, self.cfg.model.act, self.cfg.model.act_last).to(self.device)
+        dims = cfg.model.dims.copy()
+        dims.insert(0, self.cfg.dataset.num_features)
+        self.encoder = MLPEncoder(dims, self.cfg.model.act, self.cfg.model.act_last).to(self.device)
+        self.decoder = MLPDecoder(dims, self.cfg.model.act, self.cfg.model.act_last).to(self.device)
 
         self.loss_curve = []
 

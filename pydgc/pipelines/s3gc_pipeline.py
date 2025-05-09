@@ -9,7 +9,7 @@ from ..utils import perturb_data
 
 class S3GCPipeline(BasePipeline):
     def __init__(self, args: Namespace):
-        super().__init__(args.cfg_file_path, args.dataset_name)
+        super().__init__(args)
 
     def augment_data(self):
         """Data augmentation"""

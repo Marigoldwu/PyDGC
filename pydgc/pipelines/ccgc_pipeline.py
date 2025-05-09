@@ -25,7 +25,7 @@ def preprocess_graph(adj, layer, norm='sym', renorm=True):
         degree_mat_inv_sqrt = sp.diags(np.power(row_sum, -0.5).flatten())
         adj_normalized = adj_.dot(degree_mat_inv_sqrt).transpose().dot(degree_mat_inv_sqrt).tocoo()
         laplacian = ident - adj_normalized
-    elif norm == 'left':
+    else:
         degree_mat_inv_sqrt = sp.diags(np.power(row_sum, -1.).flatten())
         adj_normalized = degree_mat_inv_sqrt.dot(adj_).tocoo()
         laplacian = ident - adj_normalized
@@ -40,7 +40,7 @@ def preprocess_graph(adj, layer, norm='sym', renorm=True):
 
 class CCGCPipeline(BasePipeline):
     def __init__(self, args: Namespace):
-        super().__init__(args.cfg_file_path, args.dataset_name)
+        super().__init__(args)
 
     def augment_data(self):
         """Data augmentation"""

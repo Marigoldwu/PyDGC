@@ -163,7 +163,7 @@ class ViewLearner(nn.Module):
 class AGCDRR(DGCModel):
     def __init__(self, logger: Logger, cfg: CN):
         super(AGCDRR, self).__init__(logger, cfg)
-        igae_dims = cfg.model.dims
+        igae_dims = cfg.model.dims.copy()
         igae_dims.insert(0, cfg.dataset.augmentation.pca_dim)
         self.igae = IGAE(
             gae_n_enc_1=igae_dims[1],

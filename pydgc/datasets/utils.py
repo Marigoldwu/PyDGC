@@ -279,7 +279,7 @@ def load_dataset(dataset_dir: str, dataset_name: str, p: int = 2) -> Dataset:
     :return: a list of networkx/deepsnap graphs, plus additional info if needed
     """
     try:
-
+        dataset_dir = dataset_dir.split('_')[0] if dataset_dir.__contains__('_') else dataset_dir
         neighbors = int(dataset_name.split('_')[-1]) if dataset_name.__contains__('_') else 1
         dataset_name = dataset_name.split('_')[0] if dataset_name.__contains__('_') else dataset_name
         if dataset_name in OGB_SUPPORTED_DATASET:

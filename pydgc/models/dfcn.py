@@ -306,9 +306,9 @@ class IGAE(nn.Module):
 class DFCN(DGCModel):
     def __init__(self, logger: Logger, cfg: CN):
         super(DFCN, self).__init__(logger, cfg)
-        ae_dims = cfg.model.dims.ae
+        ae_dims = cfg.model.dims.ae.copy()
         ae_dims.insert(0, self.cfg.dataset.augmentation.pca_dim)
-        igae_dims = cfg.model.dims.igae
+        igae_dims = cfg.model.dims.igae.copy()
         igae_dims.insert(0, self.cfg.dataset.augmentation.pca_dim)
         name = cfg.dataset.name.lower().split("_")[0] if "_" in cfg.dataset.name else cfg.dataset.name.lower()
         n_node = cfg.dataset.num_nodes

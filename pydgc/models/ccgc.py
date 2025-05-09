@@ -27,7 +27,7 @@ class CCGC(DGCModel):
     def __init__(self, logger: Logger, cfg: CN):
         super(CCGC, self).__init__(logger, cfg)
         self.device = torch.device(cfg.device)
-        dims = cfg.model.dims
+        dims = cfg.model.dims.copy()
         dims.insert(0, cfg.dataset.num_features)
         self.layers1 = nn.Linear(dims[0], dims[1]).to(self.device)
         self.layers2 = nn.Linear(dims[0], dims[1]).to(self.device)

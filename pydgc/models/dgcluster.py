@@ -72,7 +72,7 @@ class DGCLUSTER(DGCModel):
 
     def __init__(self, logger: Logger, cfg: CN):
         super(DGCLUSTER, self).__init__(logger, cfg)
-        dims = cfg.model.dims
+        dims = cfg.model.dims.copy()
         dims.insert(0, cfg.dataset.num_features)
 
         if cfg.model.gnn_type == 'gcn':

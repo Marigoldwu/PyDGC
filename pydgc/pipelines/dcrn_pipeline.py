@@ -77,13 +77,13 @@ def sparse_mx_to_torch_sparse_tensor(sparse_mx):
 
 class DCRNPipeline(BasePipeline):
     def __init__(self, args: Namespace):
-        super(DCRNPipeline, self).__init__(args.cfg_file_path, args.dataset_name)
+        super(DCRNPipeline, self).__init__(args)
 
     def augment_data(self):
         """Data augmentation"""
         self.data = perturb_data(self.data, self.cfg.dataset.augmentation)
         pca = PCA(n_components=self.cfg.dataset.augmentation.pca_dim)
-        self.data.x = torch.from_numpy(pca.fit_transform(self.data.x))
+        self.data.x = torch.from_numpy(pca.fit_transform(self.data.x)).float()
 
         if hasattr(self.cfg.dataset.augmentation, 'add_self_loops'):
             if self.cfg.dataset.augmentation.add_self_loops:

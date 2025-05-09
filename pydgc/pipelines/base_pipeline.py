@@ -26,6 +26,7 @@ class BasePipeline(ABC):
 
         :param args: command line arguments for setting values frequently changed
         """
+        torch.set_default_tensor_type(torch.FloatTensor)
         self.args = args
         self.cfg_file_path = "config.yaml" if not hasattr(args, "cfg_file_path") else args.cfg_file_path
         if hasattr(args, "dataset_name"):
