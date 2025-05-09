@@ -13,4 +13,4 @@ datasets = ["WIKI", "CORA", "ACM", "CITE", "DBLP", "BLOG", "FLICKR", "USPS_3", "
 for dataset in datasets:
     args = parse_arguments(dataset)
     pipeline = SDCNPipeline(args)
-    pipeline.run(pretrain=args.pretrain, flag=args.flag)
+    pipeline.run()

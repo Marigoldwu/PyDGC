@@ -6,6 +6,7 @@ from argparse import Namespace
 
 import torch
 import numpy as np
+from torch_geometric.utils import add_self_loops
 
 from yacs.config import CfgNode as CN
 
@@ -15,7 +16,7 @@ from ..datasets import load_dataset
 from ..utils.logger import create_logger
 from ..utils.visualization import DGCVisual
 from ..utils.device import auto_select_device
-from ..metrics import DGCMetric, build_results_dict
+from ..metrics import build_results_dict
 from ..utils import load_dataset_specific_cfg, setup_seed, get_formatted_time, dump_cfg, check_required_cfg
 
 
@@ -26,7 +27,7 @@ class BasePipeline(ABC):
 
         :param args: command line arguments for setting values frequently changed
         """
-        torch.set_default_tensor_type(torch.FloatTensor)
+        torch.set_default_dtype(torch.float32)
         self.args = args
         self.cfg_file_path = "config.yaml" if not hasattr(args, "cfg_file_path") else args.cfg_file_path
         if hasattr(args, "dataset_name"):
@@ -60,6 +61,7 @@ class BasePipeline(ABC):
             self.cfg.dataset.augmentation.add_edge = float(self.args.add_edge)
         if hasattr(self.args, 'add_noise'):
             self.cfg.dataset.augmentation.add_noise = float(self.args.add_noise)
+        self.cfg.evaluate.each = self.args.eval_each
 
     def load_logger(self):
         log_file = osp.join(self.cfg.logger.dir, f'{get_formatted_time()}.log')
@@ -79,6 +81,10 @@ class BasePipeline(ABC):
                 data = dataset
             else:
                 data = dataset[0]
+            data_self_loops = add_self_loops(data.edge_index)[0]
+            data_self_loops = data_self_loops.to_dense()
+            if data.x.is_sparse_csr:
+                data.x = data.x.dense()
             data.x = data.x.float()
             self.cfg.dataset.num_nodes = data.num_nodes
             self.cfg.dataset.num_features = data.num_features
@@ -100,19 +106,19 @@ class BasePipeline(ABC):
         """模型构建逻辑"""
         pass
 
-    def evaluate(self):
-        cfg = self.cfg.evaluate
-        metric = DGCMetric(self.ground_truth, self.predicted_labels, self.embeddings, self.data.edge_index)
-        results = metric.evaluate_one_epoch(self.logger,
-                                            acc=cfg.acc,
-                                            nmi=cfg.nmi,
-                                            ari=cfg.ari,
-                                            f1=cfg.f1,
-                                            sc=cfg.sc,
-                                            hom=cfg.hom,
-                                            com=cfg.com,
-                                            pur=cfg.pur,
-                                            gre=cfg.gre)
+    def evaluate(self, results):
+        # cfg = self.cfg.evaluate
+        # metric = DGCMetric(self.ground_truth, self.predicted_labels, self.embeddings, self.data.edge_index)
+        # results = metric.evaluate_one_epoch(self.logger,
+        #                                     acc=cfg.acc,
+        #                                     nmi=cfg.nmi,
+        #                                     ari=cfg.ari,
+        #                                     f1=cfg.f1,
+        #                                     sc=cfg.sc,
+        #                                     hom=cfg.hom,
+        #                                     com=cfg.com,
+        #                                     pur=cfg.pur,
+        #                                     gre=cfg.gre)
         if self.cfg.train.rounds > 1:
             for key, value in results.items():
                 self.results[key].append(value)
@@ -164,17 +170,15 @@ class BasePipeline(ABC):
                         else:
                             raise ValueError("Model does not support pretraining!")
                     else:
-                        self.loss_curve = model.train_model(self.data, self.cfg.train)
-                        embeddings, y_pred, _ = model.clustering(self.data)
-
+                        self.loss_curve, embeddings, predicted_labels, results = model.train_model(self.data, self.cfg.train)
                         end = time.time()
                         time_cost = round(end - start, 4)
                         self.times.append(time_cost)
                         self.logger.info(f"Time cost: {time_cost}")
 
-                        self.predicted_labels = y_pred.numpy()
+                        self.predicted_labels = predicted_labels.numpy()
                         self.embeddings = embeddings.detach()
-                        self.evaluate()
+                        self.evaluate(results)
                         if self.cfg.visualize.when == 'each':
                             self.visualize()
             else:
@@ -196,21 +200,22 @@ class BasePipeline(ABC):
                         else:
                             raise ValueError("Model does not support pretraining!")
                     else:
-                        self.loss_curve = model.train_model(self.data, self.cfg.train)
-                        embeddings, y_pred, _ = model.clustering(self.data)
+                        self.loss_curve, embeddings, predicted_labels, results = model.train_model(self.data, self.cfg.train)
 
                         end = time.time()
                         time_cost = end - start
                         self.times.append(time_cost)
                         self.logger.info(f"Time cost: {time_cost}")
 
-                        self.predicted_labels = y_pred.numpy()
+                        self.predicted_labels = predicted_labels.numpy()
                         self.embeddings = embeddings.detach()
-                        self.evaluate()
+                        self.evaluate(results)
                         if self.cfg.visualize.when == 'each':
                             self.visualize()
             self.logger.table(self.cfg.logger.dir, self.dataset_name, self.results)
             self.logger.info(f"Average time cost: {np.mean(self.times)}±{np.std(self.times)}")
+            mem_used = torch.cuda.max_memory_allocated(device=self.device) / 1024 / 1024
+            self.logger.info(f"The max memory allocated to model is: {mem_used:.2f} MB.")
             if self.cfg.visualize.when == 'end':
                 self.visualize()
             dump_cfg(self.cfg)

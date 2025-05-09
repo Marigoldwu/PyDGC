@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from typing import Tuple, List
+from typing import Tuple
 import os
 import torch
 import torch.nn as nn
@@ -326,10 +326,10 @@ class AE(Module):
             self.loss_curve.append(loss_sum.item())
             logger.loss(epoch, loss_sum)
 
-            with torch.no_grad():
-                self.eval()
-                _, embedding = self.forward(data.x)
-                self.evaluate(logger, embedding, data.y, data.edge_index)
+            # with torch.no_grad():
+            #     self.eval()
+            #     _, embedding = self.forward(data.x)
+            #     self.evaluate(logger, embedding, data.y, data.edge_index)
 
         pretrain_file_name = os.path.join(cfg.dir, "ae.pth")
         validate_and_create_path(pretrain_file_name)
@@ -449,10 +449,10 @@ class IGAE(nn.Module):
             logger.loss(epoch, loss)
             loss.backward()
             optimizer.step()
-            with torch.no_grad():
-                self.eval()
-                embedding, _, _ = self.forward(data.x, adj)
-                self.evaluate(logger, embedding, data.y, data.edge_index)
+            # with torch.no_grad():
+            #     self.eval()
+            #     embedding, _, _ = self.forward(data.x, adj)
+            #     self.evaluate(logger, embedding, data.y, data.edge_index)
 
         pretrain_file_name = os.path.join(cfg.dir, "igae.pth")
         torch.save(self.state_dict(), pretrain_file_name)
@@ -525,6 +525,10 @@ class DCRN(DGCModel):
         self.gamma = Parameter(torch.zeros(1)).to(self.device)
         self.loss_curve = []
         self.pretrain_loss_curve = []
+
+        self.best_embedding = None
+        self.best_predicted_labels = None
+        self.best_results = {'ACC': -1}
 
     def reset_parameters(self):
         pass
@@ -660,16 +664,16 @@ class DCRN(DGCModel):
             self.pretrain_loss_curve.append(loss.item())
             loss.backward()
             optimizer.step()
-            with torch.no_grad():
-                x_hat, z_hat, adj_hat, z_ae, z_igae, embedding = self.ae_igae_forward(data.x, adj)
-                labels_, clustering_centers_ = KMeansGPU(3).fit(embedding)
-                DGCMetric(data.y, labels_.cpu().numpy(), embedding, data.edge_index).evaluate_one_epoch(self.logger)
+            # with torch.no_grad():
+            #     x_hat, z_hat, adj_hat, z_ae, z_igae, embedding = self.ae_igae_forward(data.x, adj)
+            #     labels_, clustering_centers_ = KMeansGPU(3).fit(embedding)
+            #     DGCMetric(data.y, labels_.cpu().numpy(), embedding, data.edge_index).evaluate_one_epoch(self.logger)
         pretrain_ae_file_name = os.path.join(cfg.dir, f'ae_both.pth')
         pretrain_igae_file_name = os.path.join(cfg.dir, f'igae_both.pth')
         torch.save(self.ae.state_dict(), pretrain_ae_file_name)
         torch.save(self.igae.state_dict(), pretrain_igae_file_name)
 
-    def train_model(self, data: Data, cfg: CN = None, flag: str = "TRAIN DCRN") -> List:
+    def train_model(self, data: Data, cfg: CN = None, flag: str = "TRAIN DCRN"):
         if cfg is None:
             cfg = self.cfg.train
         # load pretrained ae model
@@ -719,8 +723,15 @@ class DCRN(DGCModel):
             self.logger.loss(epoch, loss)
             self.loss_curve.append(loss.item())
             if self.cfg.evaluate.each:
-                self.evaluate(data)
-        return self.loss_curve
+                embedding, predicted_labels, results = self.evaluate(data)
+                if results['ACC'] > self.best_results['ACC']:
+                    self.best_embedding = embedding
+                    self.best_predicted_labels = predicted_labels
+                    self.best_results = results
+        if not self.cfg.evaluate.each:
+            embedding, predicted_labels, results = self.evaluate(data)
+            return self.loss_curve, embedding, predicted_labels, results
+        return self.loss_curve, self.best_embedding, self.best_predicted_labels, self.best_results
 
     def get_embedding(self, data) -> Tensor:
         Ad = torch.from_numpy(data.Ad).to(self.device).float()
@@ -746,7 +757,8 @@ class DCRN(DGCModel):
             return torch.from_numpy(embedding), labels_, clustering_centers_
 
     def evaluate(self, data: Data):
-        embedding, labels, clustering_centers = self.clustering(data)
+        embedding, predicted_labels, clustering_centers = self.clustering(data)
         ground_truth = data.y.numpy()
-        metric = DGCMetric(ground_truth, labels.numpy(), embedding, data.edge_index)
-        metric.evaluate_one_epoch(self.logger, acc=True, nmi=True, ari=True, f1=True, hom=True, com=True, pur=True, sc=True, gre=True)
+        metric = DGCMetric(ground_truth, predicted_labels.numpy(), embedding, data.edge_index)
+        results = metric.evaluate_one_epoch(self.logger, acc=True, nmi=True, ari=True, f1=True, hom=True, com=True, pur=True, sc=True, gre=True)
+        return embedding, predicted_labels, results

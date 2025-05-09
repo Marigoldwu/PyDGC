@@ -11,6 +11,8 @@ from sklearn.metrics import euclidean_distances
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import MinMaxScaler
 
+from . import get_formatted_time
+
 
 class DGCVisual:
     def __init__(self,
@@ -18,7 +20,8 @@ class DGCVisual:
                  save_format: str = 'png',
                  font_family: str or list = 'sans-serif',
                  font_size: int = 12):
-        self.save_path = save_path
+        time_ = get_formatted_time()
+        self.save_path = os.path.join(save_path, time_)
         if not os.path.exists(save_path):
             os.makedirs(save_path)
         self.check_save_format(save_format)

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import random
-from typing import Tuple, List, Any
+from typing import Tuple, Any
 
 from sklearn.cluster import Birch
 from torch import Tensor
@@ -97,6 +97,9 @@ class DGCLUSTER(DGCModel):
         self.conv3.to(self.device)
 
         self.loss_curve = []
+        self.best_embedding = None
+        self.best_predicted_labels = None
+        self.best_results = {'ACC': -1}
 
     def reset_parameters(self):
         pass
@@ -156,7 +159,7 @@ class DGCLUSTER(DGCModel):
 
         return loss
 
-    def train_model(self, data: Data, cfg: CN = None, flag: str = "TRAIN DGCLUSTER") -> List:
+    def train_model(self, data: Data, cfg: CN = None, flag: str = "TRAIN DGCLUSTER"):
         if cfg is None:
             cfg = self.cfg.train
         self.logger.flag(flag)
@@ -178,8 +181,15 @@ class DGCLUSTER(DGCModel):
             optimizer.step()
             scheduler.step()
             if self.cfg.evaluate.each:
-                self.evaluate(data)
-        return self.loss_curve
+                embedding, predicted_labels, results = self.evaluate(data)
+                if results['ACC'] > self.best_results['ACC']:
+                    self.best_embedding = embedding
+                    self.best_predicted_labels = predicted_labels
+                    self.best_results = results
+        if not self.cfg.evaluate.each:
+            embedding, predicted_labels, results = self.evaluate(data)
+            return self.loss_curve, embedding, predicted_labels, results
+        return self.loss_curve, self.best_embedding, self.best_predicted_labels, self.best_results
 
     def get_embedding(self, data: Data) -> Tensor:
         with torch.no_grad():
@@ -193,10 +203,8 @@ class DGCLUSTER(DGCModel):
         return embedding, labels, birch.subcluster_centers_
 
     def evaluate(self, data: Data):
-        embedding, labels, clustering_centers = self.clustering(data)
+        embedding, predicted_labels, clustering_centers = self.clustering(data)
         ground_truth = data.y.cpu().numpy()
-        metric = DGCMetric(ground_truth, labels.numpy(), embedding, data.edge_index)
-        metric.evaluate_one_epoch(self.logger, acc=True, nmi=True, ari=True, f1=True, hom=True, com=True, pur=True,
-                                  sc=True, gre=True)
-
-
+        metric = DGCMetric(ground_truth, predicted_labels.numpy(), embedding, data.edge_index)
+        results = metric.evaluate_one_epoch(self.logger, acc=True, nmi=True, ari=True, f1=True, hom=True, com=True, pur=True, sc=True, gre=True)
+        return embedding, predicted_labels, results

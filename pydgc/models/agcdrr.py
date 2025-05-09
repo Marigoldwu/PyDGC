@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from typing import Tuple, List, Any
+from typing import Tuple, Any
 import numpy as np
 import torch
 import torch.nn.functional as F
@@ -181,6 +181,9 @@ class AGCDRR(DGCModel):
         ).to(self.device)
 
         self.loss_curve = []
+        self.best_embedding = None
+        self.best_predicted_labels = None
+        self.best_results = {'ACC': -1}
 
     def reset_parameters(self):
         pass
@@ -191,7 +194,7 @@ class AGCDRR(DGCModel):
     def loss(self, *args, **kwargs) -> Tensor:
         pass
 
-    def train_model(self, data: Data, cfg: CN = None, flag: str = "TRAIN AGCDRR") -> List:
+    def train_model(self, data: Data, cfg: CN = None, flag: str = "TRAIN AGCDRR"):
         if cfg is None:
             cfg = self.cfg.train
         view_optimizer = torch.optim.Adam(self.view_learner.parameters(), lr=float(cfg.view_lr))
@@ -199,7 +202,7 @@ class AGCDRR(DGCModel):
         adj = data.adj.to(self.device)
         x = data.x.to(self.device).float()
 
-        for epoch in range(1, cfg.max_epoch+1):
+        for epoch in range(1, cfg.max_epoch + 1):
             self.view_learner.train()
             self.view_learner.zero_grad()
             self.igae.eval()
@@ -221,7 +224,8 @@ class AGCDRR(DGCModel):
             edge_drop_out_prob = 1 - batch_aug_edge_weight
             reg = edge_drop_out_prob.mean()
 
-            view_loss = -1 * ((cfg.reg_lambda * reg) + self.igae.calc_loss(c.T, aug_c.T) + self.igae.calc_loss(c, aug_c))
+            view_loss = -1 * (
+                        (cfg.reg_lambda * reg) + self.igae.calc_loss(c.T, aug_c.T) + self.igae.calc_loss(c, aug_c))
 
             view_loss.backward()
             view_optimizer.step()
@@ -247,14 +251,23 @@ class AGCDRR(DGCModel):
 
             z_mat = torch.matmul(z_igae, aug_z_igae.T)
 
-            model_loss = self.igae.calc_loss(c.T, aug_c.T) + F.mse_loss(z_mat, torch.eye(n).to('cuda')) + self.igae.calc_loss(c, aug_c)
+            model_loss = self.igae.calc_loss(c.T, aug_c.T) + F.mse_loss(z_mat,
+                                                                        torch.eye(n).to('cuda')) + self.igae.calc_loss(
+                c, aug_c)
             model_loss.backward()
             optimizer.step()
             self.logger.loss(epoch, model_loss)
             self.loss_curve.append(model_loss.item())
             if self.cfg.evaluate.each:
-                self.evaluate(data)
-        return self.loss_curve
+                embedding, predicted_labels, results = self.evaluate(data)
+                if results['ACC'] > self.best_results['ACC']:
+                    self.best_embedding = embedding
+                    self.best_predicted_labels = predicted_labels
+                    self.best_results = results
+        if not self.cfg.evaluate.each:
+            embedding, predicted_labels, results = self.evaluate(data)
+            return self.loss_curve, embedding, predicted_labels, results
+        return self.loss_curve, self.best_embedding, self.best_predicted_labels, self.best_results
 
     def get_embedding(self, data) -> Tensor:
         adj = data.adj.to(self.device)
@@ -285,8 +298,10 @@ class AGCDRR(DGCModel):
         return embedding, labels_, None
 
     def evaluate(self, data):
-        embedding, labels, _ = self.clustering(data)
+        embedding, predicted_labels, _ = self.clustering(data)
         ground_truth = data.y.numpy()
-        metric = DGCMetric(ground_truth, labels.numpy(), embedding, data.edge_index)
-        metric.evaluate_one_epoch(self.logger, acc=True, nmi=True, ari=True, f1=True, hom=True, com=True, pur=True,
-                                  sc=True, gre=True)
+        metric = DGCMetric(ground_truth, predicted_labels.numpy(), embedding, data.edge_index)
+        results = metric.evaluate_one_epoch(self.logger, acc=True, nmi=True, ari=True, f1=True, hom=True, com=True,
+                                            pur=True,
+                                            sc=True, gre=True)
+        return embedding, predicted_labels, results

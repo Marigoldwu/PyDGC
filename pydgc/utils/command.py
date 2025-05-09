@@ -4,6 +4,9 @@ import argparse
 ARGS_DEFAULT = {
         'cfg_file_path': 'config.yaml',
         'dataset_name': "ACM",
+        'pretrain': False,
+        'flag': "TRAIN",
+        'eval_each': False,
         'drop_edge': 0.0,
         'drop_feature': 0.0,
         'add_edge': 0.0,

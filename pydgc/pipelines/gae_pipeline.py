@@ -17,6 +17,7 @@ class GAEPipeline(BasePipeline):
             if self.cfg.dataset.augmentation.add_self_loops:
                 edge_index, _ = add_remaining_self_loops(self.data.edge_index, num_nodes=self.data.num_nodes)
                 self.data.edge_index = edge_index
+                self.cfg.dataset.num_edges = int((edge_index.shape[1]) / 2)
 
     def build_model(self):
         model = GAE(self.logger, self.cfg)

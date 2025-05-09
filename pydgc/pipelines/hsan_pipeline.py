@@ -43,9 +43,10 @@ def laplacian_filtering(A, X, t):
     A_norm = normalize_adj(A_tmp, self_loop=True, symmetry=True).float()
     I = torch.eye(A.shape[0])
     L = I - A_norm
+    X = X.float()
     for i in range(t):
         X = (I - L) @ X
-    return X.float()
+    return X
 
 
 class HSANPipeline(BasePipeline):

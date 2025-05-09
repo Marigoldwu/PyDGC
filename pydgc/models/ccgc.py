@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 import torch.nn.functional as F
-from typing import Tuple, List, Any
+from typing import Tuple, Any
 
 from torch import Tensor
 from torch_geometric.data import Data
@@ -33,7 +33,9 @@ class CCGC(DGCModel):
         self.layers2 = nn.Linear(dims[0], dims[1]).to(self.device)
 
         self.loss_curve = []
-        self.results = {}
+        self.best_embedding = None
+        self.best_predicted_labels = None
+        self.best_results = {'ACC': -1}
 
     def reset_parameters(self):
         pass
@@ -51,7 +53,7 @@ class CCGC(DGCModel):
     def loss(self, *args, **kwargs) -> Tensor:
         pass
 
-    def train_model(self, data: Data, cfg: CN = None, flag: str = "TRAIN CCGC") -> List:
+    def train_model(self, data: Data, cfg: CN = None, flag: str = "TRAIN CCGC"):
         if cfg is None:
             cfg = self.cfg.train
         smooth_fea = data.x.to(self.device)
@@ -126,9 +128,16 @@ class CCGC(DGCModel):
                 z1, z2 = self.forward(smooth_fea)
                 embedding = (z1 + z2) / 2
                 predict_labels, dis = init_clustering(embedding, self.cfg.dataset.n_clusters)
-            if self.cfg.evaluate.each:
-                self.evaluate(data)
-        return self.loss_curve
+                if self.cfg.evaluate.each:
+                    embedding, predicted_labels, results = self.evaluate(data)
+                    if results['ACC'] > self.best_results['ACC']:
+                        self.best_embedding = embedding
+                        self.best_predicted_labels = predicted_labels
+                        self.best_results = results
+            if not self.cfg.evaluate.each:
+                embedding, predicted_labels, results = self.evaluate(data)
+                return self.loss_curve, embedding, predicted_labels, results
+            return self.loss_curve, self.best_embedding, self.best_predicted_labels, self.best_results
 
     def get_embedding(self, data) -> Tensor:
         x = data.x.to(self.device)
@@ -143,8 +152,9 @@ class CCGC(DGCModel):
         return embedding, labels_, clustering_centers_
 
     def evaluate(self, data):
-        embedding, labels, clustering_centers = self.clustering(data)
+        embedding, predicted_labels, clustering_centers = self.clustering(data)
         ground_truth = data.y.numpy()
-        metric = DGCMetric(ground_truth, labels.numpy(), embedding, data.edge_index)
-        metric.evaluate_one_epoch(self.logger, acc=True, nmi=True, ari=True, f1=True, hom=True, com=True, pur=True,
-                                  sc=True, gre=True)
+        metric = DGCMetric(ground_truth, predicted_labels.numpy(), embedding, data.edge_index)
+        results = metric.evaluate_one_epoch(self.logger, acc=True, nmi=True, ari=True, f1=True, hom=True, com=True,
+                                            pur=True, sc=True, gre=True)
+        return embedding, predicted_labels, results

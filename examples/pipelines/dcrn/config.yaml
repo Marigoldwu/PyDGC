@@ -1,11 +1,11 @@
 WIKI:
     device: cuda
     logger:
-        name: ACM
+        name: WIKI
         mode: both
-        dir: ./log/ACM/
+        dir: ./log/WIKI/
     dataset:
-        dir: ../data/ACM/
+        dir: ../data/WIKI/
         augmentation:
             add_self_loops: false
             drop_edge: 0.0
@@ -22,16 +22,16 @@ WIKI:
     train:
         pretrain:
             ae:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/WIKI/
                 max_epoch: 30
                 lr: 1e-3
             igae:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/WIKI/
                 max_epoch: 30
                 lr: 1e-3
                 gamma_value: 0.1
             both:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/WIKI/
                 max_epoch: 100
                 lr: 1e-3
                 alpha: 0.1
@@ -48,7 +48,7 @@ WIKI:
         umap: true
         heatmap: true
         loss: true
-        dir: ./visualization/ACM/
+        dir: ./visualization/WIKI/
         when: end
     evaluate:
         each: false
@@ -64,11 +64,11 @@ WIKI:
 CORA:
     device: cuda
     logger:
-        name: ACM
+        name: CORA
         mode: both
-        dir: ./log/ACM/
+        dir: ./log/CORA/
     dataset:
-        dir: ../data/ACM/
+        dir: ../data/CORA/
         augmentation:
             add_self_loops: false
             drop_edge: 0.0
@@ -85,16 +85,16 @@ CORA:
     train:
         pretrain:
             ae:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/CORA/
                 max_epoch: 30
                 lr: 1e-3
             igae:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/CORA/
                 max_epoch: 30
                 lr: 1e-3
                 gamma_value: 0.1
             both:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/CORA/
                 max_epoch: 100
                 lr: 1e-3
                 alpha: 0.1
@@ -111,7 +111,7 @@ CORA:
         umap: true
         heatmap: true
         loss: true
-        dir: ./visualization/ACM/
+        dir: ./visualization/CORA/
         when: end
     evaluate:
         each: false
@@ -190,11 +190,11 @@ ACM:
 CITE:
     device: cuda
     logger:
-        name: ACM
+        name: CITE
         mode: both
-        dir: ./log/ACM/
+        dir: ./log/CITE/
     dataset:
-        dir: ../data/ACM/
+        dir: ../data/CITE/
         augmentation:
             add_self_loops: false
             drop_edge: 0.0
@@ -211,16 +211,16 @@ CITE:
     train:
         pretrain:
             ae:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/CITE/
                 max_epoch: 30
                 lr: 1e-3
             igae:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/CITE/
                 max_epoch: 30
                 lr: 1e-3
                 gamma_value: 0.1
             both:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/CITE/
                 max_epoch: 100
                 lr: 1e-3
                 alpha: 0.1
@@ -237,7 +237,7 @@ CITE:
         umap: true
         heatmap: true
         loss: true
-        dir: ./visualization/ACM/
+        dir: ./visualization/CITE/
         when: end
     evaluate:
         each: false
@@ -253,11 +253,11 @@ CITE:
 DBLP:
     device: cuda
     logger:
-        name: ACM
+        name: DBLP
         mode: both
-        dir: ./log/ACM/
+        dir: ./log/DBLP/
     dataset:
-        dir: ../data/ACM/
+        dir: ../data/DBLP/
         augmentation:
             add_self_loops: false
             drop_edge: 0.0
@@ -274,16 +274,16 @@ DBLP:
     train:
         pretrain:
             ae:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/DBLP/
                 max_epoch: 30
                 lr: 1e-3
             igae:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/DBLP/
                 max_epoch: 30
                 lr: 1e-3
                 gamma_value: 0.1
             both:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/DBLP/
                 max_epoch: 100
                 lr: 1e-3
                 alpha: 0.1
@@ -300,7 +300,7 @@ DBLP:
         umap: true
         heatmap: true
         loss: true
-        dir: ./visualization/ACM/
+        dir: ./visualization/DBLP/
         when: end
     evaluate:
         each: false
@@ -316,11 +316,11 @@ DBLP:
 PUBMED:
     device: cuda
     logger:
-        name: ACM
+        name: PUBMED
         mode: both
-        dir: ./log/ACM/
+        dir: ./log/PUBMED/
     dataset:
-        dir: ../data/ACM/
+        dir: ../data/PUBMED/
         augmentation:
             add_self_loops: false
             drop_edge: 0.0
@@ -337,16 +337,16 @@ PUBMED:
     train:
         pretrain:
             ae:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/PUBMED/
                 max_epoch: 30
                 lr: 1e-3
             igae:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/PUBMED/
                 max_epoch: 30
                 lr: 1e-3
                 gamma_value: 0.1
             both:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/PUBMED/
                 max_epoch: 100
                 lr: 1e-3
                 alpha: 0.1
@@ -363,7 +363,7 @@ PUBMED:
         umap: true
         heatmap: true
         loss: true
-        dir: ./visualization/ACM/
+        dir: ./visualization/PUBMED/
         when: end
     evaluate:
         each: false
@@ -379,11 +379,11 @@ PUBMED:
 ARXIV:
     device: cuda
     logger:
-        name: ACM
+        name: ARXIV
         mode: both
-        dir: ./log/ACM/
+        dir: ./log/ARXIV/
     dataset:
-        dir: ../data/ACM/
+        dir: ../data/ARXIV/
         augmentation:
             add_self_loops: false
             drop_edge: 0.0
@@ -400,16 +400,16 @@ ARXIV:
     train:
         pretrain:
             ae:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/ARXIV/
                 max_epoch: 30
                 lr: 1e-3
             igae:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/ARXIV/
                 max_epoch: 30
                 lr: 1e-3
                 gamma_value: 0.1
             both:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/ARXIV/
                 max_epoch: 100
                 lr: 1e-3
                 alpha: 0.1
@@ -426,7 +426,7 @@ ARXIV:
         umap: true
         heatmap: true
         loss: true
-        dir: ./visualization/ACM/
+        dir: ./visualization/ARXIV/
         when: end
     evaluate:
         each: false
@@ -442,11 +442,11 @@ ARXIV:
 BLOG:
     device: cuda
     logger:
-        name: ACM
+        name: BLOG
         mode: both
-        dir: ./log/ACM/
+        dir: ./log/BLOG/
     dataset:
-        dir: ../data/ACM/
+        dir: ../data/BLOG/
         augmentation:
             add_self_loops: false
             drop_edge: 0.0
@@ -463,16 +463,16 @@ BLOG:
     train:
         pretrain:
             ae:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/BLOG/
                 max_epoch: 30
                 lr: 1e-3
             igae:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/BLOG/
                 max_epoch: 30
                 lr: 1e-3
                 gamma_value: 0.1
             both:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/BLOG/
                 max_epoch: 100
                 lr: 1e-3
                 alpha: 0.1
@@ -489,7 +489,7 @@ BLOG:
         umap: true
         heatmap: true
         loss: true
-        dir: ./visualization/ACM/
+        dir: ./visualization/BLOG/
         when: end
     evaluate:
         each: false
@@ -505,11 +505,11 @@ BLOG:
 FLICKR:
     device: cuda
     logger:
-        name: ACM
+        name: FLICKR
         mode: both
-        dir: ./log/ACM/
+        dir: ./log/FLICKR/
     dataset:
-        dir: ../data/ACM/
+        dir: ../data/FLICKR/
         augmentation:
             add_self_loops: false
             drop_edge: 0.0
@@ -526,16 +526,16 @@ FLICKR:
     train:
         pretrain:
             ae:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/FLICKR/
                 max_epoch: 30
                 lr: 1e-3
             igae:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/FLICKR/
                 max_epoch: 30
                 lr: 1e-3
                 gamma_value: 0.1
             both:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/FLICKR/
                 max_epoch: 100
                 lr: 1e-3
                 alpha: 0.1
@@ -552,7 +552,7 @@ FLICKR:
         umap: true
         heatmap: true
         loss: true
-        dir: ./visualization/ACM/
+        dir: ./visualization/FLICKR/
         when: end
     evaluate:
         each: false
@@ -568,11 +568,11 @@ FLICKR:
 ROMAN:
     device: cuda
     logger:
-        name: ACM
+        name: ROMAN
         mode: both
-        dir: ./log/ACM/
+        dir: ./log/ROMAN/
     dataset:
-        dir: ../data/ACM/
+        dir: ../data/ROMAN/
         augmentation:
             add_self_loops: false
             drop_edge: 0.0
@@ -589,16 +589,16 @@ ROMAN:
     train:
         pretrain:
             ae:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/ROMAN/
                 max_epoch: 30
                 lr: 1e-3
             igae:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/ROMAN/
                 max_epoch: 30
                 lr: 1e-3
                 gamma_value: 0.1
             both:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/ROMAN/
                 max_epoch: 100
                 lr: 1e-3
                 alpha: 0.1
@@ -615,7 +615,7 @@ ROMAN:
         umap: true
         heatmap: true
         loss: true
-        dir: ./visualization/ACM/
+        dir: ./visualization/ROMAN/
         when: end
     evaluate:
         each: false
@@ -631,11 +631,11 @@ ROMAN:
 USPS_3:
     device: cuda
     logger:
-        name: ACM
+        name: USPS_3
         mode: both
-        dir: ./log/ACM/
+        dir: ./log/USPS_3/
     dataset:
-        dir: ../data/ACM/
+        dir: ../data/USPS/
         augmentation:
             add_self_loops: false
             drop_edge: 0.0
@@ -652,16 +652,16 @@ USPS_3:
     train:
         pretrain:
             ae:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/USPS_3/
                 max_epoch: 30
                 lr: 1e-3
             igae:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/USPS_3/
                 max_epoch: 30
                 lr: 1e-3
                 gamma_value: 0.1
             both:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/USPS_3/
                 max_epoch: 100
                 lr: 1e-3
                 alpha: 0.1
@@ -678,7 +678,7 @@ USPS_3:
         umap: true
         heatmap: true
         loss: true
-        dir: ./visualization/ACM/
+        dir: ./visualization/USPS_3/
         when: end
     evaluate:
         each: false
@@ -694,11 +694,11 @@ USPS_3:
 HHAR_3:
     device: cuda
     logger:
-        name: ACM
+        name: HHAR_3
         mode: both
-        dir: ./log/ACM/
+        dir: ./log/HHAR_3/
     dataset:
-        dir: ../data/ACM/
+        dir: ../data/HHAR/
         augmentation:
             add_self_loops: false
             drop_edge: 0.0
@@ -715,16 +715,16 @@ HHAR_3:
     train:
         pretrain:
             ae:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/HHAR_3/
                 max_epoch: 30
                 lr: 1e-3
             igae:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/HHAR_3/
                 max_epoch: 30
                 lr: 1e-3
                 gamma_value: 0.1
             both:
-                dir: ./pretrain/ACM/
+                dir: ./pretrain/HHAR_3/
                 max_epoch: 100
                 lr: 1e-3
                 alpha: 0.1
@@ -741,7 +741,7 @@ HHAR_3:
         umap: true
         heatmap: true
         loss: true
-        dir: ./visualization/ACM/
+        dir: ./visualization/HHAR_3/
         when: end
     evaluate:
         each: false

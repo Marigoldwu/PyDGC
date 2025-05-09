@@ -4,7 +4,7 @@ import torch.nn as nn
 
 from torch import Tensor
 from ..utils import Logger
-from typing import Tuple, Any, List
+from typing import Tuple, Any, List, Dict
 from abc import ABC, abstractmethod
 from yacs.config import CfgNode as CN
 
@@ -29,8 +29,8 @@ class DGCModel(nn.Module, ABC):
         pass
 
     @abstractmethod
-    def train_model(self, *args, **kwargs) -> List:
-        return []
+    def train_model(self, *args, **kwargs) -> Tuple[List, Tensor, Tensor, Dict]:
+        pass
 
     @abstractmethod
     def get_embedding(self, *args, **kwargs) -> Tensor:

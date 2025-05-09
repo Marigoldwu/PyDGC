@@ -22,7 +22,7 @@ class DAEGCPipeline(BasePipeline):
                 edge_index, _ = add_remaining_self_loops(self.data.edge_index, num_nodes=self.data.num_nodes)
                 self.data.edge_index = edge_index
         if hasattr(self.cfg.dataset.augmentation, 'dense_adj'):
-            if self.cfg.dataset.augmentation.to_dense_adj:
+            if self.cfg.dataset.augmentation.dense_adj:
                 adj = to_dense_adj(self.data.edge_index)[0]
                 self.data.adj = torch.from_numpy(normalize(adj.numpy(), norm="l1"))
         if hasattr(self.cfg.dataset.augmentation, 't'):

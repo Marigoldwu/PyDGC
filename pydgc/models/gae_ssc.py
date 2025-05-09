@@ -7,7 +7,7 @@ from torch import Tensor
 from ..metrics import DGCMetric
 from ..modules import SSCLayer
 from .dgc_model import DGCModel
-from typing import Tuple, List, Any
+from typing import Tuple, Any
 from torch_geometric.data import Data
 from yacs.config import CfgNode as CN
 from ..utils import validate_and_create_path
@@ -22,7 +22,9 @@ class GAESSC(DGCModel):
         self.ssc = SSCLayer(in_channels=self.cfg.model.dims[-1], out_channels=self.cfg.dataset.n_clusters, method='kl_div').to(self.device)
         self.loss_curve = []
         self.pretrain_loss_curve = []
-        self.results = {}
+        self.best_embedding = None
+        self.best_predicted_labels = None
+        self.best_results = {'ACC': -1}
         self.reset_parameters()
 
     def reset_parameters(self):
@@ -49,7 +51,7 @@ class GAESSC(DGCModel):
         pretrain_file_name = os.path.join(cfg.dir, f'gae_{self.cfg.model.gnn_type}.pth')
         torch.save(self.gae.state_dict(), pretrain_file_name)
 
-    def train_model(self, data: Data, cfg: CN = None, flag: str = "TRAIN GAE-SSC") -> List:
+    def train_model(self, data: Data, cfg: CN = None, flag: str = "TRAIN GAE-SSC"):
         flag += f'-{self.cfg.model.gnn_type.upper()}'
         if cfg is None:
             cfg = self.cfg.train
@@ -78,8 +80,15 @@ class GAESSC(DGCModel):
             self.loss_curve.append(loss.item())
             self.logger.loss(epoch, loss)
             if self.cfg.evaluate.each:
-                self.evaluate(data)
-        return self.loss_curve
+                embedding, predicted_labels, results = self.evaluate(data)
+                if results['ACC'] > self.best_results['ACC']:
+                    self.best_embedding = embedding
+                    self.best_predicted_labels = predicted_labels
+                    self.best_results = results
+        if not self.cfg.evaluate.each:
+            embedding, predicted_labels, results = self.evaluate(data)
+            return self.loss_curve, embedding, predicted_labels, results
+        return self.loss_curve, self.best_embedding, self.best_predicted_labels, self.best_results
 
     def get_embedding(self, data) -> Tensor:
         with torch.no_grad():
@@ -93,7 +102,8 @@ class GAESSC(DGCModel):
         return embedding, labels_, clustering_centers
 
     def evaluate(self, data: Data):
-        embedding, labels, clustering_centers = self.clustering(data)
+        embedding, predicted_labels, clustering_centers = self.clustering(data)
         ground_truth = data.y.numpy()
-        metric = DGCMetric(ground_truth, labels.numpy(), embedding, data.edge_index)
-        metric.evaluate_one_epoch(self.logger, acc=True, nmi=True, ari=True, f1=True, hom=True, com=True, pur=True)
+        metric = DGCMetric(ground_truth, predicted_labels.numpy(), embedding, data.edge_index)
+        results = metric.evaluate_one_epoch(self.logger, acc=True, nmi=True, ari=True, f1=True, hom=True, com=True, pur=True)
+        return embedding, predicted_labels, results

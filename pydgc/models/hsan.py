@@ -8,7 +8,7 @@ from torch_geometric.data import Data
 from ..clusterings import KMeansGPU
 from ..metrics import DGCMetric
 from ..utils import Logger
-from typing import Tuple, List, Any
+from typing import Tuple, Any
 
 from torch import Tensor
 from yacs.config import CfgNode as CN
@@ -75,7 +75,9 @@ class HSAN(DGCModel):
             self.activate = nn.Sigmoid()
 
         self.loss_curve = []
-        self.results = {}
+        self.best_embedding = None
+        self.best_predicted_labels = None
+        self.best_results = {'ACC': -1}
 
     def reset_parameters(self):
         pass
@@ -118,7 +120,7 @@ class HSAN(DGCModel):
     def loss(self, *args, **kwargs) -> Tensor:
         pass
 
-    def train_model(self, data: Data, cfg: CN = None, flag: str = "TRAIN HSAN") -> List:
+    def train_model(self, data: Data, cfg: CN = None, flag: str = "TRAIN HSAN"):
         if cfg is None:
             cfg = self.cfg.train
         node_num = self.cfg.dataset.num_nodes
@@ -168,9 +170,16 @@ class HSAN(DGCModel):
                 # update weight
                 self.pos_weight[H] = M[H].data
                 self.pos_neg_weight[H_mat] = M_mat[H_mat].data
-            if self.cfg.evaluate.each:
-                self.evaluate(data)
-        return self.loss_curve
+                if self.cfg.evaluate.each:
+                    embedding, predicted_labels, results = self.evaluate(data)
+                    if results['ACC'] > self.best_results['ACC']:
+                        self.best_embedding = embedding
+                        self.best_predicted_labels = predicted_labels
+                        self.best_results = results
+            if not self.cfg.evaluate.each:
+                embedding, predicted_labels, results = self.evaluate(data)
+                return self.loss_curve, embedding, predicted_labels, results
+            return self.loss_curve, self.best_embedding, self.best_predicted_labels, self.best_results
 
     def get_embedding(self, data) -> Tuple[Tensor, Tensor]:
         with torch.no_grad():
@@ -189,7 +198,8 @@ class HSAN(DGCModel):
         return embedding, labels_, clustering_centers_
 
     def evaluate(self, data):
-        embedding, labels, clustering_centers = self.clustering(data)
+        embedding, predicted_labels, clustering_centers = self.clustering(data)
         ground_truth = data.y.numpy()
-        metric = DGCMetric(ground_truth, labels.numpy(), embedding, data.edge_index)
-        metric.evaluate_one_epoch(self.logger, acc=True, nmi=True, ari=True, f1=True, hom=True, com=True, pur=True, sc=True, gre=True)
+        metric = DGCMetric(ground_truth, predicted_labels.numpy(), embedding, data.edge_index)
+        results = metric.evaluate_one_epoch(self.logger, acc=True, nmi=True, ari=True, f1=True, hom=True, com=True, pur=True, sc=True, gre=True)
+        return embedding, predicted_labels, results

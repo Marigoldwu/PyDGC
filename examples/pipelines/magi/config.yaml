@@ -70,7 +70,7 @@ CORA:
         ns: 0.5
     train:
         seed: -1
-        rounds: 100
+        rounds: 10
         max_epoch: 400
         lr: 5e-4
         weight_decay: 1e-3
@@ -117,7 +117,7 @@ ACM:
         ns: 0.5
     train:
         seed: -1
-        rounds: 100
+        rounds: 10
         max_epoch: 400
         lr: 5e-4
         weight_decay: 1e-3
@@ -164,7 +164,7 @@ CITE:
         ns: 0.5
     train:
         seed: -1
-        rounds: 100
+        rounds: 10
         max_epoch: 400
         lr: 1e-4
         weight_decay: 5e-4
@@ -306,7 +306,7 @@ ARXIV:
         ns: 0.1
     train:
         seed: -1
-        rounds: 100
+        rounds: 10
         max_epoch: 400
         batchsize: 2048
         lr: 1e-2

@@ -122,6 +122,10 @@ class RGAE(DGCModel):
         self.loss_curve = []
         self.pretrain_loss_curve = []
 
+        self.best_embedding = None
+        self.best_predicted_labels = None
+        self.best_results = {'ACC': -1}
+
     def reset_parameters(self):
         pass
 
@@ -173,7 +177,7 @@ class RGAE(DGCModel):
         loss = loss_recons + float(self.cfg.train.gamma) * loss_clus
         return loss, loss_recons, loss_clus
 
-    def train_model(self, data: Data, cfg: CN = None, flag: str = "TRAIN RGAE") -> List:
+    def train_model(self, data: Data, cfg: CN = None, flag: str = "TRAIN RGAE"):
         # optimizer, lr, max_epoch, gamma, beta1, beta2
         if cfg is None:
             cfg = self.cfg.train
@@ -230,7 +234,16 @@ class RGAE(DGCModel):
             lr_s.step()
             self.loss_curve.append(loss.item())
             self.logger.loss(epoch, loss)
-        return self.loss_curve
+            if self.cfg.evaluate.each:
+                embedding, predicted_labels, results = self.evaluate(data)
+                if results['ACC'] > self.best_results['ACC']:
+                    self.best_embedding = embedding
+                    self.best_predicted_labels = predicted_labels
+                    self.best_results = results
+        if not self.cfg.evaluate.each:
+            embedding, predicted_labels, results = self.evaluate(data)
+            return self.loss_curve, embedding, predicted_labels, results
+        return self.loss_curve, self.best_embedding, self.best_predicted_labels, self.best_results
 
     def generate_centers(self, emb_unconf, y_pred):
         nn_ = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(emb_unconf.detach().cpu().numpy())
@@ -278,7 +291,8 @@ class RGAE(DGCModel):
         return embedding, labels_, clustering_centers
 
     def evaluate(self, data):
-        embedding, labels, clustering_centers = self.clustering(data)
+        embedding, predicted_labels, clustering_centers = self.clustering(data)
         ground_truth = data.y.numpy()
-        metric = DGCMetric(ground_truth, labels.numpy(), embedding, data.edge_index)
-        metric.evaluate_one_epoch(self.logger, acc=True, nmi=True, ari=True, f1=True, hom=True, com=True, pur=True)
+        metric = DGCMetric(ground_truth, predicted_labels.numpy(), embedding, data.edge_index)
+        results = metric.evaluate_one_epoch(self.logger, acc=True, nmi=True, ari=True, f1=True, hom=True, com=True, pur=True)
+        return embedding, predicted_labels, results
