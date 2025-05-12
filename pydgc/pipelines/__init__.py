@@ -11,6 +11,7 @@ from .hsan_pipeline import HSANPipeline
 from .ccgc_pipeline import CCGCPipeline
 from .dgcluster_pipeline import DGCLUSTERPipeline
 from .magi_pipeline import MAGIPipeline
+from .ns4gc_pipeline import NS4GCPipeline
 
 
 __all__ = [
@@ -26,4 +27,5 @@ __all__ = [
     'CCGCPipeline',
     'DGCLUSTERPipeline',
     'MAGIPipeline',
+    'NS4GCPipeline'
 ]

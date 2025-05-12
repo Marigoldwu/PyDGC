@@ -20,5 +20,5 @@ class GAESSCPipeline(BasePipeline):
 
     def build_model(self):
         model = GAESSC(self.logger, self.cfg)
-        self.logger.info(model)
+        self.logger.model_info(model)
         return model

@@ -22,8 +22,8 @@ class DGCVisual:
                  font_size: int = 12):
         time_ = get_formatted_time()
         self.save_path = os.path.join(save_path, time_)
-        if not os.path.exists(save_path):
-            os.makedirs(save_path)
+        if not os.path.exists(self.save_path):
+            os.makedirs(self.save_path)
         self.check_save_format(save_format)
         self.save_format = save_format
         self.font_family = font_family

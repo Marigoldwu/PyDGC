@@ -211,12 +211,13 @@ class MAGI(DGCModel):
             optimizer.step()
             self.loss_curve.append(loss.item())
             self.logger.loss(epoch, loss)
-            if self.cfg.evaluate.each:
-                embedding, predicted_labels, results = self.evaluate(data)
-                if results['ACC'] > self.best_results['ACC']:
-                    self.best_embedding = embedding
-                    self.best_predicted_labels = predicted_labels
-                    self.best_results = results
+            if epoch % 10 == 0:
+                if self.cfg.evaluate.each:
+                    embedding, predicted_labels, results = self.evaluate(data)
+                    if results['ACC'] > self.best_results['ACC']:
+                        self.best_embedding = embedding
+                        self.best_predicted_labels = predicted_labels
+                        self.best_results = results
         if not self.cfg.evaluate.each:
             embedding, predicted_labels, results = self.evaluate(data)
             return self.loss_curve, embedding, predicted_labels, results

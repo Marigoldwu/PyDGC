@@ -457,9 +457,9 @@ class IGAE(nn.Module):
         pretrain_file_name = os.path.join(cfg.dir, "igae.pth")
         torch.save(self.state_dict(), pretrain_file_name)
 
-    def evaluate(self, logger, embedding, y, edge_index):
-        labels_, clustering_centers_ = KMeansGPU(3).fit(embedding)
-        DGCMetric(y, labels_.cpu().numpy(), embedding, edge_index).evaluate_one_epoch(logger)
+    # def evaluate(self, logger, embedding, y, edge_index):
+    #     labels_, clustering_centers_ = KMeansGPU(3).fit(embedding)
+    #     DGCMetric(y, labels_.cpu().numpy(), embedding, edge_index).evaluate_one_epoch(logger)
 
 
 class Readout(nn.Module):
@@ -722,12 +722,13 @@ class DCRN(DGCModel):
             optimizer.step()
             self.logger.loss(epoch, loss)
             self.loss_curve.append(loss.item())
-            if self.cfg.evaluate.each:
-                embedding, predicted_labels, results = self.evaluate(data)
-                if results['ACC'] > self.best_results['ACC']:
-                    self.best_embedding = embedding
-                    self.best_predicted_labels = predicted_labels
-                    self.best_results = results
+            if epoch % 10 == 0:
+                if self.cfg.evaluate.each:
+                    embedding, predicted_labels, results = self.evaluate(data)
+                    if results['ACC'] > self.best_results['ACC']:
+                        self.best_embedding = embedding
+                        self.best_predicted_labels = predicted_labels
+                        self.best_results = results
         if not self.cfg.evaluate.each:
             embedding, predicted_labels, results = self.evaluate(data)
             return self.loss_curve, embedding, predicted_labels, results

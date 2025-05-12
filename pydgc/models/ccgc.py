@@ -134,10 +134,10 @@ class CCGC(DGCModel):
                         self.best_embedding = embedding
                         self.best_predicted_labels = predicted_labels
                         self.best_results = results
-            if not self.cfg.evaluate.each:
-                embedding, predicted_labels, results = self.evaluate(data)
-                return self.loss_curve, embedding, predicted_labels, results
-            return self.loss_curve, self.best_embedding, self.best_predicted_labels, self.best_results
+        if not self.cfg.evaluate.each:
+            embedding, predicted_labels, results = self.evaluate(data)
+            return self.loss_curve, embedding, predicted_labels, results
+        return self.loss_curve, self.best_embedding, self.best_predicted_labels, self.best_results
 
     def get_embedding(self, data) -> Tensor:
         x = data.x.to(self.device)
