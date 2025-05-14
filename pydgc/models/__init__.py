@@ -11,7 +11,7 @@ from .hsan import HSAN
 from .ccgc import CCGC
 from .dgcluster import DGCLUSTER
 from .magi import MAGI
-from .NS4GC import NS4GC
+from .ns4gc import NS4GC
 
 
 __all__ = [
