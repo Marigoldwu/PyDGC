@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from torch_geometric.utils import add_self_loops
+
 from ..models import DGCLUSTER
 from . import BasePipeline
 from argparse import Namespace
@@ -16,7 +18,8 @@ class DGCLUSTERPipeline(BasePipeline):
     def augment_data(self):
         """Data augmentation"""
         self.data = perturb_data(self.data, self.cfg.dataset.augmentation)
-
+        if self.dataset_name == "DBLP":
+            self.data.edge_index = add_self_loops(self.data.edge_index)[0]
         # transform = T.NormalizeFeatures()
         num_nodes = self.data.x.shape[0]
         num_edges = (self.data.edge_index.shape[1])

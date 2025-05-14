@@ -25,7 +25,8 @@ class AGCDRRPipeline(BasePipeline):
                 self.data.edge_index = edge_index
         self.data.adj = to_dense_adj(self.data.edge_index)[0]
         self.data.adj = normalize_adj_torch(self.data.adj, symmetry=False).to(self.device)
-        self.data.edge_index = remove_self_loops(self.data.edge_index)[0]
+        if self.dataset_name != "DBLP":
+            self.data.edge_index = remove_self_loops(self.data.edge_index)[0]
 
     def build_model(self):
         model = AGCDRR(self.logger, self.cfg)

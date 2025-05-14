@@ -112,37 +112,37 @@ class DGCMetric:
 
     def evaluate_one_epoch(self,
                            logger: Logger,
-                           acc: bool = True,
-                           nmi: bool = True,
-                           ari: bool = True,
-                           f1: bool = True,
-                           hom: bool = True,
-                           com: bool = True,
-                           pur: bool = True,
-                           sc: bool = True,
-                           gre: bool = True) -> dict:
+                           cfg: CN = None) -> dict:
         results = {}
-        if acc:
+        if cfg is None:
             results['ACC'] = self.accuracy()
-        if nmi:
-            results['NMI'] = self.nmi_score()
-        if ari:
-            results['ARI'] = self.ari_score()
-        if f1:
-            results['F1'] = self.f1_score()
-        if hom:
-            results['HOM'] = self.hom_score()
-        if com:
-            results['COM'] = self.com_score()
-        if pur:
-            results['PUR'] = self.purity()
-        if sc:
-            if self.predicted_clusters == 1:
-                results['SC'] = 0
-            else:
-                results['SC'] = self.sil_score()
-        if gre:
-            results['GRE'] = self.graph_reconstruction_error()
+            results['NMI'] = self.accuracy()
+        else:
+            if hasattr(cfg, 'evaluate'):
+                cfg = cfg.evaluate
+            elif hasattr(cfg, 'acc') or hasattr(cfg, 'nmi') or hasattr(cfg, 'ari') or hasattr(cfg, 'f1') or hasattr(cfg, 'hom') or hasattr(cfg, 'com') or hasattr(cfg, 'pur') or hasattr(cfg, 'sc') or hasattr(cfg, 'gre'):
+                cfg = cfg
+            if cfg.acc:
+                results['ACC'] = self.accuracy()
+            if cfg.nmi:
+                results['NMI'] = self.nmi_score()
+            if cfg.ari:
+                results['ARI'] = self.ari_score()
+            if cfg.f1:
+                results['F1'] = self.f1_score()
+            if cfg.hom:
+                results['HOM'] = self.hom_score()
+            if cfg.com:
+                results['COM'] = self.com_score()
+            if cfg.pur:
+                results['PUR'] = self.purity()
+            if cfg.sc:
+                if self.predicted_clusters == 1:
+                    results['SC'] = 0
+                else:
+                    results['SC'] = self.sil_score()
+            if cfg.gre:
+                results['GRE'] = self.graph_reconstruction_error()
         logger.info(results)
         return results
 

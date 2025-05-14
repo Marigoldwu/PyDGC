@@ -81,8 +81,6 @@ class BasePipeline(ABC):
                 data = dataset
             else:
                 data = dataset[0]
-            data_self_loops = add_self_loops(data.edge_index)[0]
-            data_self_loops = data_self_loops.to_dense()
             if data.x.is_sparse_csr:
                 data.x = data.x.dense()
             data.x = data.x.float()
@@ -107,18 +105,6 @@ class BasePipeline(ABC):
         pass
 
     def evaluate(self, results):
-        # cfg = self.cfg.evaluate
-        # metric = DGCMetric(self.ground_truth, self.predicted_labels, self.embeddings, self.data.edge_index)
-        # results = metric.evaluate_one_epoch(self.logger,
-        #                                     acc=cfg.acc,
-        #                                     nmi=cfg.nmi,
-        #                                     ari=cfg.ari,
-        #                                     f1=cfg.f1,
-        #                                     sc=cfg.sc,
-        #                                     hom=cfg.hom,
-        #                                     com=cfg.com,
-        #                                     pur=cfg.pur,
-        #                                     gre=cfg.gre)
         if self.cfg.train.rounds > 1:
             for key, value in results.items():
                 self.results[key].append(value)

@@ -130,7 +130,7 @@ def distribution_loss(Q, P):
     return loss
 
 
-def r_loss(AZ, Z):
+def r_loss(AZ, Z, eps=1e-8, clamp_val=1e-4):
     """
     the loss of propagated regularization (L_R)
     Args:
@@ -143,7 +143,22 @@ def r_loss(AZ, Z):
         for j in range(3):
             p_output = F.softmax(AZ[i][j], dim=1)
             q_output = F.softmax(Z[i][j], dim=1)
-            log_mean_output = ((p_output + q_output) / 2).log()
+            if AZ[i][j].shape[0] == 2405:
+                # 防止数值下溢，clamp到最小值
+                p_output = torch.clamp(p_output, min=clamp_val)
+                q_output = torch.clamp(q_output, min=clamp_val)
+
+                # 重新归一化以确保概率和为1
+                p_output = p_output / p_output.sum(dim=1, keepdim=True)
+                q_output = q_output / q_output.sum(dim=1, keepdim=True)
+
+                # 计算平均分布
+                mean_output = (p_output + q_output) / 2
+
+                # 确保对数计算的稳定性
+                log_mean_output = torch.log(mean_output + eps)
+            else:
+                log_mean_output = ((p_output + q_output) / 2).log()
             loss += (F.kl_div(log_mean_output, p_output, reduction='batchmean') +
                      F.kl_div(log_mean_output, p_output, reduction='batchmean')) / 2
     return loss
@@ -761,5 +776,5 @@ class DCRN(DGCModel):
         embedding, predicted_labels, clustering_centers = self.clustering(data)
         ground_truth = data.y.numpy()
         metric = DGCMetric(ground_truth, predicted_labels.numpy(), embedding, data.edge_index)
-        results = metric.evaluate_one_epoch(self.logger, acc=True, nmi=True, ari=True, f1=True, hom=True, com=True, pur=True, sc=True, gre=True)
+        results = metric.evaluate_one_epoch(self.logger, self.cfg.evaluate)
         return embedding, predicted_labels, results

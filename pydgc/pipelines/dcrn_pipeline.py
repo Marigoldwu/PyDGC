@@ -89,13 +89,18 @@ class DCRNPipeline(BasePipeline):
             if self.cfg.dataset.augmentation.add_self_loops:
                 edge_index, _ = add_remaining_self_loops(self.data.edge_index, num_nodes=self.data.num_nodes)
                 self.data.edge_index = edge_index
-        if contains_self_loops(self.data.edge_index):
-            self.data.edge_index = remove_self_loops(self.data.edge_index)[0]
-
-        A = to_dense_adj(self.data.edge_index)[0].numpy()
-        self.data.A_norm = normalize_adj(A, self_loop=True, symmetry=False)
-        self.data.Ad = diffusion_adj(A, transport_rate=self.cfg.dataset.alpha_value)
-        self.data.adj = A
+        if self.dataset_name == "DBLP":
+            A = to_dense_adj(self.data.edge_index)[0].numpy()
+            self.data.A_norm = normalize_adj(A, self_loop=False, symmetry=False)
+            self.data.Ad = diffusion_adj(A, transport_rate=self.cfg.dataset.alpha_value)
+            self.data.adj = A
+        else:
+            if contains_self_loops(self.data.edge_index):
+                self.data.edge_index = remove_self_loops(self.data.edge_index)[0]
+            A = to_dense_adj(self.data.edge_index)[0].numpy()
+            self.data.A_norm = normalize_adj(A, self_loop=True, symmetry=False)
+            self.data.Ad = diffusion_adj(A, transport_rate=self.cfg.dataset.alpha_value)
+            self.data.adj = A
 
     def build_model(self):
         model = DCRN(self.logger, self.cfg)

@@ -180,12 +180,13 @@ class DGCLUSTER(DGCModel):
             torch.nn.utils.clip_grad_norm_(self.parameters(), 0.1)
             optimizer.step()
             scheduler.step()
-            if self.cfg.evaluate.each:
-                embedding, predicted_labels, results = self.evaluate(data)
-                if results['ACC'] > self.best_results['ACC']:
-                    self.best_embedding = embedding
-                    self.best_predicted_labels = predicted_labels
-                    self.best_results = results
+            if epoch % 10 == 0:
+                if self.cfg.evaluate.each:
+                    embedding, predicted_labels, results = self.evaluate(data)
+                    if results['ACC'] > self.best_results['ACC']:
+                        self.best_embedding = embedding
+                        self.best_predicted_labels = predicted_labels
+                        self.best_results = results
         if not self.cfg.evaluate.each:
             embedding, predicted_labels, results = self.evaluate(data)
             return self.loss_curve, embedding, predicted_labels, results
@@ -206,5 +207,5 @@ class DGCLUSTER(DGCModel):
         embedding, predicted_labels, clustering_centers = self.clustering(data)
         ground_truth = data.y.cpu().numpy()
         metric = DGCMetric(ground_truth, predicted_labels.numpy(), embedding, data.edge_index)
-        results = metric.evaluate_one_epoch(self.logger, acc=True, nmi=True, ari=True, f1=True, hom=True, com=True, pur=True, sc=True, gre=True)
+        results = metric.evaluate_one_epoch(self.logger, self.cfg.evaluate)
         return embedding, predicted_labels, results

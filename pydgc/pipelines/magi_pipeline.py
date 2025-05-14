@@ -6,7 +6,7 @@ from ..models import MAGI
 from . import BasePipeline
 from argparse import Namespace
 from ..utils import perturb_data
-from torch_geometric.utils import to_undirected, add_remaining_self_loops
+from torch_geometric.utils import to_undirected, add_remaining_self_loops, add_self_loops
 
 
 def get_sim(batch, adj, wt=20, wl=3):
@@ -62,8 +62,11 @@ class MAGIPipeline(BasePipeline):
         self.data = perturb_data(self.data, self.cfg.dataset.augmentation)
 
         x, edge_index, y = self.data.x, self.data.edge_index, self.data.y
+        if self.dataset_name == "DBLP":
+            edge_index = to_undirected(add_self_loops(edge_index)[0])
+        else:
+            edge_index = to_undirected(add_remaining_self_loops(edge_index)[0])
         N, E = self.data.num_nodes, self.data.num_edges
-        edge_index = to_undirected(add_remaining_self_loops(edge_index)[0])
         adj = SparseTensor(row=edge_index[0],
                            col=edge_index[1], sparse_sizes=(N, N))
         adj.fill_value_(1.)
@@ -71,7 +74,7 @@ class MAGIPipeline(BasePipeline):
         batch, adj_batch = get_sim(batch, adj, wt=self.cfg.dataset.wt, wl=self.cfg.dataset.wl)
 
         mask = get_mask(adj_batch)
-
+        self.data.edge_index = edge_index
         self.data.mask = mask
 
     def build_model(self):

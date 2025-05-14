@@ -70,7 +70,7 @@ CORA:
         ns: 0.5
     train:
         seed: -1
-        rounds: 10
+        rounds: 1
         max_epoch: 400
         lr: 5e-4
         weight_decay: 1e-3
@@ -232,7 +232,7 @@ DBLP:
         com: true
         pur: true
         sc: true
-        gre: true
+        gre: false
 PUBMED:
     device: cuda
     logger:
@@ -258,7 +258,7 @@ PUBMED:
         ns: 0.5
     train:
         seed: -1
-        rounds: 10
+        rounds: 3
         max_epoch: 400
         lr: 5e-4
         weight_decay: 1e-3
@@ -451,7 +451,7 @@ ROMAN:
         ns: 0.5
     train:
         seed: -1
-        rounds: 10
+        rounds: 3
         max_epoch: 400
         lr: 5e-4
         weight_decay: 1e-3

@@ -38,7 +38,7 @@ WIKI:
                 beta: 0.01
                 omega: 0.1
         seed: 1
-        rounds: 1
+        rounds: 10
         max_epoch: 400
         lr: 1e-4
         gamma_value: 1000
@@ -101,7 +101,7 @@ CORA:
                 beta: 0.01
                 omega: 0.1
         seed: 1
-        rounds: 1
+        rounds: 10
         max_epoch: 400
         lr: 1e-4
         gamma_value: 1000
@@ -164,7 +164,7 @@ ACM:
                 beta: 0.01
                 omega: 0.1
         seed: 1
-        rounds: 1
+        rounds: 10
         max_epoch: 400
         lr: 5e-5
         gamma_value: 1000
@@ -227,7 +227,7 @@ CITE:
                 beta: 0.01
                 omega: 0.1
         seed: 1
-        rounds: 1
+        rounds: 10
         max_epoch: 400
         lr: 1e-4
         gamma_value: 1000
@@ -259,7 +259,7 @@ DBLP:
     dataset:
         dir: ../data/DBLP/
         augmentation:
-            add_self_loops: false
+            add_self_loops: true
             drop_edge: 0.0
             drop_feature: 0.0
             add_edge: 0.0
@@ -290,7 +290,7 @@ DBLP:
                 beta: 0.01
                 omega: 0.1
         seed: 1
-        rounds: 1
+        rounds: 10
         max_epoch: 400
         lr: 1e-4
         gamma_value: 1000
@@ -353,7 +353,7 @@ PUBMED:
                 beta: 0.01
                 omega: 0.1
         seed: 1
-        rounds: 1
+        rounds: 10
         max_epoch: 400
         lr: 1e-4
         gamma_value: 1000
@@ -416,7 +416,7 @@ ARXIV:
                 beta: 0.01
                 omega: 0.1
         seed: 1
-        rounds: 1
+        rounds: 10
         max_epoch: 400
         lr: 1e-4
         gamma_value: 1000
@@ -479,7 +479,7 @@ BLOG:
                 beta: 0.01
                 omega: 0.1
         seed: 1
-        rounds: 1
+        rounds: 10
         max_epoch: 400
         lr: 1e-4
         gamma_value: 1000
@@ -542,7 +542,7 @@ FLICKR:
                 beta: 0.01
                 omega: 0.1
         seed: 1
-        rounds: 1
+        rounds: 10
         max_epoch: 400
         lr: 1e-4
         gamma_value: 1000
@@ -605,7 +605,7 @@ ROMAN:
                 beta: 0.01
                 omega: 0.1
         seed: 1
-        rounds: 1
+        rounds: 10
         max_epoch: 400
         lr: 1e-4
         gamma_value: 1000
@@ -668,7 +668,7 @@ USPS_3:
                 beta: 0.01
                 omega: 0.1
         seed: 1
-        rounds: 1
+        rounds: 10
         max_epoch: 400
         lr: 1e-4
         gamma_value: 1000
@@ -731,7 +731,7 @@ HHAR_3:
                 beta: 0.01
                 omega: 0.1
         seed: 1
-        rounds: 1
+        rounds: 10
         max_epoch: 400
         lr: 1e-4
         gamma_value: 1000

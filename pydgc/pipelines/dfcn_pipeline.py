@@ -42,17 +42,26 @@ class DFCNPipeline(BasePipeline):
             if self.cfg.dataset.augmentation.add_self_loops:
                 edge_index, _ = add_remaining_self_loops(self.data.edge_index, num_nodes=self.data.num_nodes)
                 self.data.edge_index = edge_index
-        if contains_self_loops(self.data.edge_index):
-            self.data.edge_index = remove_self_loops(self.data.edge_index)[0]
-        edges = self.data.edge_index.numpy().T
-        n = self.cfg.dataset.num_nodes
-        adj = sp.coo_matrix((np.ones(edges.shape[0]), (edges[:, 0], edges[:, 1])), shape=(n, n), dtype=np.float32)
-        adj = adj + adj.T.multiply(adj.T > adj) - adj.multiply(adj.T > adj)
-        adj = adj + sp.eye(adj.shape[0])
-        adj = normalize(adj)
-        adj = sparse_mx_to_torch_sparse_tensor(adj)
-
-        self.data.adj = adj
+        if self.dataset_name == "DBLP":
+            edges = self.data.edge_index.numpy().T
+            n = self.cfg.dataset.num_nodes
+            adj = sp.coo_matrix((np.ones(edges.shape[0]), (edges[:, 0], edges[:, 1])), shape=(n, n), dtype=np.float32)
+            adj = adj + adj.T.multiply(adj.T > adj) - adj.multiply(adj.T > adj)
+            adj = normalize(adj)
+            adj = sparse_mx_to_torch_sparse_tensor(adj)
+            self.data.adj = adj
+        else:
+            if contains_self_loops(self.data.edge_index):
+                edge_index = remove_self_loops(self.data.edge_index)[0]
+                self.data.edge_index = edge_index
+            edges = self.data.edge_index.numpy().T
+            n = self.cfg.dataset.num_nodes
+            adj = sp.coo_matrix((np.ones(edges.shape[0]), (edges[:, 0], edges[:, 1])), shape=(n, n), dtype=np.float32)
+            adj = adj + adj.T.multiply(adj.T > adj) - adj.multiply(adj.T > adj)
+            adj = adj + sp.eye(adj.shape[0])
+            adj = normalize(adj)
+            adj = sparse_mx_to_torch_sparse_tensor(adj)
+            self.data.adj = adj
 
     def build_model(self):
         model = DFCN(self.logger, self.cfg)
