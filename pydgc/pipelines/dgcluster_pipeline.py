@@ -25,7 +25,10 @@ class DGCLUSTERPipeline(BasePipeline):
         num_edges = (self.data.edge_index.shape[1])
         labels = self.data.y.flatten()
         if not isinstance(labels, torch.Tensor):
-            labels = torch.tensor(labels)
+            labels = torch.from_numpy(labels).long()
+        else:
+            if labels.dtype != torch.long:
+                labels = labels.long()
         oh_labels = F.one_hot(labels, num_classes=max(labels) + 1)
         sparse_adj = sp.csr_matrix((np.ones(num_edges), self.data.edge_index.cpu().numpy()),
                                    shape=(num_nodes, num_nodes))

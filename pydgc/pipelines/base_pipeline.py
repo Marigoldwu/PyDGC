@@ -82,8 +82,8 @@ class BasePipeline(ABC):
                 data = dataset
             else:
                 data = dataset[0]
-            if data.x.is_sparse_csr:
-                data.x = data.x.dense()
+            if data.x.layout == torch.sparse_csr:
+                data.x = data.x.to_dense()
             data.x = data.x.float()
             self.cfg.dataset.num_nodes = data.num_nodes
             self.cfg.dataset.num_features = data.num_features
