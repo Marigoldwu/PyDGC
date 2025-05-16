@@ -9,7 +9,7 @@ from pydgc.pipelines import DGCLUSTERPipeline
 from pydgc.utils import parse_arguments
 
 # datasets = ["WIKI", "CORA", "ACM", "CITE", "DBLP", "BLOG", "FLICKR", "USPS_3", "HHAR_3", "PUBMED", "ROMAN", "ARXIV"]
-datasets = ["DBLP"]
+datasets = ["CORA"]
 for dataset in datasets:
     args = parse_arguments(dataset)
     pipeline = DGCLUSTERPipeline(args)

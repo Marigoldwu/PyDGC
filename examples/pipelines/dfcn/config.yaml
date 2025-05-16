@@ -99,7 +99,7 @@ CORA:
                 beta: 0.01
                 omega: 0.1
         seed: -1
-        rounds: 10
+        rounds: 1
         max_epoch: 200
         lr: 1e-4
         gamma_value: 0.1
@@ -255,7 +255,7 @@ DBLP:
     dataset:
         dir: ../data/DBLP/
         augmentation:
-            add_self_loops: false
+            add_self_loops: true
             drop_edge: 0.0
             drop_feature: 0.0
             add_edge: 0.0

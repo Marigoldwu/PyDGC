@@ -8,7 +8,8 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 from pydgc.pipelines import DAEGCPipeline
 from pydgc.utils import parse_arguments
 
-datasets = ["WIKI", "CORA", "ACM", "CITE", "DBLP", "BLOG", "FLICKR", "USPS_3", "HHAR_3", "PUBMED", "ROMAN", "ARXIV"]
+# datasets = ["WIKI", "CORA", "ACM", "CITE", "DBLP", "BLOG", "FLICKR", "USPS_3", "HHAR_3", "PUBMED", "ROMAN", "ARXIV"]
+datasets = ["CORA"]
 
 for dataset in datasets:
     args = parse_arguments(dataset)

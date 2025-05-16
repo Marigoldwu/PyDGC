@@ -61,7 +61,7 @@ CORA:
         act_last: false
     train:
         seed: -1
-        rounds: 10
+        rounds: 1
         max_epoch: 30
         lr: 1e-3
     visualize:

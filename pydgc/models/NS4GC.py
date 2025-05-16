@@ -145,6 +145,7 @@ class NS4GC(DGCModel):
         self.encoder = self.encoder.to(self.device)
 
         self.loss_curve = []
+        self.nmi_curve = []
         self.pretrain_loss_curve = []
         self.best_embedding = None
         self.best_predicted_labels = None
@@ -168,7 +169,7 @@ class NS4GC(DGCModel):
     def loss(self, *args, **kwargs) -> Tensor:
         pass
 
-    def train_model(self, data: Data, cfg: CN = None, flag: str = "TRAIN NS4GC") -> Tuple[List, Tensor, Tensor, Dict]:
+    def train_model(self, data: Data, cfg: CN = None, flag: str = "TRAIN NS4GC") -> Tuple[List, List, Tensor, Tensor, Dict]:
         if cfg is None:
             cfg = self.cfg.train
         self.logger.flag(flag)
@@ -204,17 +205,18 @@ class NS4GC(DGCModel):
             optimizer.step()
             self.logger.loss(epoch, loss)
             self.loss_curve.append(loss.item())
-            if epoch % 10 == 0:
+            if epoch % 1 == 0:
                 if self.cfg.evaluate.each:
                     embedding, predicted_labels, results = self.evaluate(data)
+                    self.nmi_curve.append(results['NMI'])
                     if results['ACC'] > self.best_results['ACC']:
                         self.best_embedding = embedding
                         self.best_predicted_labels = predicted_labels
                         self.best_results = results
         if not self.cfg.evaluate.each:
             embedding, predicted_labels, results = self.evaluate(data)
-            return self.loss_curve, embedding, predicted_labels, results
-        return self.loss_curve, self.best_embedding, self.best_predicted_labels, self.best_results
+            return self.loss_curve, self.nmi_curve, embedding, predicted_labels, results
+        return self.loss_curve, self.nmi_curve, self.best_embedding, self.best_predicted_labels, self.best_results
 
     def get_embedding(self, data: Data) -> Tensor:
         A = data.A.to(self.device)

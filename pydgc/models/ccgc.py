@@ -33,6 +33,7 @@ class CCGC(DGCModel):
         self.layers2 = nn.Linear(dims[0], dims[1]).to(self.device)
 
         self.loss_curve = []
+        self.nmi_curve = []
         self.best_embedding = None
         self.best_predicted_labels = None
         self.best_results = {'ACC': -1}
@@ -123,21 +124,22 @@ class CCGC(DGCModel):
             self.loss_curve.append(loss.item())
             self.logger.loss(epoch, loss)
 
-            if epoch % 10 == 0:
+            if epoch % 1 == 0:
                 self.eval()
                 z1, z2 = self.forward(smooth_fea)
                 embedding = (z1 + z2) / 2
                 predict_labels, dis = init_clustering(embedding, self.cfg.dataset.n_clusters)
                 if self.cfg.evaluate.each:
                     embedding, predicted_labels, results = self.evaluate(data)
+                    self.nmi_curve.append(results['NMI'])
                     if results['ACC'] > self.best_results['ACC']:
                         self.best_embedding = embedding
                         self.best_predicted_labels = predicted_labels
                         self.best_results = results
         if not self.cfg.evaluate.each:
             embedding, predicted_labels, results = self.evaluate(data)
-            return self.loss_curve, embedding, predicted_labels, results
-        return self.loss_curve, self.best_embedding, self.best_predicted_labels, self.best_results
+            return self.loss_curve, self.nmi_curve, embedding, predicted_labels, results
+        return self.loss_curve, self.nmi_curve, self.best_embedding, self.best_predicted_labels, self.best_results
 
     def get_embedding(self, data) -> Tensor:
         x = data.x.to(self.device)

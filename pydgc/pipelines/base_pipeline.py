@@ -42,6 +42,7 @@ class BasePipeline(ABC):
         self.predicted_labels = None
         self.results = {}
         self.loss_curve = []
+        self.nmi_curve = []
         self.embeddings = None
         self.times = []
         self.current_round = 0
@@ -113,7 +114,7 @@ class BasePipeline(ABC):
 
     def visualize(self):
         cfg = self.cfg.visualize
-        plot = DGCVisual(save_path=cfg.dir, font_family=['Times New Roman', 'SimSun'], font_size=16)
+        plot = DGCVisual(save_path=cfg.dir, font_family=['Times New Roman', 'SimSun'], font_size=24)
         if cfg.tsne:
             self.logger.flag(f"TSNE START")
             plot.plot_clustering(self.embeddings.cpu().numpy(), self.predicted_labels, palette='Set2', method='tsne', filename='tsne_plot')
@@ -128,7 +129,7 @@ class BasePipeline(ABC):
             self.logger.flag(f"HEATMAP END")
         if cfg.loss:
             self.logger.flag(f"LOSS START")
-            plot.plot_loss(self.loss_curve)
+            plot.plot_loss(self.loss_curve, metrics=self.nmi_curve)
             self.logger.flag(f"LOSS END")
 
     def run(self, pretrain=False, flag="TRAIN"):
@@ -156,7 +157,7 @@ class BasePipeline(ABC):
                         else:
                             raise ValueError("Model does not support pretraining!")
                     else:
-                        self.loss_curve, embeddings, predicted_labels, results = model.train_model(self.data, self.cfg.train)
+                        self.loss_curve, self.nmi_curve, embeddings, predicted_labels, results = model.train_model(self.data, self.cfg.train)
                         end = time.time()
                         time_cost = round(end - start, 4)
                         self.times.append(time_cost)
@@ -186,7 +187,7 @@ class BasePipeline(ABC):
                         else:
                             raise ValueError("Model does not support pretraining!")
                     else:
-                        self.loss_curve, embeddings, predicted_labels, results = model.train_model(self.data, self.cfg.train)
+                        self.loss_curve, self.nmi_curve, embeddings, predicted_labels, results = model.train_model(self.data, self.cfg.train)
 
                         end = time.time()
                         time_cost = end - start

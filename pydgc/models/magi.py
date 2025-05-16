@@ -173,6 +173,7 @@ class MAGI(DGCModel):
             self.project.to(self.device)
 
         self.loss_curve = []
+        self.nmi_curve = []
 
         self.best_embedding = None
         self.best_predicted_labels = None
@@ -211,17 +212,19 @@ class MAGI(DGCModel):
             optimizer.step()
             self.loss_curve.append(loss.item())
             self.logger.loss(epoch, loss)
-            if epoch % 10 == 0:
+            if epoch % 1 == 0:
                 if self.cfg.evaluate.each:
                     embedding, predicted_labels, results = self.evaluate(data)
+                    self.nmi_curve.append(results['NMI'])
                     if results['ACC'] > self.best_results['ACC']:
                         self.best_embedding = embedding
                         self.best_predicted_labels = predicted_labels
                         self.best_results = results
         if not self.cfg.evaluate.each:
             embedding, predicted_labels, results = self.evaluate(data)
-            return self.loss_curve, embedding, predicted_labels, results
-        return self.loss_curve, self.best_embedding, self.best_predicted_labels, self.best_results
+            self.nmi_curve = None
+            return self.loss_curve, self.nmi_curve, embedding, predicted_labels, results
+        return self.loss_curve, self.nmi_curve, self.best_embedding, self.best_predicted_labels, self.best_results
 
     def get_embedding(self, data) -> Tensor:
         # eval

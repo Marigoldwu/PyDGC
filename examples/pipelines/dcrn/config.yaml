@@ -101,7 +101,7 @@ CORA:
                 beta: 0.01
                 omega: 0.1
         seed: 1
-        rounds: 10
+        rounds: 1
         max_epoch: 400
         lr: 1e-4
         gamma_value: 1000

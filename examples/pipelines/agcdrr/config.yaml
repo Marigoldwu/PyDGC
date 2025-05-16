@@ -59,7 +59,7 @@ CORA:
         dims: [1000, 500, 500, 500]
     train:
         seed: -1
-        rounds: 10
+        rounds: 1
         max_epoch: 200
         lr: 5e-4
         view_lr: 1e-4

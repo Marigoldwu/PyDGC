@@ -6,6 +6,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 from typing import Tuple
+
+from matplotlib.ticker import FixedLocator, FixedFormatter
 from sklearn.manifold import TSNE
 from sklearn.metrics import euclidean_distances
 from sklearn.metrics.pairwise import cosine_similarity
@@ -19,7 +21,7 @@ class DGCVisual:
                  save_path: str = '.',
                  save_format: str = 'png',
                  font_family: str or list = 'sans-serif',
-                 font_size: int = 12):
+                 font_size: int = 20):
         time_ = get_formatted_time()
         self.save_path = os.path.join(save_path, time_)
         if not os.path.exists(self.save_path):
@@ -43,7 +45,9 @@ class DGCVisual:
                         palette="viridis",
                         fig_size: Tuple[int, int] = (10, 8),
                         filename: str = "tsne_plot",
-                        show_axis: bool = True,
+                        show_axis: bool = False,
+                        legend: bool = False,
+                        dpi: int = 300,
                         random_state=42):
         """
         使用 t-SNE 对数据进行降维并可视化
@@ -55,6 +59,7 @@ class DGCVisual:
         :param fig_size: 图片尺寸
         :param filename: 保存图像的文件名
         :param show_axis: 是否显示坐标轴
+        :param dpi:
         :param random_state: 随机数
         """
         if method == 'tsne':
@@ -67,9 +72,9 @@ class DGCVisual:
         plt.figure(figsize=fig_size)
         if not show_axis:
             plt.axis("off")
-        sns.scatterplot(x=data[:, 0], y=data[:, 1], hue=labels, palette=palette)
+        sns.scatterplot(x=data[:, 0], y=data[:, 1], hue=labels, palette=palette, legend=legend)
         file_path = f"{self.save_path}/{filename}.{self.save_format}"
-        plt.savefig(file_path)
+        plt.savefig(file_path, dpi=dpi, bbox_inches='tight')
         plt.clf()
 
     def plot_heatmap(self,
@@ -79,8 +84,9 @@ class DGCVisual:
                      color_map="YlGnBu",
                      fig_size: Tuple[int, int] = (8, 8),
                      filename: str = "heatmap_plot",
-                     show_color_bar: bool = True,
-                     show_axis: bool = True):
+                     show_color_bar: bool = False,
+                     show_axis: bool = False,
+                     dpi: int = 300):
         """
         绘制热力图
 
@@ -92,6 +98,7 @@ class DGCVisual:
         :param filename: 保存图像的文件名
         :param show_color_bar: 是否显示color bar
         :param show_axis: 是否显示坐标轴
+        :param dpi:
         """
         # Sort F based on the sort indices
         sort_indices = np.argsort(labels)
@@ -110,22 +117,28 @@ class DGCVisual:
         if not show_axis:
             plt.axis("off")
         file_path = f"{self.save_path}/{filename}.{self.save_format}"
-        plt.savefig(file_path)
+        plt.tight_layout()
+        plt.savefig(file_path, dpi=dpi, bbox_inches='tight')
         plt.clf()
 
     def plot_loss(self,
-                  losses: np.array,
-                  fig_size: Tuple[int, int] = (10, 8),
+                  losses: list,
+                  metrics: list = None,
+                  metrics_name: str = None,
+                  fig_size: Tuple[int, int] = (8/2.54, 6/2.54),
                   marker: str = 'o',
                   line_style: str = '-',
                   color: str = 'blue',
                   line_width: int = 2,
-                  title: str = "Loss Curve",
+                  title: str = None,
+                  dpi: int = 300,
                   filename: str = "loss_curve_plot"):
         """
         绘制损失曲线
 
         :param losses: 损失值列表
+        :param metrics:
+        :param metrics_name:
         :param fig_size: 图片尺寸
         :param losses:
         :param fig_size:
@@ -134,16 +147,68 @@ class DGCVisual:
         :param color:
         :param line_width:
         :param title: 图形的标题
+        :param dpi:
         :param filename: 保存图像的文件名
         :return:
         """
-        plt.figure(figsize=fig_size)
-        epochs = np.arange(1, len(losses)+1)
+        epochs = np.arange(1, len(losses) + 1)
         losses = np.array(losses)
-        plt.plot(epochs, losses, marker=marker, linestyle=line_style, color=color, linewidth=line_width)
-        plt.xlabel('Epochs')
-        plt.ylabel('Loss')
-        plt.title(title)
+        color = (0.4, 0.4, 0.8)
+        acc_color = (0.9, 0.4, 0.0)
+        if metrics is None:
+            plt.figure(figsize=fig_size, dpi=dpi)
+
+            plt.plot(epochs, losses, marker=marker, linestyle=line_style, color=color, linewidth=line_width)
+            # plt.xlabel('Epochs')
+            # plt.ylabel('Loss')
+            if title is not None:
+                plt.title(title)
+
+        else:
+            metrics = np.array(metrics)
+            # 创建图像和双Y轴
+            fig, ax1 = plt.subplots(figsize=fig_size, dpi=dpi)
+
+            # 设置左侧Y轴 (损失函数)
+            color1 = color
+            color2 = acc_color
+            # ax1.set_xlabel('Epochs')
+            # ax1.set_ylabel('Loss', color=color1)
+            ax1.plot(epochs, losses, linestyle=line_style, color=color1, linewidth=line_width)
+            ax1.tick_params(axis='y', labelcolor=color1)
+            ax1.tick_params(axis='x')
+
+            # 设置右侧Y轴 (准确率)
+            ax2 = ax1.twinx()
+            # color2 = 'tab:blue'
+            # ax2.set_ylabel(f'{metrics_name}')
+            ax2.plot(epochs, metrics, linestyle='--', color=color2, linewidth=line_width)
+            ax2.tick_params(axis='y', labelcolor=color2)
+
+            # loss_min = np.min(losses)
+            # loss_max = np.max(losses)
+            # ax1.yaxis.set_major_locator(FixedLocator([loss_min, loss_max]))
+            # ax1.yaxis.set_major_formatter(FixedFormatter([f'{loss_min:.2f}', f'{loss_max:.2f}']))
+            #
+            # # 对于右侧Y轴（准确率）
+            # acc_min = np.min(metrics)
+            # acc_max = np.max(metrics)
+            # ax2.yaxis.set_major_locator(FixedLocator([acc_min, acc_max]))
+            # ax2.yaxis.set_major_formatter(FixedFormatter([f'{acc_min:.3f}', f'{acc_max:.3f}']))
+
+            # 设置X轴仅显示最小值和最大值
+            epoch_min = np.min(epochs)
+            epoch_max = np.max(epochs)
+            ax1.xaxis.set_major_locator(FixedLocator([epoch_min, epoch_max]))
+            ax1.xaxis.set_major_formatter(FixedFormatter([f'{epoch_min}', f'{epoch_max}']))
+            ax1.set_yticks([])  # 隐藏左侧Y轴刻度
+            ax2.set_yticks([])  # 隐藏右侧Y轴刻度
+        # 添加标题
+        if title is not None:
+            plt.title(title)
+
+        # 调整布局
+        plt.tight_layout()
         file_path = f"{self.save_path}/{filename}.{self.save_format}"
-        plt.savefig(file_path)
+        plt.savefig(file_path, dpi=dpi, bbox_inches='tight')
         plt.clf()

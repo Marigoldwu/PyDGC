@@ -68,7 +68,7 @@ CORA:
         dims: [ 256, 64 ]
     train:
         seed: 0
-        rounds: 10
+        rounds: 1
         max_epoch: 200
         lr: 1e-3
         weight_decay: 1e-5
@@ -237,7 +237,7 @@ DBLP:
         com: true
         pur: true
         sc: true
-        gre: true
+        gre: false
 PUBMED:
     device: cuda
     logger:

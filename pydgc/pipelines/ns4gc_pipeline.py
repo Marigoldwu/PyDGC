@@ -18,13 +18,14 @@ class NS4GCPipeline(BasePipeline):
         self.data = perturb_data(self.data, self.cfg.dataset.augmentation)
         x, edge_index = self.data.x, self.data.edge_index
         if self.dataset_name == "DBLP":
-            self.data.edge_index = add_self_loops(edge_index)[0]
-        N, E = self.data.num_nodes, num_edges = (self.data.edge_index.shape[1])
+            edge_index = add_self_loops(edge_index)[0]
+        N, E = self.data.num_nodes, (edge_index.shape[1])
         A = torch.sparse_coo_tensor(edge_index, torch.ones(E), size=(N, N))
         src, dst = edge_index[0], edge_index[1]
         mask = torch.full(A.size(), True)
         mask[src, dst] = False
         mask.fill_diagonal_(False)
+        self.data.edge_index = edge_index
         self.data.A = A
         self.data.mask = mask
 

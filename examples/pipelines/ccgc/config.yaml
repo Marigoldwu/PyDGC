@@ -231,7 +231,7 @@ PUBMED:
         dims: [500]
     train:
         seed: -1
-        rounds: 10
+        rounds: 3
         max_epoch: 400
         lr: 1e-4
         tau: 0.5
@@ -403,7 +403,7 @@ ROMAN:
         dims: [500]
     train:
         seed: -1
-        rounds: 10
+        rounds: 3
         max_epoch: 400
         lr: 1e-4
         tau: 0.5
