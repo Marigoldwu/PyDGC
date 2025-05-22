@@ -7,7 +7,7 @@ from ..clusterings import kmeans
 from sklearn.cluster import SpectralClustering, KMeans
 from torch_geometric.data import Data
 
-from torch_geometric.nn import GCNConv
+from torch_geometric.nn import SAGEConv
 
 from . import DGCModel
 
@@ -24,8 +24,8 @@ from torch import Tensor
 from torch_sparse import SparseTensor
 
 
-class Encoder(nn.Module):
-    def __init__(self, in_channels: int, hidden_channels, base_model=GCNConv, dropout: float = 0.5, ns: float = 0.5):
+class Encoder(torch.nn.Module):
+    def __init__(self, in_channels: int, hidden_channels, base_model=SAGEConv, dropout: float = 0.5, ns: float = 0.5):
         super(Encoder, self).__init__()
         self.base_model = base_model
         self.dropout = dropout
@@ -37,7 +37,7 @@ class Encoder(nn.Module):
 
         for i in range(1, self.k):
             self.convs.extend(
-                [base_model(hidden_channels[i - 1], hidden_channels[i])])
+                [base_model(hidden_channels[i-1], hidden_channels[i])])
 
         self.reset_parameters()
 
@@ -348,7 +348,7 @@ class MAGIBatch(DGCModel):
         encoder_dims = cfg.model.dims.encoder
         projection_dims = cfg.model.dims.projection
         encoder_dims.insert(0, cfg.dataset.num_features)
-        self.encoder = Encoder(encoder_dims[0], encoder_dims[1:], base_model=GCNConv,
+        self.encoder = Encoder(encoder_dims[0], encoder_dims[1:],
                                dropout=cfg.model.dropout, ns=cfg.model.ns).to(self.device)
         self.tau = cfg.model.tau
         self.in_channels = encoder_dims[-1]
@@ -370,14 +370,18 @@ class MAGIBatch(DGCModel):
             self.project.to(self.device)
 
         self.loss_curve = []
+        self.nmi_curve = []
+        self.best_embedding = None
+        self.best_predicted_labels = None
+        self.best_results = {'ACC': -1}
 
     def reset_parameters(self):
         pass
 
     def forward(self, data) -> Any:
         x = data.x.to(self.device)
-        adjs = data.adjs.to(self.device)
-        x = self.encoder(x, adjs)
+        adjs = data.adjs
+        x = self.encoder(x, adjs=adjs)
         if self.project is not None:
             for i in range(len(self.project_hidden)):
                 x = self.project[i](x)
@@ -387,7 +391,7 @@ class MAGIBatch(DGCModel):
     def loss(self, *args, **kwargs) -> Tensor:
         pass
 
-    def train_model(self, data: Data, cfg: CN = None, flag: str = "TRAIN MAGI") -> List:
+    def train_model(self, data: Data, cfg: CN = None, flag: str = "TRAIN MAGI"):
         if cfg is None:
             cfg = self.cfg.train
         edge_index, adj = data.edge_index, data.adj
@@ -430,9 +434,19 @@ class MAGIBatch(DGCModel):
 
             self.loss_curve.append(total_loss / total_examples)
             self.logger.loss(epoch, total_loss / total_examples)
-            if self.cfg.evaluate.each:
-                self.evaluate(data)
-        return self.loss_curve
+            if epoch % 10 == 0:
+                if self.cfg.evaluate.each:
+                    embedding, predicted_labels, results = self.evaluate(data)
+                    self.nmi_curve.append(results['NMI'])
+                    if results['ACC'] > self.best_results['ACC']:
+                        self.best_embedding = embedding
+                        self.best_predicted_labels = predicted_labels
+                        self.best_results = results
+        if not self.cfg.evaluate.each:
+            embedding, predicted_labels, results = self.evaluate(data)
+            self.nmi_curve = None
+            return self.loss_curve, self.nmi_curve, embedding, predicted_labels, results
+        return self.loss_curve, self.nmi_curve, self.best_embedding, self.best_predicted_labels, self.best_results
 
     def get_embedding(self, data) -> Tensor:
         # eval
@@ -470,7 +484,8 @@ class MAGIBatch(DGCModel):
         return embedding, labels, clustering_centers
 
     def evaluate(self, data):
-        embedding, labels, clustering_centers = self.clustering(data)
+        embedding, predicted_labels, clustering_centers = self.clustering(data)
         ground_truth = data.y.numpy()
-        metric = DGCMetric(ground_truth, labels.numpy(), embedding, data.edge_index)
-        metric.evaluate_one_epoch(self.logger, self.cfg.evaluate)
+        metric = DGCMetric(ground_truth, predicted_labels.numpy(), embedding, data.edge_index)
+        results = metric.evaluate_one_epoch(self.logger, self.cfg.evaluate)
+        return embedding, predicted_labels, results

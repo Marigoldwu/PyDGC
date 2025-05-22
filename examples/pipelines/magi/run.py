@@ -2,12 +2,11 @@
 import os
 import sys
 
-from pydgc.pipelines.magi_batch_pipeline import MAGIBatchPipeline
-
 root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 sys.path.append(root)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+from pydgc.pipelines.magi_batch_pipeline import MAGIBatchPipeline
 from pydgc.pipelines import MAGIPipeline
 from pydgc.utils import parse_arguments
 

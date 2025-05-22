@@ -77,10 +77,10 @@ class BasePipeline(ABC):
                 raise ValueError("Please load config before loading data!")
             dataset = load_dataset(self.cfg.dataset.dir, self.dataset_name)
             self.cfg.dataset.n_clusters = dataset.num_classes
-            if self.dataset_name.lower() == "arxiv":
-                data = dataset[0]
-            else:
-                data = dataset[0]
+            # if self.dataset_name.lower() == "arxiv":
+            #     data = dataset[0]
+            # else:
+            data = dataset[0]
             if data.x.layout == torch.sparse_csr:
                 data.x = data.x.to_dense()
             data.x = data.x.float()

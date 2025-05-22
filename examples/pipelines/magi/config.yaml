@@ -307,7 +307,7 @@ ARXIV:
     train:
         seed: -1
         rounds: 1
-        max_epoch: 400
+        max_epoch: 1
         batchsize: 2048
         lr: 1e-2
         weight_decay: 0
