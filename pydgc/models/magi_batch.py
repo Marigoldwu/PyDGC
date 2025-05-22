@@ -473,5 +473,4 @@ class MAGIBatch(DGCModel):
         embedding, labels, clustering_centers = self.clustering(data)
         ground_truth = data.y.numpy()
         metric = DGCMetric(ground_truth, labels.numpy(), embedding, data.edge_index)
-        metric.evaluate_one_epoch(self.logger, acc=True, nmi=True, ari=True, f1=True, hom=True, com=True, pur=True,
-                                  sc=True, gre=True)
+        metric.evaluate_one_epoch(self.logger, self.cfg.evaluate)

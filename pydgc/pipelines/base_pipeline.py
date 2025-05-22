@@ -6,7 +6,6 @@ from argparse import Namespace
 
 import torch
 import numpy as np
-from torch_geometric.utils import add_self_loops
 
 from yacs.config import CfgNode as CN
 
@@ -79,7 +78,7 @@ class BasePipeline(ABC):
             dataset = load_dataset(self.cfg.dataset.dir, self.dataset_name)
             self.cfg.dataset.n_clusters = dataset.num_classes
             if self.dataset_name.lower() == "arxiv":
-                data = dataset
+                data = dataset[0]
             else:
                 data = dataset[0]
             if data.x.layout == torch.sparse_csr:

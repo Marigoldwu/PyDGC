@@ -11,6 +11,7 @@ from .hsan import HSAN
 from .ccgc import CCGC
 from .dgcluster import DGCLUSTER
 from .magi import MAGI
+from .magi_batch import MAGIBatch
 from .ns4gc import NS4GC
 
 
@@ -28,5 +29,6 @@ __all__ = [
     'CCGC',
     'DGCLUSTER',
     'MAGI',
+    'MAGIBatch',
     'NS4GC'
 ]

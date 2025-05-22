@@ -29,7 +29,7 @@ class DGCModel(nn.Module, ABC):
         pass
 
     @abstractmethod
-    def train_model(self, *args, **kwargs) -> Tuple[List, Tensor, Tensor, Dict]:
+    def train_model(self, *args, **kwargs) -> Tuple[List, List, Tensor, Tensor, Dict]:
         pass
 
     @abstractmethod
