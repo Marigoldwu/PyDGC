@@ -158,36 +158,38 @@ class MyPipeline(BasePipeline):
 # Supported Models
 
 | No.  | Model     | Paper | Source Code |
-| ---- | --------- | ----- | ----------- |
-| 1    | GAE       |       |             |
-| 2    | GAE_SSC   |       |             |
-| 3    | DAEGC     |       |             |
-| 4    | SDCN      |       |             |
-| 5    | DFCN      |       |             |
-| 6    | DCRN      |       |             |
-| 7    | AGC-DRR   |       |             |
-| 8    | DGCluster |       |             |
-| 9    | HSAN      |       |             |
-| 10   | CCGC      |       |             |
-| 11   | MAGI      |       |             |
-| 12   | NS4GC     |       |             |
+| :----: | :---------: | :-----: | :-----------: |
+| 1    | GAE       |[Variational Graph Auto-Encoders](https://arxiv.org/abs/1611.07308)|[code](https://github.com/tkipf/gae)|
+| 2    | GAE_SSC   | - | - |
+| 3    | DAEGC     |[Attributed graph clustering: A deep attentional embedding approach](https://arxiv.org/pdf/1906.06532)|[code](https://github.com/Tiger101010/DAEGC)|
+| 4    | SDCN      |[Structural Deep Clustering Network](https://arxiv.org/pdf/2002.01633)|[code](https://github.com/bdy9527/SDCN)|
+| 5    | DFCN      |[Deep Fusion Clustering Network](https://ojs.aaai.org/index.php/AAAI/article/view/17198/17005)|[code](https://github.com/WxTu/DFCN)|
+| 6    | DCRN      |[Deep Graph Clustering via Dual Correlation Reduction](https://www.aaai.org/AAAI22Papers/AAAI-5928.LiuY.pdf)|[code](https://github.com/yueliu1999/DCRN)|
+| 7    | AGC-DRR   |[Attributed Graph Clustering with Dual Redundancy Reduction](https://www.ijcai.org/proceedings/2022/0418.pdf)|[code](https://github.com/gongleii/AGC-DRR)|
+| 8    | DGCluster |[DGCLUSTER: A Neural Framework for Attributed Graph Clustering via Modularity Maximization](https://ojs.aaai.org/index.php/AAAI/article/view/28983)|[code](https://github.com/pyrobits/DGCluster)|
+| 9    | HSAN      |[Hard Sample Aware Network for Contrastive Deep Graph Clustering](https://arxiv.org/abs/2212.08665)|[code](https://github.com/yueliu1999/HSAN)|
+| 10   | CCGC      |[Cluster-guided Contrastive Graph Clustering Network](https://arxiv.org/abs/2301.01098)|[code](https://github.com/xihongyang1999/CCGC)|
+| 11   | MAGI      |[Revisiting Modularity Maximization for Graph Clustering: A Contrastive Learning Perspective](https://arxiv.org/abs/2406.142886)|[code](https://github.com/EdisonLeeeee/MAGI)|
+| 12   | NS4GC     |[Reliable Node Similarity Matrix Guided Contrastive Graph Clustering](https://arxiv.org/pdf/2408.03765?)|[code](https://github.com/Cloudy1225/NS4GC)|
 
 # Supported Datasets
 
 | No.  | Dataset      | #Samples | #Features | #Edges | #Classes | Homo. Ratio |
-| ---- | ------------ | -------- | --------- | ------ | -------- | ----------- |
-| 1    | Wiki         |          |           |        |          |             |
-| 2    | Cora         |          |           |        |          |             |
-| 3    | ACM          |          |           |        |          |             |
-| 4    | Citeseer     |          |           |        |          |             |
-| 5    | DBLP         |          |           |        |          |             |
-| 6    | PubMed       |          |           |        |          |             |
-| 7    | Ogbn-arXiv   |          |           |        |          |             |
-| 8    | USPS         |          |           |        |          |             |
-| 9    | HHAR         |          |           |        |          |             |
-| 10   | BlogCatalog  |          |           |        |          |             |
-| 11   | Flickr       |          |           |        |          |             |
-| 12   | Roman-empire |          |           |        |          |             |
+| :----: | :------------: | --------: | ---------: | ------: | --------: | -----------: |
+| 1    | Wiki         |2,405|4,973|17,981|17|0.71|
+| 2    | Cora         |2,708|1,433|5,429|7|0.81|
+| 3    | ACM          |3,025|1,870|13,128|3|0.82|
+| 4    | Citeseer     |3,327|3,703|9,104|6|0.74|
+| 5    | DBLP         |4,057|334|3,528|4|0.80|
+| 6    | PubMed       |19,717|500|88,648|3|0.80|
+| 7    | Ogbn-arXiv   |169,343|128|2,315,598|40|0.65|
+| 8    | USPS(3NN)|9,298|256|27,894|10|0.98|
+| 9    | HHAR(3NN)|10,299|561|30,897|6|0.95|
+| 10   | BlogCatalog  |5,196|8,189|343,486|6|0.40|
+| 11   | Flickr       |7,575|12,047|479,476|9|0.24|
+| 12   | Roman-empire |22,662|300|65,854|18|0.05|
+
+> More Datasets will be introduced.
 
 # Citation
 
