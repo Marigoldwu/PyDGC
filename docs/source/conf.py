@@ -7,12 +7,15 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 import os 
 import sys
-sys.path.insert(0, os.path.abspath('../../pydgc'))
+import datetime
+import sys
+sys.path.append(os.path.abspath('../../pydgc'))
 
-project = 'PyDGC'
-copyright = '2025, Benyu Wu'
 author = 'Benyu Wu'
-release = '1.0.0'
+project = 'pydgc'
+version = release = '1.0.0'
+copyright = f'{datetime.datetime.now().year}, {author}'
+sys.path.insert(0, os.path.abspath('../../'))
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -42,3 +45,15 @@ exclude_patterns = []
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+html_theme_options = {
+    'navigation_depth': 2,  # 导航栏深度
+    'collapse_navigation': False,  # 不折叠导航
+}
+
+typehints_fully_qualified = False  # 不显示完整模块路径（更简洁）
+autodoc_typehints = 'description'  # 在描述中显示类型提示
+
+add_module_names = False
+autodoc_member_order = 'bysource'
+
+suppress_warnings = ['autodoc.import_object']

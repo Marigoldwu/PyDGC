@@ -1,10 +1,7 @@
-pydgc.modules package
+pydgc.modules
 =====================
 
-Submodules
-----------
-
-pydgc.modules.decoder module
+pydgc.modules.decoder
 ----------------------------
 
 .. automodule:: pydgc.modules.decoder
@@ -12,7 +9,7 @@ pydgc.modules.decoder module
    :undoc-members:
    :show-inheritance:
 
-pydgc.modules.encoder module
+pydgc.modules.encoder
 ----------------------------
 
 .. automodule:: pydgc.modules.encoder
@@ -20,7 +17,7 @@ pydgc.modules.encoder module
    :undoc-members:
    :show-inheritance:
 
-pydgc.modules.ssc module
+pydgc.modules.ssc
 ------------------------
 
 .. automodule:: pydgc.modules.ssc
@@ -28,18 +25,10 @@ pydgc.modules.ssc module
    :undoc-members:
    :show-inheritance:
 
-pydgc.modules.utils module
+pydgc.modules.utils
 --------------------------
 
 .. automodule:: pydgc.modules.utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: pydgc.modules
    :members:
    :undoc-members:
    :show-inheritance:

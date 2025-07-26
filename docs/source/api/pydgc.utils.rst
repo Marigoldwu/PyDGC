@@ -1,10 +1,7 @@
-pydgc.utils package
+pydgc.utils
 ===================
 
-Submodules
-----------
-
-pydgc.utils.command module
+pydgc.utils.command
 --------------------------
 
 .. automodule:: pydgc.utils.command
@@ -12,7 +9,7 @@ pydgc.utils.command module
    :undoc-members:
    :show-inheritance:
 
-pydgc.utils.config module
+pydgc.utils.config
 -------------------------
 
 .. automodule:: pydgc.utils.config
@@ -20,7 +17,7 @@ pydgc.utils.config module
    :undoc-members:
    :show-inheritance:
 
-pydgc.utils.device module
+pydgc.utils.device
 -------------------------
 
 .. automodule:: pydgc.utils.device
@@ -28,7 +25,7 @@ pydgc.utils.device module
    :undoc-members:
    :show-inheritance:
 
-pydgc.utils.logger module
+pydgc.utils.logger
 -------------------------
 
 .. automodule:: pydgc.utils.logger
@@ -36,7 +33,7 @@ pydgc.utils.logger module
    :undoc-members:
    :show-inheritance:
 
-pydgc.utils.random module
+pydgc.utils.random
 -------------------------
 
 .. automodule:: pydgc.utils.random
@@ -44,7 +41,7 @@ pydgc.utils.random module
    :undoc-members:
    :show-inheritance:
 
-pydgc.utils.transform module
+pydgc.utils.transform
 ----------------------------
 
 .. automodule:: pydgc.utils.transform
@@ -52,18 +49,10 @@ pydgc.utils.transform module
    :undoc-members:
    :show-inheritance:
 
-pydgc.utils.visualization module
+pydgc.utils.visualization
 --------------------------------
 
 .. automodule:: pydgc.utils.visualization
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: pydgc.utils
    :members:
    :undoc-members:
    :show-inheritance:

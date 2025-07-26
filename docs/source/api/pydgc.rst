@@ -1,8 +1,5 @@
-pydgc package
+pydgc
 =============
-
-Subpackages
------------
 
 .. toctree::
    :maxdepth: 4
@@ -15,10 +12,3 @@ Subpackages
    pydgc.pipelines
    pydgc.utils
 
-Module contents
----------------
-
-.. automodule:: pydgc
-   :members:
-   :undoc-members:
-   :show-inheritance:

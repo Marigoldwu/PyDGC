@@ -230,9 +230,7 @@ def load_pyg(dataset_dir: str, dataset_name: str) -> Dataset:
 
     Args:
         dataset_dir (str): Dataset stored root path.
-        dataset_name (str): Dataset name. Available datasets: CORA, CITE, CITESEER, PUBMED, 
-        BAT, EAT, UAT, COCS, COPS, AMAC, AMAP, CORNELL, TEXAS, WISC, WIKI, BLOG, PPI, FLICKR, 
-        FACEBOOK, TWEIBO, MAG, ACTOR, CORAFULL, DBLPFULL, NELL, REDDIT, REDDIT2, YELP, AMP, LFMA, ROMAN.
+        dataset_name (str): Dataset name. Available datasets: CORA, CITE, CITESEER, PUBMED, BAT, EAT, UAT, COCS, COPS, AMAC, AMAP, CORNELL, TEXAS, WISC, WIKI, BLOG, PPI, FLICKR, FACEBOOK, TWEIBO, MAG, ACTOR, CORAFULL, DBLPFULL, NELL, REDDIT, REDDIT2, YELP, AMP, LFMA, ROMAN.
 
     Returns:
         Dataset: PyG dataset.

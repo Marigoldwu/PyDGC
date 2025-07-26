@@ -1,21 +1,10 @@
-pydgc.metrics package
+pydgc.metrics
 =====================
-
-Submodules
-----------
 
 pydgc.metrics.utils module
 --------------------------
 
 .. automodule:: pydgc.metrics.utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: pydgc.metrics
    :members:
    :undoc-members:
    :show-inheritance:

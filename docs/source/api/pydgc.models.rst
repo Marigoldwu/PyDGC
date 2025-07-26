@@ -1,58 +1,55 @@
-pydgc.models package
+pydgc.models
 ====================
 
-Submodules
-----------
-
-pydgc.models.ae module
-----------------------
+pydgc.models.ae
+------------------
 
 .. automodule:: pydgc.models.ae
    :members:
    :undoc-members:
    :show-inheritance:
 
-pydgc.models.agcdrr module
---------------------------
+pydgc.models.agcdrr
+---------------------
 
 .. automodule:: pydgc.models.agcdrr
    :members:
    :undoc-members:
    :show-inheritance:
 
-pydgc.models.ccgc module
-------------------------
+pydgc.models.ccgc
+------------------
 
 .. automodule:: pydgc.models.ccgc
    :members:
    :undoc-members:
    :show-inheritance:
 
-pydgc.models.daegc module
--------------------------
+pydgc.models.daegc
+------------------
 
 .. automodule:: pydgc.models.daegc
    :members:
    :undoc-members:
    :show-inheritance:
 
-pydgc.models.dcrn module
-------------------------
+pydgc.models.dcrn
+------------------
 
 .. automodule:: pydgc.models.dcrn
    :members:
    :undoc-members:
    :show-inheritance:
 
-pydgc.models.dfcn module
-------------------------
+pydgc.models.dfcn
+------------------
 
 .. automodule:: pydgc.models.dfcn
    :members:
    :undoc-members:
    :show-inheritance:
 
-pydgc.models.dgc\_model module
+pydgc.models.dgc\_model
 ------------------------------
 
 .. automodule:: pydgc.models.dgc_model
@@ -60,7 +57,7 @@ pydgc.models.dgc\_model module
    :undoc-members:
    :show-inheritance:
 
-pydgc.models.dgcluster module
+pydgc.models.dgcluster
 -----------------------------
 
 .. automodule:: pydgc.models.dgcluster
@@ -68,7 +65,7 @@ pydgc.models.dgcluster module
    :undoc-members:
    :show-inheritance:
 
-pydgc.models.gae module
+pydgc.models.gae
 -----------------------
 
 .. automodule:: pydgc.models.gae
@@ -76,7 +73,7 @@ pydgc.models.gae module
    :undoc-members:
    :show-inheritance:
 
-pydgc.models.gae\_ssc module
+pydgc.models.gae\_ssc
 ----------------------------
 
 .. automodule:: pydgc.models.gae_ssc
@@ -84,7 +81,7 @@ pydgc.models.gae\_ssc module
    :undoc-members:
    :show-inheritance:
 
-pydgc.models.hsan module
+pydgc.models.hsan
 ------------------------
 
 .. automodule:: pydgc.models.hsan
@@ -92,7 +89,7 @@ pydgc.models.hsan module
    :undoc-members:
    :show-inheritance:
 
-pydgc.models.magi module
+pydgc.models.magi
 ------------------------
 
 .. automodule:: pydgc.models.magi
@@ -100,7 +97,7 @@ pydgc.models.magi module
    :undoc-members:
    :show-inheritance:
 
-pydgc.models.magi\_batch module
+pydgc.models.magi\_batch
 -------------------------------
 
 .. automodule:: pydgc.models.magi_batch
@@ -108,7 +105,7 @@ pydgc.models.magi\_batch module
    :undoc-members:
    :show-inheritance:
 
-pydgc.models.ns4gc module
+pydgc.models.ns4gc
 -------------------------
 
 .. automodule:: pydgc.models.ns4gc
@@ -116,42 +113,10 @@ pydgc.models.ns4gc module
    :undoc-members:
    :show-inheritance:
 
-pydgc.models.rgae module
-------------------------
-
-.. automodule:: pydgc.models.rgae
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-pydgc.models.s3gc module
-------------------------
-
-.. automodule:: pydgc.models.s3gc
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-pydgc.models.scgc module
-------------------------
-
-.. automodule:: pydgc.models.scgc
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-pydgc.models.sdcn module
+pydgc.models.sdcn
 ------------------------
 
 .. automodule:: pydgc.models.sdcn
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: pydgc.models
    :members:
    :undoc-members:
    :show-inheritance:

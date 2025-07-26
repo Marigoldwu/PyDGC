@@ -1,8 +1,5 @@
-pydgc.clusterings package
+pydgc.clusterings
 =========================
-
-Submodules
-----------
 
 pydgc.clusterings.batch\_kmeans\_gpu module
 -------------------------------------------
@@ -16,14 +13,6 @@ pydgc.clusterings.kmeans\_gpu module
 ------------------------------------
 
 .. automodule:: pydgc.clusterings.kmeans_gpu
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: pydgc.clusterings
    :members:
    :undoc-members:
    :show-inheritance:
