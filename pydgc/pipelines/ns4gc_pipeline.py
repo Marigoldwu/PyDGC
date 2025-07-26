@@ -10,11 +10,15 @@ from ..models import NS4GC
 
 
 class NS4GCPipeline(BasePipeline):
+    """NS4GC pipeline.
+
+    Args:
+        args (Namespace): Arguments.
+    """
     def __init__(self, args: Namespace):
         super(NS4GCPipeline, self).__init__(args)
 
     def augment_data(self):
-        """Data augmentation"""
         self.data = perturb_data(self.data, self.cfg.dataset.augmentation)
         x, edge_index = self.data.x, self.data.edge_index
         if self.dataset_name == "DBLP":

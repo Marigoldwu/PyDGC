@@ -100,6 +100,14 @@ pydgc.pipelines.magi\_pipeline module
    :undoc-members:
    :show-inheritance:
 
+pydgc.pipelines.ns4gc\_pipeline module
+--------------------------------------
+
+.. automodule:: pydgc.pipelines.ns4gc_pipeline
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pydgc.pipelines.rgae\_pipeline module
 -------------------------------------
 

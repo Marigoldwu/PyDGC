@@ -17,6 +17,12 @@ from ..modules import MLPEncoder, MLPDecoder
 
 
 class AE(DGCModel):
+    """Autoencoder model with MLP as encoder and decoder. Performs kmeans on embeddings.
+
+    Args:
+        logger (Logger): Logger.
+        cfg (CN): Config.
+    """
 
     def __init__(self, logger: Logger, cfg: CN):
         super(AE, self).__init__(logger, cfg)

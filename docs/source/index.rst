@@ -1,5 +1,5 @@
 .. PyDGC documentation master file, created by
-   sphinx-quickstart on Thu May  8 19:31:11 2025.
+   sphinx-quickstart on Sat Jul 26 16:28:04 2025.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
@@ -7,12 +7,14 @@ Welcome to PyDGC's documentation!
 =================================
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
+   :caption: Contents:
+
 
 .. automodule:: pydgc
    :members:
    :undoc-members:
-
+   :show-inheritance:
 
 
 Indices and tables

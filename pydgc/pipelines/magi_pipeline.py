@@ -10,6 +10,17 @@ from torch_geometric.utils import to_undirected, add_remaining_self_loops, add_s
 
 
 def get_sim(batch, adj, wt=20, wl=3):
+    """Get similarity matrix.
+
+    Args:
+        batch (torch.Tensor): Batch indices.
+        adj (SparseTensor): Adjacency matrix.
+        wt (int, optional): Number of random walks. Defaults to 20.
+        wl (int, optional): Length of random walks. Defaults to 3.
+
+    Returns:
+        torch.Tensor: Similarity matrix.
+    """
     rowptr, col, _ = adj.csr()
     batch_size = batch.shape[0]
     batch_repeat = batch.repeat(wt)
@@ -43,6 +54,14 @@ def get_sim(batch, adj, wt=20, wl=3):
 
 
 def get_mask(adj):
+    """Get mask matrix.
+
+    Args:
+        adj (SparseTensor): Adjacency matrix.
+
+    Returns:
+        SparseTensor: Mask matrix.
+    """
     batch_mean = adj.mean(dim=1)
     mean = batch_mean[torch.LongTensor(adj.storage.row())]
     mask = (adj.storage.value() - mean) > - 1e-10
@@ -54,11 +73,15 @@ def get_mask(adj):
 
 
 class MAGIPipeline(BasePipeline):
+    """MAGI pipeline.
+
+    Args:
+        args (Namespace): Arguments.
+    """
     def __init__(self, args: Namespace):
         super().__init__(args)
 
     def augment_data(self):
-        """Data augmentation"""
         self.data = perturb_data(self.data, self.cfg.dataset.augmentation)
 
         x, edge_index, y = self.data.x, self.data.edge_index, self.data.y

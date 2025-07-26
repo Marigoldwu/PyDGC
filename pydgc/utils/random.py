@@ -5,9 +5,10 @@ import numpy as np
 
 
 def setup_seed(seed):
-    """
-    fix the random seed
-    :param seed: the random seed
+    """Fix the random seed.
+
+    Args:
+        seed (int): The random seed.
     """
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)

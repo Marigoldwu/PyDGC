@@ -9,20 +9,21 @@ from . import layer_registry
 
 
 class BaseDecoder(nn.Module):
+    """Base Decoder class.
+
+    Args:
+        dims (List[int]): A list of dimensions from input to output.
+        layer (str): Type of layers, e.g., 'linear', 'gcn', 'gat', 'sage', 'sg'.
+        act (str): Activation function, e.g., 'relu', ''
+        act_last (bool): Whether to apply activation function to the last layer.
+        add_self_loops (bool): Whether to add self-loops to the graph.
+    """
     def __init__(self,
                  dims: List[int] = None,
                  layer: str = 'linear',
                  act: str = 'relu',
                  act_last: bool = False,
                  add_self_loops: bool = True):
-        """
-
-        :param dims: A list of dimensions from input to output
-        :param layer: type of layers, e.g., 'linear', 'gcn', 'gat', 'sage', 'sg'
-        :param act: activation function, e.g., 'relu', ''
-        :param act_last:
-        :param add_self_loops:
-        """
         super(BaseDecoder, self).__init__()
         self.act = act
         self.act_last = act_last
@@ -75,6 +76,13 @@ class BaseDecoder(nn.Module):
 
 
 class MLPDecoder(BaseDecoder):
+    """MLP Decoder class.
+
+    Args:
+        dims (List[int]): A list of dimensions from input to output.
+        act (str): Activation function, e.g., 'relu', ''
+        act_last (bool): Whether to apply activation function to the last layer.
+    """
     def __init__(self, dims, act='relu', act_last=False):
         super(MLPDecoder, self).__init__(dims=dims,
                                          layer='linear',
@@ -91,6 +99,15 @@ class MLPDecoder(BaseDecoder):
 
 
 class GNNAttributeDecoder(BaseDecoder):
+    """GNN Attribute Decoder class.
+
+    Args:
+        dims (List[int]): A list of dimensions from input to output.
+        layer (str): Type of layers, e.g., 'linear', 'gcn', 'gat', 'sage', 'sg'.
+        act (str): Activation function, e.g., 'relu', ''
+        act_last (bool): Whether to apply activation function to the last layer.
+        add_self_loops (bool): Whether to add self-loops to the graph.
+    """
     def __init__(self, dims, layer='gcn', act='relu', act_last=False, add_self_loops=True):
         super(GNNAttributeDecoder, self).__init__(dims=dims,
                                                   act=act,
@@ -115,6 +132,13 @@ class GNNAttributeDecoder(BaseDecoder):
 
 
 class InnerProductDecoder(nn.Module):
+    """Inner Product Decoder class.
+
+    $\hat{A} = sigmoid(ZZ^T)$
+
+    Args:
+        None
+    """
     def __init__(self):
         super(InnerProductDecoder, self).__init__()
         self.reset_parameters()

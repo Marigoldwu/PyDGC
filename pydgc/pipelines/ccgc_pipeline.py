@@ -12,6 +12,17 @@ from ..utils import perturb_data
 
 
 def preprocess_graph(adj, layer, norm='sym', renorm=True):
+    """Preprocess graph.
+
+    Args:
+        adj (sp.csr_matrix): Adjacency matrix.
+        layer (int): Number of layers.
+        norm (str): Normalization method.
+        renorm (bool): Whether to renormalize the adjacency matrix.
+
+    Returns:
+        list: List of preprocessed adjacency matrices.
+    """
     adj = sp.coo_matrix(adj)
     ident = sp.eye(adj.shape[0])
     if renorm:
@@ -39,11 +50,15 @@ def preprocess_graph(adj, layer, norm='sym', renorm=True):
 
 
 class CCGCPipeline(BasePipeline):
+    """CCGC pipeline.
+
+    Args:
+        args (Namespace): Arguments.
+    """
     def __init__(self, args: Namespace):
         super().__init__(args)
 
     def augment_data(self):
-        """Data augmentation"""
         self.data = perturb_data(self.data, self.cfg.dataset.augmentation)
         if contains_self_loops(self.data.edge_index):
             self.data.edge_index = remove_self_loops(self.data.edge_index)[0]

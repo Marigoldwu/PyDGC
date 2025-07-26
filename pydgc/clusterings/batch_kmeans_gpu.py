@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Reference: https://github.com/EdisonLeeeee/MAGI/blob/master/magi/batch_kmeans_cuda.py
-"""
 from functools import partial
 
 import numpy as np
@@ -10,12 +7,14 @@ from tqdm import tqdm
 
 
 def initialize(X, num_clusters, seed):
-    """
-    initialize cluster centers
-    :param X: (torch.tensor) matrix
-    :param num_clusters: (int) number of clusters
-    :param seed: (int) seed for kmeans
-    :return: (np.array) initial state
+    """initialize cluster centers
+
+    Args:
+        X: (torch.tensor) matrix
+        num_clusters: (int) number of clusters
+        seed: (int) seed for kmeans
+    Returns:
+        (np.array) initial state
     """
     num_samples = len(X)
     if seed == None:
@@ -40,18 +39,22 @@ def kmeans(
         gamma_for_soft_dtw=0.001,
         seed=None,
 ):
-    """
-    perform kmeans
-    :param X: (torch.tensor) matrix
-    :param num_clusters: (int) number of clusters
-    :param distance: (str) distance [options: 'euclidean', 'cosine'] [default: 'euclidean']
-    :param seed: (int) seed for kmeans
-    :param tol: (float) threshold [default: 0.0001]
-    :param device: (torch.device) device [default: cpu]
-    :param tqdm_flag: Allows to turn logs on and off
-    :param iter_limit: hard limit for max number of iterations
-    :param gamma_for_soft_dtw: approaches to (hard) DTW as gamma -> 0
-    :return: (torch.tensor, torch.tensor) cluster ids, cluster centers
+    """perform kmeans
+
+    Reference: https://github.com/EdisonLeeeee/MAGI/blob/master/magi/batch_kmeans_cuda.py
+
+    Args:
+        X: (torch.tensor) matrix
+        num_clusters: (int) number of clusters
+        distance: (str) distance [options: 'euclidean', 'cosine'] [default: 'euclidean']
+        seed: (int) seed for kmeans
+        tol: (float) threshold [default: 0.0001]
+        device: (torch.device) device [default: cpu]
+        tqdm_flag: Allows to turn logs on and off
+        iter_limit: hard limit for max number of iterations
+        gamma_for_soft_dtw: approaches to (hard) DTW as gamma -> 0
+    Returns:
+        (torch.tensor, torch.tensor) cluster ids, cluster centers
     """
     if tqdm_flag:
         print(f'running k-means on {device}..')
@@ -132,14 +135,16 @@ def kmeans_predict(
         gamma_for_soft_dtw=0.001,
         tqdm_flag=True
 ):
-    """
-    predict using cluster centers
-    :param X: (torch.tensor) matrix
-    :param cluster_centers: (torch.tensor) cluster centers
-    :param distance: (str) distance [options: 'euclidean', 'cosine'] [default: 'euclidean']
-    :param device: (torch.device) device [default: 'cpu']
-    :param gamma_for_soft_dtw: approaches to (hard) DTW as gamma -> 0
-    :return: (torch.tensor) cluster ids
+    """predict using cluster centers
+
+    Args:
+        X: (torch.tensor) matrix
+        cluster_centers: (torch.tensor) cluster centers
+        distance: (str) distance [options: 'euclidean', 'cosine'] [default: 'euclidean']
+        device: (torch.device) device [default: 'cpu']
+        gamma_for_soft_dtw: approaches to (hard) DTW as gamma -> 0
+    Returns:
+        (torch.tensor) cluster ids
     """
     if tqdm_flag:
         print(f'predicting on {device}..')
@@ -161,6 +166,17 @@ def kmeans_predict(
 
 
 def pairwise_distance(data1, data2, batch_size=100000, device=torch.device('cpu'), tqdm_flag=True):
+    """compute pairwise distance
+
+    Args:
+        data1: (torch.tensor) matrix
+        data2: (torch.tensor) matrix
+        batch_size: (int) batch size
+        device: (torch.device) device [default: 'cpu']
+        tqdm_flag: Allows to turn logs on and off
+    Returns:
+        (torch.tensor) pairwise distance
+    """
     if tqdm_flag:
         print(f'device is :{device}')
 

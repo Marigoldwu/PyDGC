@@ -17,6 +17,18 @@ from . import DGCModel
 
 
 def comprehensive_similarity(Z1, Z2, E1, E2, alpha):
+    """Comprehensive similarity function.
+
+    Args:
+        Z1 (torch.Tensor): Latent representation of the first view.
+        Z2 (torch.Tensor): Latent representation of the second view.
+        E1 (torch.Tensor): Latent representation of the first view.
+        E2 (torch.Tensor): Latent representation of the second view.
+        alpha (float): Weight of the similarity function.
+
+    Returns:
+        torch.Tensor: Comprehensive similarity matrix.
+    """
     Z1_Z2 = torch.cat([torch.cat([Z1 @ Z1.T, Z1 @ Z2.T], dim=1),
                        torch.cat([Z2 @ Z1.T, Z2 @ Z2.T], dim=1)], dim=0)
 
@@ -28,6 +40,18 @@ def comprehensive_similarity(Z1, Z2, E1, E2, alpha):
 
 
 def hard_sample_aware_infoNCE(S, M, pos_neg_weight, pos_weight, node_num):
+    """Hard sample aware InfoNCE loss function.
+
+    Args:
+        S (torch.Tensor): Comprehensive similarity matrix.
+        M (torch.Tensor): Mask matrix.
+        pos_neg_weight (float): Weight of the negative samples.
+        pos_weight (float): Weight of the positive samples.
+        node_num (int): Number of nodes.
+
+    Returns:
+        torch.Tensor: InfoNCE loss.
+    """
     pos_neg = M * torch.exp(S * pos_neg_weight)
     pos = torch.cat([torch.diag(S, node_num), torch.diag(S, -node_num)], dim=0)
     pos = torch.exp(pos * pos_weight)
@@ -37,6 +61,15 @@ def hard_sample_aware_infoNCE(S, M, pos_neg_weight, pos_weight, node_num):
 
 
 def square_euclid_distance(Z, center):
+    """Square Euclidean distance function.
+
+    Args:
+        Z (torch.Tensor): Latent representation.
+        center (torch.Tensor): Clustering centers.
+
+    Returns:
+        torch.Tensor: Square Euclidean distance matrix.
+    """
     ZZ = (Z * Z).sum(-1).reshape(-1, 1).repeat(1, center.shape[0])
     CC = (center * center).sum(-1).reshape(1, -1).repeat(Z.shape[0], 1)
     ZZ_CC = ZZ + CC
@@ -46,11 +79,29 @@ def square_euclid_distance(Z, center):
 
 
 def phi(embedding, cluster_num):
+    """Clustering function.
+
+    Args:
+        embedding (torch.Tensor): Latent representation.
+        cluster_num (int): Number of clusters.
+
+    Returns:
+        torch.Tensor: Clustering labels.
+        torch.Tensor: Clustering centers.
+    """
     labels_, clustering_centers_ = KMeansGPU(cluster_num).fit(embedding)
     return labels_, clustering_centers_
 
 
 class HSAN(DGCModel):
+    """Hard Sample Aware Network for Contrastive Deep Graph Clustering.
+
+    Reference: https://ojs.aaai.org/index.php/AAAI/article/view/26071
+
+    Args:
+        logger (Logger): Logger object.
+        cfg (CN): Configuration object.
+    """
     def __init__(self, logger: Logger, cfg: CN):
         super(HSAN, self).__init__(logger, cfg)
         self.device = torch.device(cfg.device)

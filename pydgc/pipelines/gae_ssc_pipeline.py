@@ -7,6 +7,11 @@ from torch_geometric.utils import add_remaining_self_loops
 
 
 class GAESSCPipeline(BasePipeline):
+    """GAE-SSC pipeline.
+
+    Args:
+        args (Namespace): Arguments.
+    """
     def __init__(self, args: Namespace):
         super().__init__(args)
 

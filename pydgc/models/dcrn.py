@@ -19,12 +19,15 @@ from yacs.config import CfgNode as CN
 
 
 def normalize_adj(adj, self_loop=True, symmetry=False):
-    """
-    normalize the adj matrix
-    :param adj: input adj matrix
-    :param self_loop: if add the self loop or not
-    :param symmetry: symmetry normalize or not
-    :return: the normalized adj matrix
+    """Normalize the adj matrix.
+
+    Args:
+        adj (np.ndarray): Input adj matrix.
+        self_loop (bool, optional): If add the self loop or not. Defaults to True.
+        symmetry (bool, optional): Symmetry normalize or not. Defaults to False.
+
+    Returns:
+        np.ndarray: The normalized adj matrix.
     """
     # add the self_loop
     if self_loop:
@@ -49,11 +52,14 @@ def normalize_adj(adj, self_loop=True, symmetry=False):
 
 
 def numpy_to_torch(a, sparse=False):
-    """
-    numpy array to torch tensor
-    :param a: the numpy array
-    :param sparse: is sparse tensor or not
-    :return: torch tensor
+    """Convert numpy array to torch tensor.
+
+    Args:
+        a (np.ndarray): Input numpy array.
+        sparse (bool, optional): If sparse tensor or not. Defaults to False.
+
+    Returns:
+        torch.Tensor: Output torch tensor.
     """
     if sparse:
         a = torch.sparse.Tensor(a)
@@ -64,15 +70,16 @@ def numpy_to_torch(a, sparse=False):
 
 
 def remove_edge(A, similarity, remove_rate=0.1, device='cuda'):
-    """
-    remove edge based on embedding similarity
+    """Remove edge based on embedding similarity.
+
     Args:
-        A: the origin adjacency matrix
-        similarity: cosine similarity matrix of embedding
-        remove_rate: the rate of removing linkage relation
-        device: device
+        A (np.ndarray): The origin adjacency matrix.
+        similarity (np.ndarray): Cosine similarity matrix of embedding.
+        remove_rate (float, optional): The rate of removing linkage relation. Defaults to 0.1.
+        device (str, optional): Device. Defaults to 'cuda'.
+
     Returns:
-        Am: edge-masked adjacency matrix
+        np.ndarray: Edge-masked adjacency matrix.
     """
     # remove edges based on cosine similarity of embedding
     n_node = A.shape[0]
@@ -87,15 +94,17 @@ def remove_edge(A, similarity, remove_rate=0.1, device='cuda'):
 
 # the reconstruction function from DFCN
 def reconstruction_loss(X, A_norm, X_hat, Z_hat, A_hat):
-    """
-    reconstruction loss L_{}
+    """Reconstruction loss $L_{rec}$.
+
     Args:
-        X: the origin feature matrix
-        A_norm: the normalized adj
-        X_hat: the reconstructed X
-        Z_hat: the reconstructed Z
-        A_hat: the reconstructed A
-    Returns: the reconstruction loss
+        X (torch.Tensor): The origin feature matrix.
+        A_norm (torch.Tensor): The normalized adj.
+        X_hat (torch.Tensor): The reconstructed X.
+        Z_hat (torch.Tensor): The reconstructed Z.
+        A_hat (torch.Tensor): The reconstructed A.
+
+    Returns:
+        torch.Tensor: The reconstruction loss.
     """
     loss_ae = F.mse_loss(X_hat, X)
     loss_w = F.mse_loss(Z_hat, torch.spmm(A_norm, X))
@@ -106,11 +115,13 @@ def reconstruction_loss(X, A_norm, X_hat, Z_hat, A_hat):
 
 
 def target_distribution(Q):
-    """
-    calculate the target distribution (student-t distribution)
+    """Calculate the target distribution (student-t distribution).
+
     Args:
-        Q: the soft assignment distribution
-    Returns: target distribution P
+        Q (torch.Tensor): The soft assignment distribution.
+
+    Returns:
+        torch.Tensor: The target distribution P.
     """
     weight = Q ** 2 / Q.sum(0)
     P = (weight.t() / weight.sum(1)).t()
@@ -119,24 +130,30 @@ def target_distribution(Q):
 
 # clustering guidance from DFCN
 def distribution_loss(Q, P):
-    """
-    calculate the clustering guidance loss L_{KL}
+    """Clustering guidance loss $L_{KL}$.
+
     Args:
-        Q: the soft assignment distribution
-        P: the target distribution
-    Returns: L_{KL}
+        Q (torch.Tensor): The soft assignment distribution.
+        P (torch.Tensor): The target distribution.
+
+    Returns:
+        torch.Tensor: The clustering guidance loss.
     """
     loss = F.kl_div((Q[0].log() + Q[1].log() + Q[2].log()) / 3, P, reduction='batchmean')
     return loss
 
 
 def r_loss(AZ, Z, eps=1e-8, clamp_val=1e-4):
-    """
-    the loss of propagated regularization (L_R)
+    """Propagated regularization loss $L_{R}$.
+
     Args:
-        AZ: the propagated embedding
-        Z: embedding
-    Returns: L_R
+        AZ (torch.Tensor): The propagated embedding.
+        Z (torch.Tensor): The embedding.
+        eps (float, optional): The epsilon value. Defaults to 1e-8.
+        clamp_val (float, optional): The clamp value. Defaults to 1e-4.
+
+    Returns:
+        torch.Tensor: The propagated regularization loss.
     """
     loss = 0
     for i in range(2):
@@ -165,11 +182,13 @@ def r_loss(AZ, Z, eps=1e-8, clamp_val=1e-4):
 
 
 def off_diagonal(x):
-    """
-    off-diagonal elements of x
+    """Off-diagonal elements of x.
+
     Args:
-        x: the input matrix
-    Returns: the off-diagonal elements of x
+        x (torch.Tensor): Input matrix.
+
+    Returns:
+        torch.Tensor: Off-diagonal elements of x.
     """
     n, m = x.shape
     assert n == m
@@ -177,38 +196,43 @@ def off_diagonal(x):
 
 
 def cross_correlation(Z_v1, Z_v2):
-    """
-    calculate the cross-view correlation matrix S
+    """Cross-view correlation matrix S.
+
     Args:
-        Z_v1: the first view embedding
-        Z_v2: the second view embedding
-    Returns: S
+        Z_v1 (torch.Tensor): The first view embedding.
+        Z_v2 (torch.Tensor): The second view embedding.
+
+    Returns:
+        torch.Tensor: The cross-view correlation matrix S.
     """
     return torch.mm(F.normalize(Z_v1, dim=1), F.normalize(Z_v2, dim=1).t())
 
 
 def correlation_reduction_loss(S):
-    """
-    the correlation reduction loss L: MSE for S and I (identical matrix)
+    """Correlation reduction loss $L_{CR}$.
+
     Args:
-        S: the cross-view correlation matrix S
-    Returns: L
+        S (torch.Tensor): The cross-view correlation matrix S.
+
+    Returns:
+        torch.Tensor: The correlation reduction loss.
     """
     return torch.diagonal(S).add(-1).pow(2).mean() + off_diagonal(S).pow(2).mean()
 
 
 def dicr_loss(name, Z_ae, Z_igae, AZ, Z, gamma_value):
-    """
-    Dual Information Correlation Reduction loss L_{DICR}
+    """Dual Information Correlation Reduction loss $L_{DICR}$.
+
     Args:
-        name: dataset name
-        Z_ae: AE embedding including two-view node embedding [0, 1] and two-view cluster-level embedding [2, 3]
-        Z_igae: IGAE embedding including two-view node embedding [0, 1] and two-view cluster-level embedding [2, 3]
-        AZ: the propagated fusion embedding AZ
-        Z: the fusion embedding Z
-        gamma_value: gamma_value
+        name (str): Dataset name.
+        Z_ae (list of torch.Tensor): AE embedding including two-view node embedding [0, 1] and two-view cluster-level embedding [2, 3].
+        Z_igae (list of torch.Tensor): IGAE embedding including two-view node embedding [0, 1] and two-view cluster-level embedding [2, 3].
+        AZ (torch.Tensor): The propagated fusion embedding AZ.
+        Z (torch.Tensor): The fusion embedding Z.
+        gamma_value (float): Gamma value.
+
     Returns:
-        L_{DICR}
+        torch.Tensor: The DICR loss.
     """
     # Sample-level Correlation Reduction (SCR)
     # cross-view sample correlation matrix
@@ -244,12 +268,14 @@ def dicr_loss(name, Z_ae, Z_igae, AZ, Z, gamma_value):
 
 
 def gaussian_noised_feature(X, device='cuda'):
-    """
-    add gaussian noise to the attribute matrix X
+    """Add gaussian noise to the attribute matrix X.
+
     Args:
-        X: the attribute matrix
-        device: device
-    Returns: the noised attribute matrix X_tilde
+        X (torch.Tensor): The attribute matrix.
+        device (str): Device.
+
+    Returns:
+        torch.Tensor: The noised attribute matrix X_tilde.
     """
     N_1 = torch.Tensor(np.random.normal(1, 0.1, X.shape)).to(device)
     N_2 = torch.Tensor(np.random.normal(1, 0.1, X.shape)).to(device)
@@ -259,6 +285,18 @@ def gaussian_noised_feature(X, device='cuda'):
 
 
 class AE_encoder(Module):
+    """AE encoder.
+
+    Args:
+        ae_n_enc_1 (int): The number of neurons in the first layer of the encoder.
+        ae_n_enc_2 (int): The number of neurons in the second layer of the encoder.
+        ae_n_enc_3 (int): The number of neurons in the third layer of the encoder.
+        n_input (int): The number of input features.
+        n_z (int): The number of latent features.
+
+    Returns:
+        torch.Tensor: The encoded latent features.
+    """
     def __init__(self, ae_n_enc_1, ae_n_enc_2, ae_n_enc_3, n_input, n_z):
         super(AE_encoder, self).__init__()
         self.enc_1 = Linear(n_input, ae_n_enc_1)
@@ -276,6 +314,18 @@ class AE_encoder(Module):
 
 
 class AE_decoder(Module):
+    """AE decoder.
+
+    Args:
+        ae_n_dec_1 (int): The number of neurons in the first layer of the decoder.
+        ae_n_dec_2 (int): The number of neurons in the second layer of the decoder.
+        ae_n_dec_3 (int): The number of neurons in the third layer of the decoder.
+        n_input (int): The number of input features.
+        n_z (int): The number of latent features.
+
+    Returns:
+        torch.Tensor: The decoded features.
+    """
     def __init__(self, ae_n_dec_1, ae_n_dec_2, ae_n_dec_3, n_input, n_z):
         super(AE_decoder, self).__init__()
 
@@ -294,6 +344,24 @@ class AE_decoder(Module):
 
 
 class AE(Module):
+    """AE module.
+    
+
+    Args:
+        ae_n_enc_1 (int): The number of neurons in the first layer of the encoder.
+        ae_n_enc_2 (int): The number of neurons in the second layer of the encoder.
+        ae_n_enc_3 (int): The number of neurons in the third layer of the encoder.
+        ae_n_dec_1 (int): The number of neurons in the first layer of the decoder.
+        ae_n_dec_2 (int): The number of neurons in the second layer of the decoder.
+        ae_n_dec_3 (int): The number of neurons in the third layer of the decoder.
+        n_input (int): The number of input features.
+        n_z (int): The number of latent features.
+        device (str): Device.
+
+    Returns:
+        torch.Tensor: The decoded features.
+    """
+
     def __init__(self, ae_n_enc_1, ae_n_enc_2, ae_n_enc_3, ae_n_dec_1, ae_n_dec_2, ae_n_dec_3, n_input, n_z, device='cuda'):
         super(AE, self).__init__()
         self.device = device
@@ -356,6 +424,16 @@ class AE(Module):
 
 
 class GNNLayer(Module):
+    """GNN layer.
+
+    Args:
+        name (str): Name of the GNN layer.
+        in_features (int): Number of input features.
+        out_features (int): Number of output features.
+
+    Returns:
+        torch.Tensor: Output features.
+    """
     def __init__(self, name, in_features, out_features):
         super(GNNLayer, self).__init__()
         self.name = name
@@ -386,6 +464,18 @@ class GNNLayer(Module):
 
 
 class IGAE_encoder(Module):
+    """IGAE encoder.
+
+    Args:
+        name (str): Name of the GNN layer.
+        gae_n_enc_1 (int): The number of neurons in the first layer of the encoder.
+        gae_n_enc_2 (int): The number of neurons in the second layer of the encoder.
+        gae_n_enc_3 (int): The number of neurons in the third layer of the encoder.
+        n_input (int): The number of input features.
+
+    Returns:
+        torch.Tensor: Output features.
+    """
     def __init__(self, name, gae_n_enc_1, gae_n_enc_2, gae_n_enc_3, n_input):
         super(IGAE_encoder, self).__init__()
         self.gnn_1 = GNNLayer(name, n_input, gae_n_enc_1)
@@ -418,6 +508,23 @@ class IGAE_decoder(nn.Module):
 
 
 class IGAE(nn.Module):
+    """IGAE model.
+
+    Args:
+        name (str): Name of the GNN layer.
+        gae_n_enc_1 (int): The number of neurons in the first layer of the encoder.
+        gae_n_enc_2 (int): The number of neurons in the second layer of the encoder.
+        gae_n_enc_3 (int): The number of neurons in the third layer of the encoder.
+        gae_n_dec_1 (int): The number of neurons in the first layer of the decoder.
+        gae_n_dec_2 (int): The number of neurons in the second layer of the decoder.
+        gae_n_dec_3 (int): The number of neurons in the third layer of the decoder.
+        n_input (int): The number of input features.
+        device (str): Device.
+
+    Returns:
+        torch.Tensor: Output features.
+    """
+
     def __init__(self, name, gae_n_enc_1, gae_n_enc_2, gae_n_enc_3, gae_n_dec_1, gae_n_dec_2, gae_n_dec_3, n_input, device='cuda'):
         super(IGAE, self).__init__()
         # IGAE encoder
@@ -478,6 +585,14 @@ class IGAE(nn.Module):
 
 
 class Readout(nn.Module):
+    """Readout layer.
+
+    Args:
+        K (int): Number of clusters.
+
+    Returns:
+        torch.Tensor: Cluster-level embedding.
+    """
     def __init__(self, K):
         super(Readout, self).__init__()
         self.K = K
@@ -503,6 +618,17 @@ class Readout(nn.Module):
 
 
 class DCRN(DGCModel):
+    """Deep Graph Clustering via Dual Correlation Reduction.
+
+    Reference: https://ojs.aaai.org/index.php/AAAI/article/view/20726
+
+    Args:
+        logger (Logger): Logger.
+        cfg (CN): Configuration.
+
+    Returns:
+        torch.Tensor: Output features.
+    """
     def __init__(self, logger: Logger, cfg: CN):
         super(DCRN, self).__init__(logger, cfg)
         # Auto Encoder

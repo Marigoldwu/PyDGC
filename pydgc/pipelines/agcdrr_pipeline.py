@@ -9,11 +9,20 @@ from torch_geometric.utils import to_dense_adj, remove_self_loops, add_remaining
 
 
 class AGCDRRPipeline(BasePipeline):
+    """AGCDRR pipeline.
+
+    Args:
+        args (Namespace): Arguments.
+    """
     def __init__(self, args: Namespace):
         super().__init__(args)
 
     def augment_data(self):
-        """Data augmentation"""
+        """Data augmentation.
+
+        Args:
+            self.data (Data): PyG data object.
+        """
         self.data = perturb_data(self.data, self.cfg.dataset.augmentation)
 
         pca = PCA(n_components=self.cfg.dataset.augmentation.pca_dim)

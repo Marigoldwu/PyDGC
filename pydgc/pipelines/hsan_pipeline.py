@@ -50,6 +50,11 @@ def laplacian_filtering(A, X, t):
 
 
 class HSANPipeline(BasePipeline):
+    """HSAN pipeline.
+
+    Args:
+        args (Namespace): Arguments.
+    """
     def __init__(self, args: Namespace):
         super().__init__(args)
 

@@ -16,6 +16,17 @@ from pydgc.utils import Logger
 
 
 def new_graph(edge_index, weight, n, device):
+    """Create a new graph with the given edge index, weight, and number of nodes.
+
+    Args:
+        edge_index (Tensor): Edge index.
+        weight (Tensor): Edge weight.
+        n (int): Number of nodes.
+        device (torch.device): Device.
+
+    Returns:
+        Tensor: New graph.
+    """
     edge_index = edge_index.cpu().numpy()
     indices = torch.from_numpy(
         np.vstack((edge_index[0], edge_index[1])).astype(np.int64)).to(device)
@@ -25,6 +36,14 @@ def new_graph(edge_index, weight, n, device):
 
 
 def normalize(mx):
+    """Row-normalize sparse matrix.
+
+    Args:
+        mx (scipy.sparse.csr_matrix): Sparse matrix.
+
+    Returns:
+        scipy.sparse.csr_matrix: Row-normalized sparse matrix.
+    """
     row_sum = np.array(mx.sum(1))
     r_inv = np.power(row_sum, -1).flatten()
     r_inv[np.isinf(r_inv)] = 0.
@@ -34,6 +53,12 @@ def normalize(mx):
 
 
 class GNNLayer(Module):
+    """Graph Neural Network Layer.
+
+    Args:
+        in_features (int): Input feature dimension.
+        out_features (int): Output feature dimension.
+    """
 
     def __init__(self, in_features, out_features):
         super(GNNLayer, self).__init__()
@@ -53,6 +78,14 @@ class GNNLayer(Module):
 
 
 class IGAE_encoder(nn.Module):
+    """IGAE encoder.
+
+    Args:
+        gae_n_enc_1 (int): Number of hidden units in the first layer.
+        gae_n_enc_2 (int): Number of hidden units in the second layer.
+        gae_n_enc_3 (int): Number of hidden units in the third layer.
+        n_input (int): Input feature dimension.
+    """
 
     def __init__(self, gae_n_enc_1, gae_n_enc_2, gae_n_enc_3, n_input):
         super(IGAE_encoder, self).__init__()
@@ -70,6 +103,13 @@ class IGAE_encoder(nn.Module):
 
 
 class Cluster_layer(nn.Module):
+    """Clustering layer.
+
+    Args:
+        in_dims (int): Input feature dimension.
+        out_dims (int): Output feature dimension.
+    """
+
     def __init__(self, in_dims, out_dims):
         super(Cluster_layer, self).__init__()
         self.linear = nn.Sequential(nn.Linear(in_dims, out_dims),
@@ -81,6 +121,16 @@ class Cluster_layer(nn.Module):
 
 
 class IGAE(nn.Module):
+    """IGAE model.
+
+    Args:
+        gae_n_enc_1 (int): Number of hidden units in the first layer.
+        gae_n_enc_2 (int): Number of hidden units in the second layer.
+        gae_n_enc_3 (int): Number of hidden units in the third layer.
+        n_input (int): Input feature dimension.
+        clusters (int): Number of clusters.
+    """
+
     def __init__(self, gae_n_enc_1, gae_n_enc_2, gae_n_enc_3, n_input, clusters):
         super(IGAE, self).__init__()
         self.encoder = IGAE_encoder(
@@ -130,6 +180,13 @@ class IGAE(nn.Module):
 
 
 class ViewLearner(nn.Module):
+    """View learner.
+
+    Args:
+        encoder (nn.Module): Encoder model.
+        embedding_dim (int): Embedding dimension.
+    """
+
     def __init__(self, encoder, embedding_dim):
         super(ViewLearner, self).__init__()
 
@@ -160,6 +217,15 @@ class ViewLearner(nn.Module):
 
 
 class AGCDRR(DGCModel):
+    """Attributed Graph Clustering with Dual Redundancy Reduction.
+
+    Reference: https://xinwangliu.github.io/document/new_paper/IJCAI22-Attributed%20Graph%20Clustering%20with%20Dual%20Redundancy%20Reduction.pdf
+
+    Args:
+        logger (Logger): Logger.
+        cfg (CN): Config.
+    """
+
     def __init__(self, logger: Logger, cfg: CN):
         super(AGCDRR, self).__init__(logger, cfg)
         igae_dims = cfg.model.dims.copy()

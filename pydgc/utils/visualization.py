@@ -17,6 +17,14 @@ from . import get_formatted_time
 
 
 class DGCVisual:
+    """A class for visualizing data.
+
+    Args:
+        save_path (str, optional): The path to save the images. Defaults to '.'.
+        save_format (str, optional): The format of the images. Defaults to 'png'.
+        font_family (str or list, optional): The font family. Defaults to 'sans-serif'.
+        font_size (int, optional): The font size. Defaults to 20.
+    """
     def __init__(self,
                  save_path: str = '.',
                  save_format: str = 'png',
@@ -35,6 +43,14 @@ class DGCVisual:
 
     @staticmethod
     def check_save_format(save_format):
+        """Check if the save format is supported.
+
+        Args:
+            save_format (str): The save format, e.g., 'png', 'pdf', 'jpg', 'jpeg', 'bmp', 'tiff', 'gif', 'svg', 'eps'.
+
+        Raises:
+            ValueError: If the save format is not supported.
+        """
         support_format = ["png", "pdf", "jpg", "jpeg", "bmp", "tiff", "gif", "svg", "eps"]
         assert save_format in support_format
 
@@ -49,18 +65,19 @@ class DGCVisual:
                         legend: bool = False,
                         dpi: int = 300,
                         random_state=42):
-        """
-        使用 t-SNE 对数据进行降维并可视化
+        """Plot the clustering results with tsne or umap dimension reduction.
 
-        :param data: 输入数据，形状为 (n_samples, n_features)
-        :param labels: 数据对应的标签
-        :param method: 'tsne' or 'umap'
-        :param palette: 颜色
-        :param fig_size: 图片尺寸
-        :param filename: 保存图像的文件名
-        :param show_axis: 是否显示坐标轴
-        :param dpi:
-        :param random_state: 随机数
+        Args:
+            data (np.array): The input data, shape (n_samples, n_features).
+            labels (np.array): The data labels.
+            method (str, optional): The dimensionality reduction method, 'tsne' or 'umap'. Defaults to 'tsne'.
+            palette (str, optional): The color palette. Defaults to "viridis".
+            fig_size (Tuple[int, int], optional): The figure size. Defaults to (10, 8).
+            filename (str, optional): The filename to save the plot. Defaults to "tsne_plot".
+            show_axis (bool, optional): Whether to show the axis. Defaults to False.
+            legend (bool, optional): Whether to show the legend. Defaults to False.
+            dpi (int, optional): The DPI of the plot. Defaults to 300.
+            random_state (int, optional): The random state. Defaults to 42.
         """
         if method == 'tsne':
             tsne = TSNE(n_components=2, random_state=random_state)
@@ -87,18 +104,18 @@ class DGCVisual:
                      show_color_bar: bool = False,
                      show_axis: bool = False,
                      dpi: int = 300):
-        """
-        绘制热力图
+        """Plot the heatmap of the data.
 
-        :param data: 输入数据，二维数组
-        :param labels: 用于划分簇的标签
-        :param method: 相似度计算方式，'cosine' or 'euclidean' or 'inner_product'
-        :param color_map: 颜色映射
-        :param fig_size: 图形尺寸
-        :param filename: 保存图像的文件名
-        :param show_color_bar: 是否显示color bar
-        :param show_axis: 是否显示坐标轴
-        :param dpi:
+        Args:
+            data (np.array): The input data, shape (n_samples, n_features).
+            labels (np.array): The data labels.
+            method (str, optional): The similarity method, 'cosine' or 'euclidean' or 'inner_product'. Defaults to 'inner_product'.
+            color_map (str, optional): The color map. Defaults to "YlGnBu".
+            fig_size (Tuple[int, int], optional): The figure size. Defaults to (8, 8).
+            filename (str, optional): The filename to save the plot. Defaults to "heatmap_plot".
+            show_color_bar (bool, optional): Whether to show the color bar. Defaults to False.
+            show_axis (bool, optional): Whether to show the axis. Defaults to False.
+            dpi (int, optional): The DPI of the plot. Defaults to 300.
         """
         # Sort F based on the sort indices
         sort_indices = np.argsort(labels)
@@ -133,23 +150,21 @@ class DGCVisual:
                   title: str = None,
                   dpi: int = 300,
                   filename: str = "loss_curve_plot"):
-        """
-        绘制损失曲线
+        """Plot the loss curve and metrics curve if metrics valid.
 
-        :param losses: 损失值列表
-        :param metrics:
-        :param metrics_name:
-        :param fig_size: 图片尺寸
-        :param losses:
-        :param fig_size:
-        :param marker:
-        :param line_style:
-        :param color:
-        :param line_width:
-        :param title: 图形的标题
-        :param dpi:
-        :param filename: 保存图像的文件名
-        :return:
+        Args:
+            losses (list): The loss values.
+            metrics (list, optional): The metrics values. Defaults to None.
+            metrics_name (str, optional): The metrics name. Defaults to None.
+            fig_size (Tuple[int, int], optional): The figure size. Defaults to (8/2.54, 6/2.54).
+            marker (str, optional): The marker style. Defaults to 'o'.
+            line_style (str, optional): The line style. Defaults to '-'.
+            color (str, optional): The line color. Defaults to 'blue'.
+            line_width (int, optional): The line width. Defaults to 2.
+            title (str, optional): The title. Defaults to None.
+            dpi (int, optional): The DPI. Defaults to 300.
+            filename (str, optional): The filename. Defaults to "loss_curve_plot".
+
         """
         epochs = np.arange(1, len(losses) + 1)
         losses = np.array(losses)
@@ -166,48 +181,33 @@ class DGCVisual:
 
         else:
             metrics = np.array(metrics)
-            # 创建图像和双Y轴
+            # create the figure and double y-axis
             fig, ax1 = plt.subplots(figsize=fig_size, dpi=dpi)
 
-            # 设置左侧Y轴 (损失函数)
+            # set the left y-axis (loss)
             color1 = color
             color2 = acc_color
-            # ax1.set_xlabel('Epochs')
-            # ax1.set_ylabel('Loss', color=color1)
             ax1.plot(epochs, losses, linestyle=line_style, color=color1, linewidth=line_width)
             ax1.tick_params(axis='y', labelcolor=color1)
             ax1.tick_params(axis='x')
 
-            # 设置右侧Y轴 (准确率)
+            # set the right y-axis (metrics)
             ax2 = ax1.twinx()
-            # color2 = 'tab:blue'
-            # ax2.set_ylabel(f'{metrics_name}')
             ax2.plot(epochs, metrics, linestyle='--', color=color2, linewidth=line_width)
             ax2.tick_params(axis='y', labelcolor=color2)
 
-            # loss_min = np.min(losses)
-            # loss_max = np.max(losses)
-            # ax1.yaxis.set_major_locator(FixedLocator([loss_min, loss_max]))
-            # ax1.yaxis.set_major_formatter(FixedFormatter([f'{loss_min:.2f}', f'{loss_max:.2f}']))
-            #
-            # # 对于右侧Y轴（准确率）
-            # acc_min = np.min(metrics)
-            # acc_max = np.max(metrics)
-            # ax2.yaxis.set_major_locator(FixedLocator([acc_min, acc_max]))
-            # ax2.yaxis.set_major_formatter(FixedFormatter([f'{acc_min:.3f}', f'{acc_max:.3f}']))
-
-            # 设置X轴仅显示最小值和最大值
+            # set the x-axis to show only the minimum and maximum values
             epoch_min = np.min(epochs)
             epoch_max = np.max(epochs)
             ax1.xaxis.set_major_locator(FixedLocator([epoch_min, epoch_max]))
             ax1.xaxis.set_major_formatter(FixedFormatter([f'{epoch_min}', f'{epoch_max}']))
-            ax1.set_yticks([])  # 隐藏左侧Y轴刻度
-            ax2.set_yticks([])  # 隐藏右侧Y轴刻度
-        # 添加标题
+            ax1.set_yticks([])  # hide the left y-axis tick
+            ax2.set_yticks([])  # hide the right y-axis tick
+        # add title
         if title is not None:
             plt.title(title)
 
-        # 调整布局
+        # adjust the layout
         plt.tight_layout()
         file_path = f"{self.save_path}/{filename}.{self.save_format}"
         plt.savefig(file_path, dpi=dpi, bbox_inches='tight')

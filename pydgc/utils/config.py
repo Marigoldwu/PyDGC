@@ -30,12 +30,14 @@ REQUIRED_CONFIG = [
 
 
 def validate_and_create_path(save_path):
-    """
-    Validate whether save_path is valid or not.
+    """Validate whether save_path is valid or not.
     If it contains directory and is valid but not exists, create directory.
 
-    :param save_path:
-    :return:
+    Args:
+        save_path (str): Save path.
+
+    Returns:
+        bool: True if save_path is valid, False otherwise.
     """
     if os.sep not in save_path and (os.altsep and os.altsep not in save_path):
         return False
@@ -51,6 +53,14 @@ def validate_and_create_path(save_path):
 
 
 def default_cfg(dataset_name) -> CN:
+    """Default configuration.
+
+    Args:
+        dataset_name (str): Dataset name.
+
+    Returns:
+        CN: Default configuration.
+    """
     dataset_name = dataset_name.upper()
     _C = CN()
     _C.device = "cuda"
@@ -97,10 +107,13 @@ def default_cfg(dataset_name) -> CN:
 
 
 def yaml_to_cfg(yaml_data):
-    """
-    transform YAML into CfgNode
-    :param yaml_data: data loaded from yaml
-    :return: transformed CfgNode
+    """Transform YAML into CfgNode.
+
+    Args:
+        yaml_data (dict): Data loaded from yaml.
+
+    Returns:
+        CN: Transformed CfgNode.
     """
     cfg = CN()
     for key, value in yaml_data.items():
@@ -112,11 +125,11 @@ def yaml_to_cfg(yaml_data):
 
 
 def dump_cfg(cfg: CN, save_path=None):
-    """
-    Records the configuration of this experiment.
-    :param cfg:
-    :param save_path:
-    :return:
+    """Records the configuration of this experiment.
+
+    Args:
+        cfg (CN): Configuration.
+        save_path (str, optional): Save path. Defaults to None.
     """
     if save_path is None:
         if hasattr(cfg, 'logger') and hasattr(cfg.logger, 'dir'):
@@ -135,11 +148,14 @@ def dump_cfg(cfg: CN, save_path=None):
 
 
 def load_dataset_specific_cfg(cfg_file_path, dataset_name):
-    """
-    load config on specified dataset
-    :param cfg_file_path: path of config file
-    :param dataset_name: name of specific dataset
-    :return:
+    """Load config on specified dataset.
+
+    Args:
+        cfg_file_path (str): Path of config file.
+        dataset_name (str): Name of specific dataset.
+
+    Returns:
+        CN: Config of specific dataset.
     """
     try:
         dataset_name = dataset_name.upper()
@@ -161,6 +177,16 @@ def load_dataset_specific_cfg(cfg_file_path, dataset_name):
 
 
 def check_required_cfg(cfg: CN, dataset_name, auto_complete=True):
+    """Check required config items.
+
+    Args:
+        cfg (CN): Configuration.
+        dataset_name (str): Name of specific dataset.
+        auto_complete (bool, optional): Whether to auto-complete missing config items. Defaults to True.
+
+    Returns:
+        bool: True if all required config items are present, False otherwise.
+    """
     missing_cfg = []
     cfg_keys = cfg.keys()
 
@@ -208,11 +234,14 @@ def check_required_cfg(cfg: CN, dataset_name, auto_complete=True):
 
 
 def generate_default_cfg(datasets: str or list, save_path=None):
-    """
-    generate default config
-    :param datasets:
-    :param save_path:
-    :return:
+    """Generate default config.
+
+    Args:
+        datasets (str or list): Name(s) of dataset(s).
+        save_path (str, optional): Save path. Defaults to None.
+
+    Returns:
+        CN: Default config.
     """
     root = CN()
     if isinstance(datasets, str):

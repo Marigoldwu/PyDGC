@@ -7,6 +7,17 @@ from typing import Tuple
 
 
 class KMeansGPU:
+    """Performs K-means clustering on GPU
+    
+    Reference: https://github.com/yueliu1999/HSAN/blob/main/kmeans_gpu.py
+
+    Args:
+        n_clusters: (int) number of clusters
+        distance: (str) distance metric [default: 'euclidean']
+        tol: (float) tolerance [default: 1e-4]
+        max_iter: (int) maximum number of iterations [default: 500]
+        device: (str) device [default: 'cuda']
+    """
     def __init__(self,
                  n_clusters: int,
                  *,
@@ -23,10 +34,13 @@ class KMeansGPU:
         self.labels_ = None
 
     def initialize(self, X: Tensor) -> np.array:
-        """
-        initialize cluster centers
-        :param X: (torch.tensor) matrix
-        :return: (np.array) initial state
+        """initialize cluster centers
+
+        Args:
+            X: (torch.tensor) matrix
+
+        Returns:
+            (np.array) initial state
         """
         num_samples = len(X)
         indices = np.random.choice(num_samples, self.n_clusters, replace=False)
@@ -34,6 +48,14 @@ class KMeansGPU:
         return initial_state
 
     def pairwise_distance(self, data1: Tensor, data2: Tensor) -> Tensor:
+        """compute pairwise distance
+
+        Args:
+            data1: (torch.tensor) matrix
+            data2: (torch.tensor) matrix
+        Returns:
+            (torch.tensor) pairwise distance
+        """
         # transfer to device
         data1, data2 = data1.to(self.device), data2.to(self.device)
 
@@ -49,6 +71,14 @@ class KMeansGPU:
         return dis
 
     def pairwise_cosine(self, data1: Tensor, data2: Tensor) -> Tensor:
+        """compute pairwise cosine distance
+
+        Args:
+            data1: (torch.tensor) matrix
+            data2: (torch.tensor) matrix
+        Returns:
+            (torch.tensor) pairwise cosine distance
+        """
         # transfer to device
         data1, data2 = data1.to(self.device), data2.to(self.device)
 
@@ -69,10 +99,13 @@ class KMeansGPU:
         return cosine_dis
 
     def fit(self, X: Tensor) -> Tuple[Tensor, Tensor]:
-        """
-        perform kmeans
-        :param X: (torch.tensor) matrix
-        :return: (torch.tensor, torch.tensor) cluster ids, cluster centers
+        """perform kmeans
+
+        Args:
+            X: (torch.tensor) matrix
+
+        Returns:
+            (torch.tensor, torch.tensor) cluster ids, cluster centers
         """
         if self.distance == 'euclidean':
             pairwise_distance_function = self.pairwise_distance
@@ -122,10 +155,13 @@ class KMeansGPU:
         return self.labels_.cpu(), self.cluster_centers_
 
     def predict(self, X: Tensor) -> Tensor:
-        """
-        predict using cluster centers
-        :param X: (torch.tensor) matrix
-        :return: (torch.tensor) cluster ids
+        """predict using cluster centers
+
+        Args:
+            X: (torch.tensor) matrix
+
+        Returns:
+            (torch.tensor) cluster ids
         """
         if self.distance == 'euclidean':
             pairwise_distance_function = self.pairwise_distance

@@ -253,11 +253,11 @@ PUBMED:
 ARXIV:
     device: cuda
     logger:
-        name: PUBMED
+        name: ARXIV
         mode: both
-        dir: ./log/PUBMED/
+        dir: ./log/ARXIV/
     dataset:
-        dir: ../data/PUBMED/
+        dir: ../data/ARXIV/
         augmentation:
             add_self_loops: true
             drop_edge: 0.0
@@ -279,7 +279,7 @@ ARXIV:
         umap: true
         heatmap: true
         loss: true
-        dir: ./visualization/PUBMED/
+        dir: ./visualization/ARXIV/
         when: end
     evaluate:
         each: false

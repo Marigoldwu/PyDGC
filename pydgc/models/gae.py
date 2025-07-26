@@ -16,6 +16,14 @@ from ..modules import GNNEncoder, InnerProductDecoder
 
 
 class GAE(DGCModel):
+    """Variational Graph Auto-Encoders.
+    
+    Reference: https://arxiv.org/abs/1611.07308
+    
+    Args:
+        logger (Logger): Logger object.
+        cfg (CN): Configuration object.
+    """
     def __init__(self, logger: Logger, cfg: CN):
         super(GAE, self).__init__(logger, cfg)
         self.device = torch.device(cfg.device)

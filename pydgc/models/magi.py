@@ -21,6 +21,15 @@ import numpy as np
 
 
 class Encoder(nn.Module):
+    """Encoder for MAGI.
+
+    Args:
+        in_channels (int): Number of input channels.
+        hidden_channels (list): List of hidden channels.
+        base_model (torch.nn.Module): Base model for graph convolution.
+        dropout (float): Dropout rate.
+        ns (float): Negative slope for leaky ReLU.
+    """
     def __init__(self, in_channels: int, hidden_channels, base_model=GCNConv, dropout: float = 0.5, ns: float = 0.5):
         super(Encoder, self).__init__()
         self.base_model = base_model
@@ -60,6 +69,13 @@ class Encoder(nn.Module):
 
 
 class Loss(nn.Module):
+    """Loss function for MAGI.
+
+    Args:
+        temperature (float): Temperature
+        scale_by_temperature (bool): Whether to scale loss by temperature.
+        scale_by_weight (bool): Whether to scale loss by weight.
+    """
     def __init__(self, temperature=0.07, scale_by_temperature=True, scale_by_weight=False):
         super(Loss, self).__init__()
         self.temperature = temperature
@@ -111,6 +127,22 @@ class Loss(nn.Module):
 
 def clustering(feature, n_clusters, true_labels, kmeans_device='cpu', batch_size=100000, tol=1e-4,
                device=torch.device('cuda:0'), spectral_clustering=False):
+    """Clustering function.
+
+    Args:
+        feature (torch.Tensor): Latent representation.
+        n_clusters (int): Number of clusters.
+        true_labels (torch.Tensor): True labels.
+        kmeans_device (str): Device for kmeans.
+        batch_size (int): Batch size.
+        tol (float): Tolerance.
+        device (torch.device): Device.
+        spectral_clustering (bool): Whether to use spectral clustering.
+
+    Returns:
+        torch.Tensor: Clustering labels.
+        None: Clustering centers.
+    """
     if spectral_clustering:
         if isinstance(feature, torch.Tensor):
             feature = feature.numpy()
@@ -137,6 +169,14 @@ def clustering(feature, n_clusters, true_labels, kmeans_device='cpu', batch_size
 
 
 def scale(z: torch.Tensor):
+    """Scale the latent representation.
+
+    Args:
+        z (torch.Tensor): Latent representation.
+
+    Returns:
+        torch.Tensor: Scaled latent representation.
+    """
     zmax = z.max(dim=1, keepdim=True)[0]
     zmin = z.min(dim=1, keepdim=True)[0]
     z_std = (z - zmin) / ((zmax - zmin) + 1e-20)
@@ -145,7 +185,14 @@ def scale(z: torch.Tensor):
 
 
 class MAGI(DGCModel):
+    """ Revisiting Modularity Maximization for Graph Clustering: A Contrastive Learning Perspective.
 
+    Reference: https://doi.org/10.1145/3637528.3671967
+
+    Args:
+        logger (Logger): Logger object.
+        cfg (CN): Configuration object.
+    """
     def __init__(self, logger: Logger, cfg: CN):
         super(MAGI, self).__init__(logger, cfg)
         encoder_dims = cfg.model.dims.encoder.copy()

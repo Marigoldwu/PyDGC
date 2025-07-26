@@ -16,6 +16,15 @@ from . import DGCModel
 
 
 def mask_feat(X: torch.Tensor, mask_prob: float):
+    """Mask feature.
+
+    Args:
+        X (torch.Tensor): Feature matrix.
+        mask_prob (float): Mask probability.
+
+    Returns:
+        torch.Tensor: Masked feature matrix.
+    """
     drop_mask = (
             torch.empty((X.size(1),), dtype=torch.float32, device=X.device).uniform_()
             < mask_prob
@@ -27,6 +36,15 @@ def mask_feat(X: torch.Tensor, mask_prob: float):
 
 
 def drop_edge(A: torch.sparse.Tensor, drop_prob: float):
+    """Drop edge with drop probability
+
+    Args:
+        A (torch.sparse.Tensor): Adjacency matrix.
+        drop_prob (float): Drop probability.
+
+    Returns:
+        torch.sparse.Tensor: Dropped adjacency matrix.
+    """
     n_edges = A._nnz()
     mask_rates = torch.full((n_edges,), fill_value=drop_prob,
                             dtype=torch.float)
@@ -44,11 +62,28 @@ def drop_edge(A: torch.sparse.Tensor, drop_prob: float):
 
 
 def add_self_loop(A: torch.sparse.Tensor):
+    """Add self loop to the adjacency matrix.
+
+    Args:
+        A (torch.sparse.Tensor): Adjacency matrix.
+
+    Returns:
+        torch.sparse.Tensor: Adjacency matrix with self loop.
+    """
     return A + sparse_identity(A.shape[0], device=A.device)
 
 
 def normalize(A: torch.sparse.Tensor, add_self_loops=True, returnA=False):
-    """Normalized the graph's adjacency matrix in the torch.sparse.Tensor format"""
+    """Normalized the graph's adjacency matrix in the torch.sparse.Tensor format.
+
+    Args:
+        A (torch.sparse.Tensor): Adjacency matrix.
+        add_self_loops (bool): Whether to add self loops.
+        returnA (bool): Whether to return the original adjacency matrix.
+
+    Returns:
+        torch.sparse.Tensor: Normalized adjacency matrix.
+    """
     if add_self_loops:
         A_hat = add_self_loop(A)
     else:
@@ -65,6 +100,15 @@ def normalize(A: torch.sparse.Tensor, add_self_loops=True, returnA=False):
 
 
 def sparse_identity(dim, device):
+    """Create a sparse identity matrix.
+
+    Args:
+        dim (int): Dimension of the identity matrix.
+        device (torch.device): Device to create the matrix on.
+
+    Returns:
+        torch.sparse.Tensor: Sparse identity matrix.
+    """
     indices = torch.arange(dim).unsqueeze(0).repeat(2, 1)
     values = torch.ones(dim)
     identity_matrix = torch.sparse_coo_tensor(indices, values,
@@ -73,6 +117,14 @@ def sparse_identity(dim, device):
 
 
 def sparse_diag(V: torch.Tensor):
+    """Create a sparse diagonal matrix.
+
+    Args:
+        V (torch.Tensor): Diagonal values.
+
+    Returns:
+        torch.sparse.Tensor: Sparse diagonal matrix.
+    """
     size = V.size(0)
     indices = torch.arange(size).unsqueeze(0).repeat(2, 1)
     values = V
@@ -83,6 +135,18 @@ def sparse_diag(V: torch.Tensor):
 
 def augment(A: torch.sparse.Tensor, X: torch.Tensor,
             edge_mask_rate: float, feat_drop_rate: float):
+    """Augment the graph and feature matrix.
+
+    Args:
+        A (torch.sparse.Tensor): Adjacency matrix.
+        X (torch.Tensor): Feature matrix.
+        edge_mask_rate (float): Edge mask rate.
+        feat_drop_rate (float): Feature drop rate.
+
+    Returns:
+        torch.sparse.Tensor: Augmented adjacency matrix.
+        torch.Tensor: Augmented feature matrix.
+    """
     A = drop_edge(A, edge_mask_rate)
     X = mask_feat(X, feat_drop_rate)
 
@@ -91,10 +155,11 @@ def augment(A: torch.sparse.Tensor, X: torch.Tensor,
 
 class GCNConv(nn.Module):
     """Implementation of Graph Convolutional Network (GCN) layer.
-    Attributes:
-      in_dim: Input dimensionality of the layer.
-      out_dim: Output dimensionality of the layer.
-      activation: Activation function to use for the final representations.
+
+    Args:
+        in_dim (int): Input dimensionality of the layer.
+        out_dim (int): Output dimensionality of the layer.
+        activation (callable, optional): Activation function to use for the final representations. Defaults to None.
     """
 
     def __init__(self, in_dim, out_dim, activation=None):
@@ -114,11 +179,14 @@ class GCNConv(nn.Module):
         nn.init.zeros_(self.bias)
 
     def forward(self, A_norm, X):
-        """
-        Computes GCN representations according to input features and input graph.
-        :param A_norm: normalized (n*n) sparse graph adjacency matrix
-        :param X: (n*in_dim) node feature matrix
-        :return: An (n*out_dim) node representation matrix
+        """Computes GCN representations according to input features and input graph.
+
+        Args:
+            A_norm (torch.sparse.Tensor): Normalized (n*n) sparse graph adjacency matrix.
+            X (torch.Tensor): (n*in_dim) node feature matrix.
+
+        Returns:
+            torch.Tensor: An (n*out_dim) node representation matrix.
         """
         assert isinstance(X, torch.Tensor)
         assert isinstance(A_norm, torch.sparse.Tensor)
@@ -131,6 +199,14 @@ class GCNConv(nn.Module):
 
 
 class NS4GC(DGCModel):
+    """Reliable Node Similarity Matrix Guided Contrastive Graph Clustering.
+    
+    Reference: https://ieeexplore.ieee.org/abstract/document/10614738/
+
+    Args:
+        logger (Logger): Logger object.
+        cfg (CN): Configuration object.
+    """
 
     def __init__(self, logger: Logger, cfg: CN):
         super(NS4GC, self).__init__(logger, cfg)

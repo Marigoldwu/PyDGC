@@ -66,12 +66,13 @@ METRIC_MAP = {"USPS": "heat", "HHAR": "cosine", "REUT": "cosine"}
 
 
 class UserDataset(InMemoryDataset):
+    """User custom Dataset inherited from InMemoryDataset of PyG
+
+    Args:
+        root (str): Path of data stored
+        dataset_name (str): Name of dataset
+    """
     def __init__(self, root: str, dataset_name: str):
-        """
-        User custom Dataset
-        :param root: Path of data stored
-        :param dataset_name: Name of dataset
-        """
         self.dataset_name = dataset_name.upper()
         super().__init__(root)
         self.load(self.processed_paths[0])
@@ -99,20 +100,21 @@ class UserDataset(InMemoryDataset):
 
 
 class NonGraphDataset(InMemoryDataset):
+    """Dataset object for constructing non-graph data
+
+    Args:
+        root (str): Path of data stored
+        dataset_name (str): Name of dataset
+        neighbors (int, optional): k for knn. Defaults to 1.
+        metric (str, optional): Similarity measurement. Defaults to 'minkowski'.
+        p (int, optional): Power parameter for the Minkowski metric. Defaults to 2.
+    """
     def __init__(self,
                  root: str,
                  dataset_name: str,
                  neighbors: int = 1,
                  metric: str = 'minkowski',
                  p: int = 2):
-        """
-        Dataset object for constructing non-graph data
-        :param root: Path of data stored
-        :param dataset_name: Name of dataset
-        :param neighbors: k for knn
-        :param metric: Similarity measurement
-        :param p: Power parameter for the Minkowski metric.
-        """
         self.root = root
         self.dataset_name = dataset_name.split('_')[0].upper()
         self.neighbors = neighbors
@@ -152,7 +154,16 @@ class NonGraphDataset(InMemoryDataset):
         self.save([data], self.processed_paths[0])
 
 
-def heat_kernel_knn_graph(x: np.array, k: int) -> Tensor:
+def heat_kernel_knn_graph(x: np.ndarray, k: int) -> Tensor:
+    """Construct heat kernel graph
+
+    Args:
+        x (np.ndarray): Input data
+        k (int): Number of neighbors
+
+    Returns:
+        Tensor: Adjacency matrix
+    """
     xy = np.matmul(x, x.transpose())
     xx = (x * x).sum(1).reshape(-1, 1)
     xx_yy = xx + xx.transpose()
@@ -173,6 +184,12 @@ def heat_kernel_knn_graph(x: np.array, k: int) -> Tensor:
 
 
 class DGCGraphDataset(UserDataset):
+    """DGC Dataset object for constructing graph data
+
+    Args:
+        root (str): Path of data stored
+        dataset_name (str): Name of dataset
+    """
     def __init__(self, root, dataset_name):
         super().__init__(root, dataset_name)
 
@@ -184,6 +201,15 @@ class DGCGraphDataset(UserDataset):
 
 
 class DGCNonGraphDataset(NonGraphDataset):
+    """DGC Non-Graph Dataset object for constructing graph from non-graph data
+
+    Args:
+        root (str): Path of data stored
+        dataset_name (str): Name of dataset
+        neighbors (int, optional): k for knn. Defaults to 1.
+        metric (str, optional): Similarity measurement. Defaults to 'minkowski'.
+        p (int, optional): Power parameter for the Minkowski metric. Defaults to 2.
+    """
     def __init__(self, root, dataset_name, neighbors=1, metric='minkowski', p=2):
         super().__init__(root, dataset_name, neighbors, metric, p)
 
@@ -200,6 +226,17 @@ class DGCNonGraphDataset(NonGraphDataset):
 
 
 def load_pyg(dataset_dir: str, dataset_name: str) -> Dataset:
+    """Load PyG dataset built in PyDGC.
+
+    Args:
+        dataset_dir (str): Dataset stored root path.
+        dataset_name (str): Dataset name. Available datasets: CORA, CITE, CITESEER, PUBMED, 
+        BAT, EAT, UAT, COCS, COPS, AMAC, AMAP, CORNELL, TEXAS, WISC, WIKI, BLOG, PPI, FLICKR, 
+        FACEBOOK, TWEIBO, MAG, ACTOR, CORAFULL, DBLPFULL, NELL, REDDIT, REDDIT2, YELP, AMP, LFMA, ROMAN.
+
+    Returns:
+        Dataset: PyG dataset.
+    """
     if dataset_name in ["CORA", "CITE", "CITESEER", "PUBMED"]:
         return Planetoid(dataset_dir, name=DATASET_NAME_MAP[dataset_name])
     if dataset_name in ["BAT", "EAT", "UAT"]:
@@ -235,6 +272,15 @@ def load_pyg(dataset_dir: str, dataset_name: str) -> Dataset:
 
 
 def load_dgc_graph(dataset_dir: str, dataset_name: str) -> Dataset:
+    """Load custom DGC graph dataset.
+
+    Args:
+        dataset_dir (str): Dataset stored root path.
+        dataset_name (str): Dataset name.
+
+    Returns:
+        Dataset: Custom DGC graph dataset.
+    """
     return DGCGraphDataset(dataset_dir, dataset_name)
 
 
@@ -244,19 +290,29 @@ def load_dgc_non_graph(dataset_dir: str,
                        neighbors: int = 1,
                        metric: str = 'minkowski',
                        p: int = 2) -> Dataset:
-    """
-    Load non-graph dataset.
-    :param dataset_dir: Dataset stored root path.
-    :param dataset_name: Dataset name for non-graph dataset.
-    :param neighbors: K for KNN. Self is not included.
-    :param metric: Distance type, 'minkowski' for default.
-    :param p: Power parameter for the Minkowski metric. When p = 1, this is equivalent to using manhattan_distance (l1), and euclidean_distance (l2) for p = 2. For arbitrary p, minkowski_distance (l_p) is used.
-    :return: NonGraphDataset
+    """Load custom non-graph dataset.
+    Args:
+        dataset_dir (str): Dataset stored root path.
+        dataset_name (str): Dataset name for non-graph dataset.
+        neighbors (int, optional): K for KNN. Self is not included. Defaults to 1.
+        metric (str, optional): Distance type, 'minkowski' for default. Defaults to 'minkowski'.
+        p (int, optional): Power parameter for the Minkowski metric. When p = 1, this is equivalent to using manhattan_distance (l1), and euclidean_distance (l2) for p = 2. For arbitrary p, minkowski_distance (l_p) is used.
+    Returns
+        NonGraphDataset: Custom non-graph Dataset object.
     """
     return DGCNonGraphDataset(dataset_dir, dataset_name, neighbors, metric, p)
 
 
 def load_ogb(dataset_dir: str, dataset_name: str) -> Dataset:
+    """Load OGB dataset.
+
+    Args:
+        dataset_dir (str): Dataset stored root path.
+        dataset_name (str): Dataset name.
+
+    Returns:
+        Dataset: OGB dataset.
+    """
     dataset = PygNodePropPredDataset(root=dataset_dir, name=dataset_name)
     splits = dataset.get_idx_split()
     split_names = ['train_mask', 'val_mask', 'test_mask']
@@ -270,13 +326,15 @@ def load_ogb(dataset_dir: str, dataset_name: str) -> Dataset:
 
 
 def load_dataset(dataset_dir: str, dataset_name: str, p: int = 2) -> Dataset:
-    """
-    load raw datasets.
+    """Load raw datasets.
 
-    :param dataset_dir:
-    :param dataset_name:
-    :param p:
-    :return: a list of networkx/deepsnap graphs, plus additional info if needed
+    Args:
+        dataset_dir (str): Dataset stored root path.
+        dataset_name (str): Dataset name.
+        p (int, optional): Power parameter for the Minkowski metric. Defaults to 2.
+
+    Returns:
+        Dataset: Raw dataset.
     """
     try:
         dataset_dir = dataset_dir.split('_')[0] if dataset_dir.__contains__('_') else dataset_dir
@@ -301,12 +359,12 @@ def load_dataset(dataset_dir: str, dataset_name: str, p: int = 2) -> Dataset:
 
 
 def preprocess_custom_data(root: str, dataset_name: str, dataset_type: str = 'graph'):
-    """
-    Transform dataset with format from Awesome-Deep-Graph-Clustering.
-    :param root: root path
-    :param dataset_name: Dataset name.
-    :param dataset_type: Dataset type. Options: 'graph', 'non-graph'
-    :return:
+    """Transform dataset with format from Awesome-Deep-Graph-Clustering.
+
+    Args:
+        root (str): Dataset stored root path.
+        dataset_name (str): Dataset name.
+        dataset_type (str, optional): Dataset type. Options: 'graph', 'non-graph'. Defaults to 'graph'.
     """
     try:
         if not osp.isdir(root):
@@ -344,6 +402,11 @@ def preprocess_custom_data(root: str, dataset_name: str, dataset_type: str = 'gr
 
 
 class LoadAttribute(TorchDataset):
+    """Load attribute dataset.
+
+    Args:
+        x (np.ndarray): Attribute matrix.
+    """
     def __init__(self, x):
         if isinstance(x, torch.Tensor) and x.device != torch.device('cpu'):
             x = x.cpu()

@@ -23,12 +23,32 @@ from . import DGCModel
 
 
 def target_distribution(q):
+    """Target distribution.
+
+    Args:
+        q (torch.Tensor): Input tensor.
+
+    Returns:
+        torch.Tensor: Target distribution.
+    """
     weight = q ** 2 / q.sum(0)
     return (weight.t() / weight.sum(1)).t()
 
 
 class AE_encoder(nn.Module):
+    """Autoencoder encoder.
 
+    Args:
+        ae_n_enc_1 (int): The number of neurons in the first layer of the encoder.
+        ae_n_enc_2 (int): The number of neurons in the second layer of the encoder.
+        ae_n_enc_3 (int): The number of neurons in the third layer of the encoder.
+        n_input (int): The number of input features.
+        n_z (int): The number of latent features.
+        device (str): Device.
+
+    Returns:
+        torch.Tensor: Output features.
+    """
     def __init__(self, ae_n_enc_1, ae_n_enc_2, ae_n_enc_3, n_input, n_z, device='cuda'):
         super(AE_encoder, self).__init__()
         self.device = device
@@ -55,7 +75,19 @@ class AE_encoder(nn.Module):
 
 
 class AE_decoder(nn.Module):
+    """Autoencoder decoder.
 
+    Args:
+        ae_n_dec_1 (int): The number of neurons in the first layer of the decoder.
+        ae_n_dec_2 (int): The number of neurons in the second layer of the decoder.
+        ae_n_dec_3 (int): The number of neurons in the third layer of the decoder.
+        n_input (int): The number of input features.
+        n_z (int): The number of latent features.
+        device (str): Device.
+
+    Returns:
+        torch.Tensor: Output features.
+    """
     def __init__(self, ae_n_dec_1, ae_n_dec_2, ae_n_dec_3, n_input, n_z, device='cuda'):
         super(AE_decoder, self).__init__()
         self.device = device
@@ -82,6 +114,22 @@ class AE_decoder(nn.Module):
 
 
 class AE(nn.Module):
+    """Autoencoder.
+    
+    Args:
+        ae_n_enc_1 (int): The number of neurons in the first layer of the encoder.
+        ae_n_enc_2 (int): The number of neurons in the second layer of the encoder.
+        ae_n_enc_3 (int): The number of neurons in the third layer of the encoder.
+        ae_n_dec_1 (int): The number of neurons in the first layer of the decoder.
+        ae_n_dec_2 (int): The number of neurons in the second layer of the decoder.
+        ae_n_dec_3 (int): The number of neurons in the third layer of the decoder.
+        n_input (int): The number of input features.
+        n_z (int): The number of latent features.
+        device (str): Device.
+
+    Returns:
+        torch.Tensor: Output features.
+    """
 
     def __init__(self, ae_n_enc_1, ae_n_enc_2, ae_n_enc_3, ae_n_dec_1, ae_n_dec_2, ae_n_dec_3, n_input, n_z, device='cuda'):
         super(AE, self).__init__()
@@ -150,6 +198,17 @@ class AE(nn.Module):
 
 
 class GNNLayer(nn.Module):
+    """Graph neural network layer.
+
+    Args:
+        name (str): Name of the dataset.
+        in_features (int): Number of input features.
+        out_features (int): Number of output features.
+        device (str): Device.
+
+    Returns:
+        torch.Tensor: Output features.
+    """
 
     def __init__(self, name, in_features, out_features, device='cuda'):
         super(GNNLayer, self).__init__()
@@ -187,6 +246,19 @@ class GNNLayer(nn.Module):
 
 
 class IGAE_encoder(nn.Module):
+    """IGAE encoder.
+
+    Args:
+        name (str): Name of the dataset.
+        gae_n_enc_1 (int): The number of neurons in the first layer of the encoder.
+        gae_n_enc_2 (int): The number of neurons in the second layer of the encoder.
+        gae_n_enc_3 (int): The number of neurons in the third layer of the encoder.
+        n_input (int): The number of input features.
+        device (str): Device.
+
+    Returns:
+        torch.Tensor: Output features.
+    """
 
     def __init__(self, name, gae_n_enc_1, gae_n_enc_2, gae_n_enc_3, n_input, device='cuda'):
         super(IGAE_encoder, self).__init__()
@@ -213,6 +285,19 @@ class IGAE_encoder(nn.Module):
 
 
 class IGAE_decoder(nn.Module):
+    """IGAE decoder.
+
+    Args:
+        name (str): Name of the dataset.
+        gae_n_dec_1 (int): The number of neurons in the first layer of the decoder.
+        gae_n_dec_2 (int): The number of neurons in the second layer of the decoder.
+        gae_n_dec_3 (int): The number of neurons in the third layer of the decoder.
+        n_input (int): The number of input features.
+        device (str): Device.
+
+    Returns:
+        torch.Tensor: Output features.
+    """
 
     def __init__(self, name, gae_n_dec_1, gae_n_dec_2, gae_n_dec_3, n_input, device='cuda'):
         super(IGAE_decoder, self).__init__()
@@ -240,7 +325,22 @@ class IGAE_decoder(nn.Module):
 
 
 class IGAE(nn.Module):
+    """IGAE model.
 
+    Args:
+        name (str): Name of the dataset.
+        gae_n_enc_1 (int): The number of neurons in the first layer of the encoder.
+        gae_n_enc_2 (int): The number of neurons in the second layer of the encoder.
+        gae_n_enc_3 (int): The number of neurons in the third layer of the encoder.
+        gae_n_dec_1 (int): The number of neurons in the first layer of the decoder.
+        gae_n_dec_2 (int): The number of neurons in the second layer of the decoder.
+        gae_n_dec_3 (int): The number of neurons in the third layer of the decoder.
+        n_input (int): The number of input features.
+        device (str): Device.
+
+    Returns:
+        torch.Tensor: Output features.
+    """
     def __init__(self, name, gae_n_enc_1, gae_n_enc_2, gae_n_enc_3, gae_n_dec_1, gae_n_dec_2, gae_n_dec_3, n_input, device='cuda'):
         super(IGAE, self).__init__()
         self.device = device
@@ -303,6 +403,17 @@ class IGAE(nn.Module):
 
 
 class DFCN(DGCModel):
+    """Deep Fusion Clustering Network.
+
+    Reference: https://ojs.aaai.org/index.php/AAAI/article/view/17198
+
+    Args:
+        logger (Logger): Logger.
+        cfg (CN): Configuration.
+
+    Returns:
+        torch.Tensor: Output features.
+    """
     def __init__(self, logger: Logger, cfg: CN):
         super(DFCN, self).__init__(logger, cfg)
         ae_dims = cfg.model.dims.ae.copy()

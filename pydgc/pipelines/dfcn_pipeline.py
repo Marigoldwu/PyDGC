@@ -11,6 +11,14 @@ from torch_geometric.utils import contains_self_loops, remove_self_loops, add_re
 
 
 def normalize(mx):
+    """Row-normalize sparse matrix.
+
+    Args:
+        mx (scipy.sparse): Input sparse matrix.
+
+    Returns:
+        scipy.sparse: Row-normalized sparse matrix.
+    """
     row_sum = np.array(mx.sum(1))
     r_inv = np.power(row_sum, -1).flatten()
     r_inv[np.isinf(r_inv)] = 0.
@@ -20,6 +28,14 @@ def normalize(mx):
 
 
 def sparse_mx_to_torch_sparse_tensor(sparse_mx):
+    """Convert a scipy sparse matrix to a torch sparse tensor.
+
+    Args:
+        sparse_mx (scipy.sparse): Input sparse matrix.
+
+    Returns:
+        torch.sparse_coo_tensor: The torch sparse tensor.
+    """
     sparse_mx = sparse_mx.tocoo().astype(np.float32)
     indices = torch.from_numpy(
         np.vstack((sparse_mx.row, sparse_mx.col)).astype(np.int64))
@@ -29,11 +45,15 @@ def sparse_mx_to_torch_sparse_tensor(sparse_mx):
 
 
 class DFCNPipeline(BasePipeline):
+    """DFCN pipeline.
+
+    Args:
+        args (Namespace): Arguments.
+    """
     def __init__(self, args: Namespace):
         super(DFCNPipeline, self).__init__(args)
 
     def augment_data(self):
-        """Data augmentation"""
         self.data = perturb_data(self.data, self.cfg.dataset.augmentation)
         pca = PCA(n_components=self.cfg.dataset.augmentation.pca_dim)
         self.data.x = torch.from_numpy(pca.fit_transform(self.data.x)).float()

@@ -153,7 +153,7 @@ CITE:
         umap: false
         heatmap: false
         loss: true
-        dir: ./visualization/ACM/
+        dir: ./visualization/CITE/
         when: end
     evaluate:
         each: true
@@ -463,11 +463,11 @@ USPS_3:
 HHAR_3:
     device: cuda
     logger:
-        name: USPS_3
+        name: HHAR_3
         mode: both
-        dir: ./log/USPS_3/
+        dir: ./log/HHAR_3/
     dataset:
-        dir: ../data/USPS/
+        dir: ../data/HHAR/
         augmentation:
             add_self_loops: false
             drop_edge: 0.0
@@ -489,7 +489,7 @@ HHAR_3:
         umap: true
         heatmap: true
         loss: true
-        dir: ./visualization/USPS_3/
+        dir: ./visualization/HHAR_3/
         when: end
     evaluate:
         each: false

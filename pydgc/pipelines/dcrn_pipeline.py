@@ -11,12 +11,15 @@ from torch_geometric.utils import contains_self_loops, remove_self_loops, to_den
 
 
 def normalize_adj(adj, self_loop=True, symmetry=False):
-    """
-    normalize the adj matrix
-    :param adj: input adj matrix
-    :param self_loop: if add the self loop or not
-    :param symmetry: symmetry normalize or not
-    :return: the normalized adj matrix
+    """Normalize the adj matrix.
+
+    Args:
+        adj (np.ndarray): Input adj matrix.
+        self_loop (bool): If add the self loop or not.
+        symmetry (bool): Symmetry normalize or not.
+
+    Returns:
+        np.ndarray: The normalized adj matrix.
     """
     # add the self_loop
     if self_loop:
@@ -41,13 +44,14 @@ def normalize_adj(adj, self_loop=True, symmetry=False):
 
 
 def diffusion_adj(adj, transport_rate=0.2):
-    """
-    graph diffusion
-    :param adj: input adj matrix
-    :param transport_rate: the transport rate
-    - personalized page rank
-    -
-    :return: the graph diffusion
+    """Graph diffusion.
+
+    Args:
+        adj (np.ndarray): Input adj matrix.
+        transport_rate (float): The transport rate.
+
+    Returns:
+        np.ndarray: The graph diffusion.
     """
     # add the self_loop
     adj_tmp = adj + np.eye(adj.shape[0])
@@ -67,6 +71,14 @@ def diffusion_adj(adj, transport_rate=0.2):
 
 
 def sparse_mx_to_torch_sparse_tensor(sparse_mx):
+    """Convert a scipy sparse matrix to a torch sparse tensor.
+
+    Args:
+        sparse_mx (scipy.sparse): Input sparse matrix.
+
+    Returns:
+        torch.sparse_coo_tensor: The torch sparse tensor.
+    """
     sparse_mx = sparse_mx.tocoo().astype(np.float32)
     indices = torch.from_numpy(
         np.vstack((sparse_mx.row, sparse_mx.col)).astype(np.int64))
@@ -76,11 +88,15 @@ def sparse_mx_to_torch_sparse_tensor(sparse_mx):
 
 
 class DCRNPipeline(BasePipeline):
+    """DCRN pipeline.
+
+    Args:
+        args (Namespace): Arguments.
+    """
     def __init__(self, args: Namespace):
         super(DCRNPipeline, self).__init__(args)
 
     def augment_data(self):
-        """Data augmentation"""
         self.data = perturb_data(self.data, self.cfg.dataset.augmentation)
         pca = PCA(n_components=self.cfg.dataset.augmentation.pca_dim)
         self.data.x = torch.from_numpy(pca.fit_transform(self.data.x)).float()

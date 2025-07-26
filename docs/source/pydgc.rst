@@ -5,9 +5,8 @@ Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
 
-   installation
    pydgc.clusterings
    pydgc.datasets
    pydgc.metrics

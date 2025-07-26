@@ -17,6 +17,16 @@ from yacs.config import CfgNode as CN
 
 
 def init_clustering(feature, cluster_num):
+    """Initialize clustering with kmeans.
+
+    Args:
+        feature (Tensor): Input feature.
+        cluster_num (int): Number of clusters.
+
+    Returns:
+        predict_labels (Tensor): Predicted labels.
+        dis (Tensor): Pairwise distance.
+    """
     kmeans = KMeansGPU(n_clusters=cluster_num, distance="euclidean", device="cuda")
     predict_labels, _ = kmeans.fit(feature)
     dis = kmeans.pairwise_distance(feature, kmeans.cluster_centers_)
@@ -24,6 +34,14 @@ def init_clustering(feature, cluster_num):
 
 
 class CCGC(DGCModel):
+    """ Cluster-Guided Contrastive Graph Clustering Network.
+
+    Reference: https://ojs.aaai.org/index.php/AAAI/article/view/26285
+
+    Args:
+        logger (Logger): Logger.
+        cfg (CN): Config.
+    """
     def __init__(self, logger: Logger, cfg: CN):
         super(CCGC, self).__init__(logger, cfg)
         self.device = torch.device(cfg.device)

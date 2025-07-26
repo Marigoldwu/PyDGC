@@ -10,13 +10,15 @@ from sklearn.preprocessing import normalize
 
 
 def get_M(adj, t: int = 2):
-    """
-    calculate the matrix M by the equation:
-        M=(B^1 + B^2 + ... + B^t) / t
+    """Calculate the matrix M by the equation:
+        $M=(B^1 + B^2 + ... + B^t) / t$
 
-    :param adj: the adjacency matrix
-    :param t: default value is 2
-    :return: M
+    Args:
+        adj (torch.Tensor): The adjacency matrix.
+        t (int, optional): Default value is 2.
+
+    Returns:
+        torch.Tensor: The matrix M.
     """
     if adj.device != torch.device("cpu"):
         adj = adj.cpu()
@@ -28,19 +30,28 @@ def get_M(adj, t: int = 2):
 
 
 def target_distribution(q):
+    """Target distribution.
+
+    Args:
+        q (torch.Tensor): The input tensor.
+
+    Returns:
+        torch.Tensor: The target distribution.
+    """
     weight = q ** 2 / q.sum(0)
     return (weight.t() / weight.sum(1)).t()
 
 
 def diffusion_adj(adj, mode="ppr", transport_rate=0.2):
-    """
-    graph diffusion
-    :param adj: input adj matrix
-    :param mode: the mode of graph diffusion
-    :param transport_rate: the transport rate
-    - personalized page rank
-    -
-    :return: the graph diffusion
+    """Graph diffusion.
+
+    Args:
+        adj (torch.Tensor): The adjacency matrix.
+        mode (str, optional): The mode of graph diffusion. Defaults to "ppr".
+        transport_rate (float, optional): The transport rate. Defaults to 0.2.
+
+    Returns:
+        torch.Tensor: The graph diffusion.
     """
     # add the self_loop
     adj_tmp = adj + np.eye(adj.shape[0])
@@ -62,8 +73,15 @@ def diffusion_adj(adj, mode="ppr", transport_rate=0.2):
 
 
 def add_gaussian_noise(x: Tensor, mean=0, std_dev=0.1):
-    """
-    Add gaussian noise to x
+    """Add gaussian noise to x.
+
+    Args:
+        x (torch.Tensor): The input tensor.
+        mean (int, optional): The mean of the gaussian noise. Defaults to 0.
+        std_dev (float, optional): The standard deviation of the gaussian noise. Defaults to 0.1.
+
+    Returns:
+        torch.Tensor: The tensor with gaussian noise.
     """
     noise = torch.normal(mean, std_dev, size=x.size())
     x = x + noise
@@ -71,6 +89,15 @@ def add_gaussian_noise(x: Tensor, mean=0, std_dev=0.1):
 
 
 def perturb_data(data: Data, cfg: CN):
+    """Perturb the data.
+
+    Args:
+        data (Data): The input data.
+        cfg (CN): The configuration.
+
+    Returns:
+        Data: The perturbed data.
+    """
     if hasattr(cfg, 'drop_edge'):
         drop_edge_rate = float(cfg.drop_edge) if float(cfg.drop_edge) < 0.99 else 0.99
         if cfg.drop_edge > 0:
@@ -98,6 +125,14 @@ def perturb_data(data: Data, cfg: CN):
 
 
 def sparse_mx_to_torch_sparse_tensor(sparse_mx):
+    """Convert a scipy sparse matrix to a torch sparse tensor.
+
+    Args:
+        sparse_mx (scipy.sparse.csr_matrix): The input scipy sparse matrix.
+
+    Returns:
+        torch.sparse_coo_tensor: The torch sparse tensor.
+    """
     sparse_mx = sparse_mx.tocoo().astype(np.float32)
     indices = torch.from_numpy(
         np.vstack((sparse_mx.row, sparse_mx.col)).astype(np.int64))
@@ -107,12 +142,14 @@ def sparse_mx_to_torch_sparse_tensor(sparse_mx):
 
 
 def normalize_adj_torch(adj, symmetry=True):
-    """
-    Normalize the adjacency matrix.
+    """Normalize the adjacency matrix.
 
-    :param adj: Input adjacency matrix
-    :param symmetry: Symmetry normalize or not
-    :return norm_adj: The normalized adjacency matrix
+    Args:
+        adj (torch.Tensor): The input adjacency matrix.
+        symmetry (bool, optional): Symmetry normalize or not. Defaults to True.
+
+    Returns:
+        torch.Tensor: The normalized adjacency matrix.
     """
     # Calculate degree matrix and its inverse matrix
     d_inv = torch.diag(1 / torch.sum(adj, dim=1))

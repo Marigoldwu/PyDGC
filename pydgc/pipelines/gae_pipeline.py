@@ -7,11 +7,15 @@ from torch_geometric.utils import add_remaining_self_loops
 
 
 class GAEPipeline(BasePipeline):
+    """GAE pipeline.
+
+    Args:
+        args (Namespace): Arguments.
+    """
     def __init__(self, args: Namespace):
         super().__init__(args)
 
     def augment_data(self):
-        """Data augmentation"""
         self.data = perturb_data(self.data, self.cfg.dataset.augmentation)
         if hasattr(self.cfg.dataset.augmentation, 'add_self_loops'):
             if self.cfg.dataset.augmentation.add_self_loops:

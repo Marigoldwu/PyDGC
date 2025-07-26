@@ -20,12 +20,12 @@ from ..utils import load_dataset_specific_cfg, setup_seed, get_formatted_time, d
 
 
 class BasePipeline(ABC):
-    def __init__(self, args: Namespace):
-        """
-        Standardized pipeline for deep graph clustering
+    """Standardized pipeline for deep graph clustering.
 
-        :param args: command line arguments for setting values frequently changed
-        """
+    Args:
+        args (Namespace): Arguments for setting values frequently changed.
+    """
+    def __init__(self, args: Namespace):
         torch.set_default_dtype(torch.float32)
         self.args = args
         self.cfg_file_path = "config.yaml" if not hasattr(args, "cfg_file_path") else args.cfg_file_path
@@ -47,7 +47,12 @@ class BasePipeline(ABC):
         self.current_round = 0
 
     def load_config(self):
-        """load config from yaml"""
+        """load config from yaml
+
+        Args:
+            self.cfg_file_path (str): Path to the config file.
+            self.dataset_name (str): Name of the dataset.
+        """
         self.cfg = load_dataset_specific_cfg(self.cfg_file_path, self.dataset_name)
         cfg = check_required_cfg(self.cfg, dataset_name=self.dataset_name)
         if isinstance(cfg, CN):
@@ -61,9 +66,16 @@ class BasePipeline(ABC):
             self.cfg.dataset.augmentation.add_edge = float(self.args.add_edge)
         if hasattr(self.args, 'add_noise'):
             self.cfg.dataset.augmentation.add_noise = float(self.args.add_noise)
+        if hasattr(self.args, 'rounds'):
+            self.cfg.train.rounds = int(self.args.rounds)
         self.cfg.evaluate.each = self.args.eval_each
 
     def load_logger(self):
+        """Load logger.
+
+        Args:
+            self.cfg (CN): Config object.
+        """
         log_file = osp.join(self.cfg.logger.dir, f'{get_formatted_time()}.log')
         self.logger = create_logger(self.cfg.logger.name, self.cfg.logger.mode, log_file)
         auto_select_device(self.logger, self.cfg)
@@ -72,6 +84,12 @@ class BasePipeline(ABC):
             self.results = build_results_dict(self.cfg.evaluate)
 
     def load_dataset(self):
+        """Load dataset.
+
+        Args:
+            self.cfg (CN): Config object.
+            self.dataset_name (str): Name of the dataset.
+        """
         try:
             if not self.cfg:
                 raise ValueError("Please load config before loading data!")
@@ -101,10 +119,23 @@ class BasePipeline(ABC):
 
     @abstractmethod
     def build_model(self) -> DGCModel:
-        """模型构建逻辑"""
+        """Build model.
+
+        Args:
+            self.cfg (CN): Config object.
+
+        Returns:
+            DGCModel: Model object.
+        """
         pass
 
     def evaluate(self, results):
+        """Evaluate model.
+
+        Args:
+            self.cfg (CN): Config object.
+            results (dict): Evaluation results.
+        """
         if self.cfg.train.rounds > 1:
             for key, value in results.items():
                 self.results[key].append(value)
@@ -112,6 +143,11 @@ class BasePipeline(ABC):
             self.results = results
 
     def visualize(self):
+        """Visualize results.
+
+        Args:
+            self.cfg (CN): Config object.
+        """
         cfg = self.cfg.visualize
         plot = DGCVisual(save_path=cfg.dir, font_family=['Times New Roman', 'SimSun'], font_size=24)
         if cfg.tsne:
@@ -132,6 +168,15 @@ class BasePipeline(ABC):
             self.logger.flag(f"LOSS END")
 
     def run(self, pretrain=False, flag="TRAIN"):
+        """Run pipeline.
+
+        Args:
+            self.cfg_file_path (str): Path to the config file.
+            self.dataset_name (str): Name of the dataset.
+            self.args (Namespace): Arguments.
+            pretrain (bool): Whether to pretrain the model.
+            flag (str): Flag for logging.
+        """
         try:
             self.load_config()
             self.load_logger()

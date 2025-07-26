@@ -14,6 +14,12 @@ from ..utils import validate_and_create_path
 
 
 class GAESSC(DGCModel):
+    """Graph-autoencoder with self-supervised clustering used in DEC.
+    
+    Args:
+        logger (Logger): Logger object.
+        cfg (CN): Configuration object.
+    """
 
     def __init__(self, logger, cfg):
         super(GAESSC, self).__init__(logger, cfg)

@@ -12,11 +12,15 @@ import torch
 
 
 class DGCLUSTERPipeline(BasePipeline):
+    """DGCLUSTER pipeline.
+
+    Args:
+        args (Namespace): Arguments.
+    """
     def __init__(self, args: Namespace):
         super().__init__(args)
 
     def augment_data(self):
-        """Data augmentation"""
         self.data = perturb_data(self.data, self.cfg.dataset.augmentation)
         if self.dataset_name == "DBLP":
             self.data.edge_index = add_self_loops(self.data.edge_index)[0]

@@ -25,6 +25,15 @@ from torch_sparse import SparseTensor
 
 
 class Encoder(torch.nn.Module):
+    """Encoder model for MAGI-Batch.
+
+    Args:
+        in_channels (int): Input feature dimension.
+        hidden_channels (list): Hidden layer dimensions.
+        base_model (torch.nn.Module): Base model for graph convolution.
+        dropout (float): Dropout rate.
+        ns (float): Negative slope for LeakyReLU.
+    """
     def __init__(self, in_channels: int, hidden_channels, base_model=SAGEConv, dropout: float = 0.5, ns: float = 0.5):
         super(Encoder, self).__init__()
         self.base_model = base_model
@@ -64,6 +73,13 @@ class Encoder(torch.nn.Module):
 
 
 class Loss(nn.Module):
+    """Loss function for MAGI-Batch.
+
+    Args:
+        temperature (float): Temperature parameter for softmax.
+        scale_by_temperature (bool): Whether to scale the loss by temperature.
+        scale_by_weight (bool): Whether to scale the loss by weight.
+    """
     def __init__(self, temperature=0.07, scale_by_temperature=True, scale_by_weight=False):
         super(Loss, self).__init__()
         self.temperature = temperature
@@ -115,6 +131,22 @@ class Loss(nn.Module):
 
 def clustering(feature, n_clusters, true_labels, kmeans_device='cpu', batch_size=100000, tol=1e-4,
                device=torch.device('cuda:0'), spectral_clustering=False):
+    """Clustering function.
+
+    Args:
+        feature (torch.Tensor): Latent representation.
+        n_clusters (int): Number of clusters.
+        true_labels (torch.Tensor): True labels.
+        kmeans_device (str): Device for kmeans.
+        batch_size (int): Batch size for kmeans.
+        tol (float): Tolerance for kmeans.
+        device (torch.device): Device for kmeans.
+        spectral_clustering (bool): Whether to use spectral clustering.
+
+    Returns:
+        torch.Tensor: Clustering labels.
+        None: Clustering centers.
+    """
     if spectral_clustering:
         if isinstance(feature, torch.Tensor):
             feature = feature.numpy()
@@ -141,6 +173,14 @@ def clustering(feature, n_clusters, true_labels, kmeans_device='cpu', batch_size
 
 
 def scale(z: torch.Tensor):
+    """Scale the latent representation.
+
+    Args:
+        z (torch.Tensor): Latent representation.
+
+    Returns:
+        torch.Tensor: Scaled latent representation.
+    """
     zmax = z.max(dim=1, keepdim=True)[0]
     zmin = z.min(dim=1, keepdim=True)[0]
     z_std = (z - zmin) / ((zmax - zmin) + 1e-20)
@@ -171,7 +211,8 @@ class Adj(NamedTuple):
 
 
 class NeighborSampler(torch.utils.data.DataLoader):
-    r"""
+    """Neighbor sampler for graph convolution.
+
     This code adapted from the pytorch geometric
     (https://github.com/pyg-team/pytorch_geometric/blob/master/torch_geometric/loader/neighbor_sampler.py).
     """
@@ -331,6 +372,14 @@ class NeighborSampler(torch.utils.data.DataLoader):
 
 
 def get_mask(adj):
+    """Get mask for positive edges.
+
+    Args:
+        adj (SparseTensor): Adjacency matrix.
+
+    Returns:
+        SparseTensor: Masked adjacency matrix.
+    """
     batch_mean = adj.mean(dim=1)
     mean = batch_mean[torch.LongTensor(adj.storage.row())]
     mask = (adj.storage.value() - mean) > - 1e-10
@@ -342,6 +391,14 @@ def get_mask(adj):
 
 
 class MAGIBatch(DGCModel):
+    """ Revisiting Modularity Maximization for Graph Clustering: A Contrastive Learning Perspective.
+
+    Reference: https://doi.org/10.1145/3637528.3671967
+    
+    Args:
+        logger (Logger): Logger object.
+        cfg (CN): Configuration object.
+    """
 
     def __init__(self, logger: Logger, cfg: CN):
         super(MAGIBatch, self).__init__(logger, cfg)

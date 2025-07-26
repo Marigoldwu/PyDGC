@@ -20,6 +20,14 @@ import torch.nn.functional as F
 
 
 def convert_scipy_torch_sp(sp_adj):
+    """Convert scipy sparse matrix to torch sparse matrix.
+    
+    Args:
+        sp_adj (scipy.sparse.csr_matrix): Input sparse matrix.
+    
+    Returns:
+        torch.sparse_coo_tensor: Output sparse matrix.
+    """
     sp_adj = sp_adj.tocoo()
     indices = torch.tensor(np.vstack((sp_adj.row, sp_adj.col)))
     sp_adj = torch.sparse_coo_tensor(indices, torch.tensor(sp_adj.data), size=sp_adj.shape)
@@ -27,6 +35,16 @@ def convert_scipy_torch_sp(sp_adj):
 
 
 def aux_objective(output, s, oh_labels):
+    """Auxiliary objective function.
+    
+    Args:
+        output (torch.Tensor): Output tensor.
+        s (torch.Tensor): Sample indices.
+        oh_labels (torch.Tensor): One-hot labels.
+    
+    Returns:
+        torch.Tensor: Auxiliary objective loss.
+    """
     sample_size = len(s)
 
     out = output[s, :].float()
@@ -59,6 +77,15 @@ def aux_objective(output, s, oh_labels):
 
 
 def regularization(output, s):
+    """Regularization function.
+    
+    Args:
+        output (torch.Tensor): Output tensor.
+        s (torch.Tensor): Sample indices.
+    
+    Returns:
+        torch.Tensor: Regularization loss.
+    """
     out = output[s, :]
     ss = out.sum(dim=0)
     ss = ss ** 2
@@ -69,6 +96,14 @@ def regularization(output, s):
 
 
 class DGCLUSTER(DGCModel):
+    """DGCLUSTER: A Neural Framework for Attributed Graph Clustering via Modularity Maximization.
+
+    Reference: https://ojs.aaai.org/index.php/AAAI/article/view/28983
+    
+    Args:
+        logger (Logger): Logger object.
+        cfg (CN): Configuration object.
+    """
 
     def __init__(self, logger: Logger, cfg: CN):
         super(DGCLUSTER, self).__init__(logger, cfg)

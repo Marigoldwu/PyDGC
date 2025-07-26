@@ -9,20 +9,21 @@ layer_registry = LayerRegistry()
 
 
 class BaseEncoder(nn.Module):
+    """Base Encoder class.
+
+    Args:
+        dims (List[int]): A list of dimensions from input to output.
+        layer (str): Type of layers, e.g., 'linear', 'gcn', 'gat', 'sage', 'sg'.
+        act (str): Activation function, e.g., 'relu', ''
+        act_last (bool): Whether to apply activation function to the last layer.
+        add_self_loops (bool): Whether to add self-loops to the graph.
+    """
     def __init__(self,
                  dims: List[int] = None,
                  layer: str = 'linear',
                  act: str = 'relu',
                  act_last: bool = False,
                  add_self_loops: bool = True):
-        """
-
-        :param dims: A list of dimensions from input to output
-        :param layer: type of layers, e.g., 'linear', 'gcn', 'gat', 'sage', 'sg'
-        :param act: activation function, e.g., 'relu', ''
-        :param act_last:
-        :param add_self_loops:
-        """
         super(BaseEncoder, self).__init__()
         self.act = act
         self.act_last = act_last
@@ -73,6 +74,13 @@ class BaseEncoder(nn.Module):
 
 
 class MLPEncoder(BaseEncoder):
+    """MLP Encoder class.
+
+    Args:
+        dims (List[int]): A list of dimensions from input to output.
+        act (str): Activation function, e.g., 'relu', ''
+        act_last (bool): Whether to apply activation function to the last layer.
+    """
     def __init__(self, dims, act='relu', act_last=False):
         super(MLPEncoder, self).__init__(dims=dims,
                                          layer='linear',
@@ -95,6 +103,15 @@ class MLPEncoder(BaseEncoder):
 
 
 class GNNEncoder(BaseEncoder):
+    """GNN Encoder class.
+
+    Args:
+        dims (List[int]): A list of dimensions from input to output.
+        layer (str): Type of layers, e.g., 'linear', 'gcn', 'gat', 'sage', 'sg'.
+        act (str): Activation function, e.g., 'relu', ''
+        act_last (bool): Whether to apply activation function to the last layer.
+        add_self_loops (bool): Whether to add self-loops to the graph.
+    """
     def __init__(self, dims, layer='gcn', act='relu', act_last=False, add_self_loops=True):
         super(GNNEncoder, self).__init__(dims=dims,
                                          act=act,
@@ -119,6 +136,14 @@ class GNNEncoder(BaseEncoder):
 
 
 class GATMEncoder(nn.Module):
+    """GAT Encoder with M.
+
+    $M=(B+B^2+\dots+B^t)/t$
+
+    Args:
+        dims (List[int]): A list of dimensions from input to output.
+        alpha (float): LeakyReLU negative slope.
+    """
     def __init__(self, dims, alpha=0.2):
         super(GATMEncoder, self).__init__()
         dims_next = dims.copy()
@@ -141,8 +166,14 @@ class GATMEncoder(nn.Module):
 
 
 class GATMConv(nn.Module):
-    """
-    Graph Attention Neural Network
+    """Graph Attention Convolutional Layer with Multi-head Attention.
+
+    $M=(B+B^2+\dots+B^t)/t$
+
+    Args:
+        in_features (int): Number of input features.
+        out_features (int): Number of output features.
+        alpha (float): LeakyReLU negative slope.
     """
 
     def __init__(self, in_features, out_features, alpha=0.2):

@@ -8,15 +8,18 @@ from torch.nn.parameter import Parameter
 
 
 class SSCLayer(nn.Module):
-    def __init__(self, in_channels: int, out_channels: int, method: str = 'kl_div', v: float = 1.0):
-        """
-        Self-supervised clustering layer
+    """Self-supervised clustering layer.
 
-        :param in_channels: dimension of embeddings
-        :param out_channels: number of clusters
-        :param method: 'kl_div' for default, 'cross_entropy', 'mse'
-        :param v: v=1.0 for default
-        """
+    Reference: http://proceedings.mlr.press/v48/xieb16.pdf
+
+    Args:
+        in_channels (int): Dimension of embeddings.
+        out_channels (int): Number of clusters.
+        method (str): Method of loss calculation, e.g., 'kl_div', 'cross_entropy', 'mse'.
+        v (float): Parameter for soft assignment.
+    """
+
+    def __init__(self, in_channels: int, out_channels: int, method: str = 'kl_div', v: float = 1.0):
         super(SSCLayer, self).__init__()
         self.cluster_centers = Parameter(torch.Tensor(out_channels, in_channels))
         self.method = method
@@ -42,11 +45,14 @@ class SSCLayer(nn.Module):
 
     @staticmethod
     def loss(q, method='kl_div'):
-        """
-        Calculate loss of self-supervised clustering
-        :param q:
-        :param method:
-        :return:
+        """Calculate loss of self-supervised clustering.
+
+        Args:
+            q (torch.Tensor): Soft assignment matrix.
+            method (str): Method of loss calculation, e.g., 'kl_div', 'cross_entropy', 'mse'.
+
+        Returns:
+            torch.Tensor: Loss value.
         """
         p = target_distribution(q.detach().data)
         if method == 'mse':

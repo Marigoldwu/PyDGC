@@ -16,6 +16,15 @@ from ..utils import Logger, target_distribution, validate_and_create_path
 
 
 class SDCN(DGCModel):
+    """Structural Deep Clustering Network.
+
+    Reference: https://doi.org/10.1145/3366423.3380214
+
+    Args:
+        logger (Logger): Logger object.
+        cfg (CN): Configuration object.
+    """
+
     def __init__(self, logger: Logger, cfg: CN):
         super(SDCN, self).__init__(logger, cfg)
         self.ae = AE(logger, cfg)

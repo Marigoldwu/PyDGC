@@ -108,6 +108,14 @@ pydgc.models.magi\_batch module
    :undoc-members:
    :show-inheritance:
 
+pydgc.models.ns4gc module
+-------------------------
+
+.. automodule:: pydgc.models.ns4gc
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pydgc.models.rgae module
 ------------------------
 

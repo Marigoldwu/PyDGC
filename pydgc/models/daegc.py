@@ -18,6 +18,12 @@ from yacs.config import CfgNode as CN
 
 
 class GATE(DGCModel):
+    """Graph Attentional Autoencoder.
+
+    Args:
+        logger (Logger): Logger.
+        cfg (CN): Config.
+    """
     def __init__(self, logger: Logger, cfg: CN):
         super(GATE, self).__init__(logger, cfg)
         self.device = torch.device(cfg.device)
@@ -99,6 +105,14 @@ class GATE(DGCModel):
 
 
 class DAEGC(DGCModel):
+    """Attributed Graph Clustering: A Deep Attentional Embedding Approach.
+
+    Reference: https://arxiv.org/abs/1906.06532
+
+    Args:
+        logger (Logger): Logger.
+        cfg (CN): Config.
+    """
 
     def __init__(self, logger: Logger, cfg: CN):
         super(DAEGC, self).__init__(logger, cfg)

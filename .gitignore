@@ -4,6 +4,7 @@
 examples/pipelines/data/**
 examples/pipelines/**/log/**
 examples/pipelines/**/visualization/**
+examples/pipelines/**/pretrain/**
 *.npy
 .idea
 *.png

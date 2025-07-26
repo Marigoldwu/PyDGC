@@ -20,14 +20,6 @@ pydgc.clusterings.kmeans\_gpu module
    :undoc-members:
    :show-inheritance:
 
-pydgc.clusterings.utils module
-------------------------------
-
-.. automodule:: pydgc.clusterings.utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Module contents
 ---------------
 

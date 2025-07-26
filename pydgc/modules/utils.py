@@ -25,7 +25,12 @@ class LayerRegistry:
 
 
 def register_layer(name: str, layer_class: nn.Module):
-    """Register decorators/functions for custom layer types"""
+    """Register decorators/functions for custom layer types.
+
+    Args:
+        name (str): Name of the layer, available layer: linear, gcn, gat, sage, sg.
+        layer_class (nn.Module): Class of the layer.
+    """
     def decorator(cls):
         _layer_registry[name] = layer_class
         return cls

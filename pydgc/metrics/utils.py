@@ -13,12 +13,15 @@ from sklearn.metrics import (accuracy_score, adjusted_rand_score, normalized_mut
 
 
 class DGCMetric:
-    def __init__(self, ground_truth: np.array, predicted_labels: np.array, embeddings: Tensor, edge_index: Tensor):
-        """
+    """DGC metric class.
 
-        :param ground_truth:
-        :param predicted_labels:
-        """
+    Args:
+        ground_truth (np.array): Ground truth labels.
+        predicted_labels (np.array): Predicted labels.
+        embeddings (Tensor): Node embeddings.
+        edge_index (Tensor): Edge index.
+    """
+    def __init__(self, ground_truth: np.ndarray, predicted_labels: np.ndarray, embeddings: Tensor, edge_index: Tensor):
         self.predicted_labels = predicted_labels
         self.ground_truth = ground_truth
         self.predicted_clusters = len(np.unique(self.predicted_labels))
@@ -28,11 +31,14 @@ class DGCMetric:
         self.edge_index = edge_index
 
     def accuracy(self, decimal: int = 4):
-        """
-        Calculate clustering accuracy after using the linear_sum_assignment function in SciPy to
+        """Calculate clustering accuracy after using the linear_sum_assignment function in SciPy to
         determine reassignments.
-        :param decimal: The number of decimal places that need to be retained
-        :return: Clustering accuracy
+
+        Args:
+            decimal (int, optional): The number of decimal places that need to be retained. Defaults to 4.
+
+        Returns:
+            float: Clustering accuracy.
         """
         if self.mapped_labels is not None:
             acc = accuracy_score(self.ground_truth, self.mapped_labels)
@@ -48,7 +54,15 @@ class DGCMetric:
         acc = count_matrix[row_ind, col_ind].sum() / self.predicted_labels.size
         return round(acc, decimal)
 
-    def f1_score(self, decimal: int = 4):
+    def f1_score(self, decimal: int = 4) -> float:
+        """Calculate F1 score.
+
+        Args:
+            decimal (int, optional): The number of decimal places that need to be retained. Defaults to 4.
+
+        Returns:
+            float: F1 score.
+        """
         if self.mapped_labels is not None:
             f1 = f1_score(self.ground_truth, self.mapped_labels, average='macro')
             return round(f1, decimal)
@@ -64,22 +78,62 @@ class DGCMetric:
         return round(f1, decimal)
 
     def nmi_score(self, decimal: int = 4) -> float:
+        """Calculate NMI score.
+
+        Args:
+            decimal (int, optional): The number of decimal places that need to be retained. Defaults to 4.
+
+        Returns:
+            float: NMI score.
+        """
         nmi = normalized_mutual_info_score(self.ground_truth, self.predicted_labels, average_method='arithmetic')
         return round(nmi, decimal)
 
     def ari_score(self, decimal: int = 4) -> float:
+        """Calculate ARI score.
+
+        Args:
+            decimal (int, optional): The number of decimal places that need to be retained. Defaults to 4.
+
+        Returns:
+            float: ARI score.
+        """
         ari = adjusted_rand_score(self.ground_truth, self.predicted_labels)
         return round(ari, decimal)
 
     def hom_score(self, decimal: int = 4) -> float:
+        """Calculate homogeneity score.
+
+        Args:
+            decimal (int, optional): The number of decimal places that need to be retained. Defaults to 4.
+
+        Returns:
+            float: Homogeneity score.
+        """
         hom = homogeneity_score(self.ground_truth, self.predicted_labels)
         return round(hom, decimal)
 
     def com_score(self, decimal: int = 4) -> float:
+        """Calculate completeness score.
+
+        Args:
+            decimal (int, optional): The number of decimal places that need to be retained. Defaults to 4.
+
+        Returns:
+            float: Completeness score.
+        """
         com = completeness_score(self.ground_truth, self.predicted_labels)
         return round(com, decimal)
 
     def sil_score(self, decimal: int = 4) -> float:
+        """Calculate silhouette score.
+
+        Args:
+            decimal (int, optional): The number of decimal places that need to be retained. Defaults to 4.
+
+        Returns:
+            float: Silhouette score.
+        """
         # if isinstance(self.embeddings, np.ndarray):
         #     embeddings = self.embeddings.copy()
         # else:
@@ -92,6 +146,14 @@ class DGCMetric:
         return round(sil, decimal)
 
     def graph_reconstruction_error(self, decimal: int = 4) -> float:
+        """Calculate graph reconstruction error.
+
+        Args:
+            decimal (int, optional): The number of decimal places that need to be retained. Defaults to 4.
+
+        Returns:
+            float: Graph reconstruction error.
+        """
         if isinstance(self.embeddings, np.ndarray):
             self.embeddings = torch.from_numpy(self.embeddings)
         reconstructed = F.sigmoid(self.embeddings @ self.embeddings.t())
@@ -105,7 +167,15 @@ class DGCMetric:
         gre = F.mse_loss(reconstructed, dense_adj).item()
         return round(gre, decimal)
 
-    def purity(self, decimal: int = 4):
+    def purity(self, decimal: int = 4) -> float:
+        """Calculate purity score.
+
+        Args:
+            decimal (int, optional): The number of decimal places that need to be retained. Defaults to 4.
+
+        Returns:
+            float: Purity score.
+        """
         contingency_matrix = cluster.contingency_matrix(self.ground_truth, self.predicted_labels)
         pur = np.sum(np.amax(contingency_matrix, axis=0)) / np.sum(contingency_matrix)
         return round(pur, decimal)
@@ -113,6 +183,15 @@ class DGCMetric:
     def evaluate_one_epoch(self,
                            logger: Logger,
                            cfg: CN = None) -> dict:
+        """Evaluate one epoch.
+
+        Args:
+            logger (Logger): Logger.
+            cfg (CN, optional): Config. Defaults to None.
+
+        Returns:
+            dict: Results with metric names as keys and metric values as values.
+        """
         results = {}
         if cfg is None:
             results['ACC'] = self.accuracy()
@@ -148,6 +227,14 @@ class DGCMetric:
 
 
 def build_results_dict(cfg: CN) -> dict:
+    """Build results dict.
+
+    Args:
+        cfg (CN): Config.
+
+    Returns:
+        dict: Results dict.
+    """
     results = {}
     for key, value in zip(cfg.keys(), cfg.values()):
         if key == 'each':
