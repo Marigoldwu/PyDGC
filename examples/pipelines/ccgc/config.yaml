@@ -114,7 +114,7 @@ ACM:
         umap: true
         heatmap: true
         loss: true
-        dir: ./visualization/CORA/
+        dir: ./visualization/ACM/
         when: end
     evaluate:
         each: false

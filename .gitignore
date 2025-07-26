@@ -1,9 +1,14 @@
 /logs/**
 /img/**
 /pretrain/**
+examples/pipelines/data/**
+examples/pipelines/**/log/**
+examples/pipelines/**/visualization/**
 *.npy
 .idea
-
+*.png
+.log
+**/log/*/*.txt
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

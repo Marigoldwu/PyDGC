@@ -155,7 +155,7 @@ class DGCVisual:
         losses = np.array(losses)
         color = (0.4, 0.4, 0.8)
         acc_color = (0.9, 0.4, 0.0)
-        if metrics is None:
+        if metrics is None or len(metrics) == 0:
             plt.figure(figsize=fig_size, dpi=dpi)
 
             plt.plot(epochs, losses, marker=marker, linestyle=line_style, color=color, linewidth=line_width)
