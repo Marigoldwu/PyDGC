@@ -55,19 +55,19 @@ Timeline of representative models.
 It is recommended to use conda to create a virtual python environment.
 
   ```shell
-  conda create --name pydgc python=3.8
-  conda activate pydgc
+  conda create --name DGCbench python=3.8
+  conda activate DGCbench
   ```
 
 It is recommended to install GPU or CPU version of PyTorch according to the device in advance, version >=2.0.1.
 
-- Install with Pip
+- (Plan 1) Install with Pip
 
   ```shell
   pip install pydgc
   ```
 
-- Installation for local development
+- (Plan 2) Installation for local development
 
   ```shell
   git clone https://github.com/Marigoldwu/PyDGC.git
@@ -79,10 +79,27 @@ It is recommended to install GPU or CPU version of PyTorch according to the devi
 
 ## Reproduce built-in models
 
-Take GAE as an example:
+Take GAE as an example. You can run the following command to reproduce the results of GAE on CORA dataset.
+
+Create a folder `dgc` to store the results.
 
 ```shell
-cd PyDGC/example/pipelines/gae
+mkdir dgc
+cd dgc
+mkdir gae
+cd gae
+```
+
+Copy `config.yaml` and `run.py` of GAE from our github repository to the current folder.
+
+```shell
+wget https://raw.githubusercontent.com/Marigoldwu/PyDGC/master/examples/pipelines/gae/config.yaml
+wget https://raw.githubusercontent.com/Marigoldwu/PyDGC/master/examples/pipelines/gae/run.py
+```
+
+Run the pipeline.
+
+```shell
 python run.py
 ```
 
