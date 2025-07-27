@@ -9,7 +9,7 @@
   <a href="#Installation">Installation</a> |
   <a href="#Tutorial">Tutorial</a> |
   <a href="https://pydgc.readthedocs.io/latest/">Docs</a> |
-  <a href="#Citation">Citation</a> 
+  <a href="#Citation">Citation</a> |
   <a href="#Visualization">Visualization</a>
 </div>
 
