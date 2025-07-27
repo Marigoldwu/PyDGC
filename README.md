@@ -7,8 +7,8 @@
   <a href="#PyDGC">Overview</a> |
   <a href="#DGCBench">DGCBench</a> |
   <a href="#Installation">Installation</a> |
-  <a href="#Examples">Examples</a> |
-  <a href="#Docs">Docs</a> |
+  <a href="#Tutorial">Tutorial</a> |
+  <a href="https://pydgc.readthedocs.io/latest/">Docs</a> |
   <a href="#Citation">Citation</a> 
 </div>
 
@@ -17,7 +17,8 @@
 **PyDGC**, a flexible and extensible Python library  for deep graph clustering (DGC), is compatible with frameworks such as PyG and OGB. It supports the easy integration of new models and datasets, facilitating the rapid development, reproduction, and fair comparison of DGC methods.
 
 ## News
-
+- 🔥*2025.07*: API documentation is released.
+- 🔥*2025.07*: PyDGC is now available on PyPI.
 - *2025.05*: Release source code of PyDGC.
 
 ## What is DGC?
@@ -51,38 +52,54 @@ Timeline of representative models.
 
 # Installation
 
+It is recommended to use conda to create a virtual python environment.
+
+  ```shell
+  conda create --name pydgc python=3.8
+  conda activate pydgc
+  ```
+
+It is recommended to install GPU or CPU version of PyTorch according to the device in advance, version >=2.0.1.
+
 - Install with Pip
 
-  coming soon...
+  ```shell
+  pip install pydgc
+  ```
 
 - Installation for local development
 
-  ```bash
+  ```shell
   git clone https://github.com/Marigoldwu/PyDGC.git
   cd PyDGC
   pip install -e .
   ```
 
-# Examples
+# Tutorial
 
 ## Reproduce built-in models
 
 Take GAE as an example:
 
-```bash
+```shell
 cd PyDGC/example/pipelines/gae
 python run.py
 ```
 
 You can also specify arguments in the command line:
 
-```bash
-python run.py --dataset_name CORA -eval_each
+```shell
+python run.py --dataset_name CORA -eval_each --rounds 1
 ```
+
+> Note:
+> - `--dataset_name` is the name of the dataset.
+> - `--rounds` is the number of times to run the pipeline.
+> - `-eval_each` is the flag to evaluate the model after each epoch.
 
 Other optional arguments:
 
-```bash
+```shell
 --cfg_file_path YourPath  # path of corresponding configurations file
 --flag FlagContent  # Descriptions
 --drop_edge float  # probability of dropping edges
@@ -189,7 +206,7 @@ class MyPipeline(BasePipeline):
 | 11   | Flickr       |7,575|12,047|479,476|9|0.24|
 | 12   | Roman-empire |22,662|300|65,854|18|0.05|
 
-> More Datasets will be introduced.
+> The 12 datasets above are benchmark datasets introduced in our paper. More Datasets will be introduced.
 
 # Citation
 
