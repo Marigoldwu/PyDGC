@@ -8,7 +8,6 @@ examples/pipelines/**/pretrain/**
 *.npy
 .idea
 *.ipynb
-*.png
 .log
 **/log/*/*.txt
 # Byte-compiled / optimized / DLL files

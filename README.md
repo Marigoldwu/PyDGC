@@ -10,6 +10,7 @@
   <a href="#Tutorial">Tutorial</a> |
   <a href="https://pydgc.readthedocs.io/latest/">Docs</a> |
   <a href="#Citation">Citation</a> 
+  <a href="#Visualization">Visualization</a>
 </div>
 
 # PyDGC
@@ -203,7 +204,7 @@ class MyPipeline(BasePipeline):
 | 8    | DGCluster |[DGCLUSTER: A Neural Framework for Attributed Graph Clustering via Modularity Maximization](https://ojs.aaai.org/index.php/AAAI/article/view/28983)|[code](https://github.com/pyrobits/DGCluster)|
 | 9    | HSAN      |[Hard Sample Aware Network for Contrastive Deep Graph Clustering](https://arxiv.org/abs/2212.08665)|[code](https://github.com/yueliu1999/HSAN)|
 | 10   | CCGC      |[Cluster-guided Contrastive Graph Clustering Network](https://arxiv.org/abs/2301.01098)|[code](https://github.com/xihongyang1999/CCGC)|
-| 11   | MAGI      |[Revisiting Modularity Maximization for Graph Clustering: A Contrastive Learning Perspective](https://arxiv.org/abs/2406.142886)|[code](https://github.com/EdisonLeeeee/MAGI)|
+| 11   | MAGI      |[Revisiting Modularity Maximization for Graph Clustering: A Contrastive Learning Perspective](https://dl.acm.org/doi/abs/10.1145/3637528.3671967)|[code](https://github.com/EdisonLeeeee/MAGI)|
 | 12   | NS4GC     |[Reliable Node Similarity Matrix Guided Contrastive Graph Clustering](https://arxiv.org/pdf/2408.03765?)|[code](https://github.com/Cloudy1225/NS4GC)|
 
 # Supported Datasets
@@ -227,7 +228,14 @@ class MyPipeline(BasePipeline):
 
 # Citation
 
+# Visualization
+<div align="center">
+<img src="https://raw.githubusercontent.com/Marigoldwu/PyDGC/master/assets/Cora.png" border="0"/>
+</div>
 
+<div align="center">
+<img src="https://raw.githubusercontent.com/Marigoldwu/PyDGC/master/assets/ACM.png" border="0"/>
+</div>
 
 # Related Repositories
 
