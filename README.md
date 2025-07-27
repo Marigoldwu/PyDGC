@@ -1,7 +1,7 @@
 
 
 <div align="center">
-<img src="./assets/logo.png" border="0" width=600px/>
+<img src="https://raw.githubusercontent.com/Marigoldwu/PyDGC/master/assets/logo.png" border="0" width=600px/>
 </div>
 <div align="center">
   <a href="#PyDGC">Overview</a> |
@@ -29,7 +29,7 @@ More details can be found in the [survey](https://arxiv.org/abs/2211.12875) pape
 Timeline of representative models.
 
 <div align="center">
-<img src="./assets/Roadmap.png" border="0" width=800px/>
+<img src="https://raw.githubusercontent.com/Marigoldwu/PyDGC/master/assets/Roadmap.png" border="0" width=800px/>
 </div>
 
 ## DGCBench
@@ -46,7 +46,7 @@ Timeline of representative models.
 ### Overview of Pipeline
 
 <div align="center">
-<img src="./assets/Pipelines.png" border="0" width=800px/>
+<img src="https://raw.githubusercontent.com/Marigoldwu/PyDGC/master/assets/Pipelines.png" border="0" width=800px/>
 </div>
 
 # Installation
