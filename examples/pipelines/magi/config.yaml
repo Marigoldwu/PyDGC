@@ -307,7 +307,7 @@ ARXIV:
     train:
         seed: -1
         rounds: 1
-        max_epoch: 1
+        max_epoch: 400
         batchsize: 2048
         lr: 1e-2
         weight_decay: 0
@@ -329,9 +329,9 @@ ARXIV:
         f1: true
         hom: true
         com: true
-        pur: true
-        sc: true
-        gre: true
+        pur: false
+        sc: false
+        gre: false
 BLOG:
     device: cuda
     logger:

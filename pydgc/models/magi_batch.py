@@ -542,7 +542,7 @@ class MAGIBatch(DGCModel):
 
     def evaluate(self, data):
         embedding, predicted_labels, clustering_centers = self.clustering(data)
-        ground_truth = data.y.numpy()
+        ground_truth = data.y.numpy().flatten()
         metric = DGCMetric(ground_truth, predicted_labels.numpy(), embedding, data.edge_index)
         results = metric.evaluate_one_epoch(self.logger, self.cfg.evaluate)
         return embedding, predicted_labels, results

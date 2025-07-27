@@ -86,7 +86,7 @@ class DGCMetric:
         Returns:
             float: NMI score.
         """
-        nmi = normalized_mutual_info_score(self.ground_truth, self.predicted_labels, average_method='arithmetic')
+        nmi = normalized_mutual_info_score(self.ground_truth, self.predicted_labels)
         return round(nmi, decimal)
 
     def ari_score(self, decimal: int = 4) -> float:
