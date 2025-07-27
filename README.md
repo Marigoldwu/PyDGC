@@ -198,7 +198,7 @@ class MyPipeline(BasePipeline):
 | 3    | DAEGC     |[Attributed graph clustering: A deep attentional embedding approach](https://arxiv.org/pdf/1906.06532)|[code](https://github.com/Tiger101010/DAEGC)|
 | 4    | SDCN      |[Structural Deep Clustering Network](https://arxiv.org/pdf/2002.01633)|[code](https://github.com/bdy9527/SDCN)|
 | 5    | DFCN      |[Deep Fusion Clustering Network](https://ojs.aaai.org/index.php/AAAI/article/view/17198/17005)|[code](https://github.com/WxTu/DFCN)|
-| 6    | DCRN      |[Deep Graph Clustering via Dual Correlation Reduction](https://www.aaai.org/AAAI22Papers/AAAI-5928.LiuY.pdf)|[code](https://github.com/yueliu1999/DCRN)|
+| 6    | DCRN      |[Deep Graph Clustering via Dual Correlation Reduction](https://aaai.org/papers/07603-deep-graph-clustering-via-dual-correlation-reduction/)|[code](https://github.com/yueliu1999/DCRN)|
 | 7    | AGC-DRR   |[Attributed Graph Clustering with Dual Redundancy Reduction](https://www.ijcai.org/proceedings/2022/0418.pdf)|[code](https://github.com/gongleii/AGC-DRR)|
 | 8    | DGCluster |[DGCLUSTER: A Neural Framework for Attributed Graph Clustering via Modularity Maximization](https://ojs.aaai.org/index.php/AAAI/article/view/28983)|[code](https://github.com/pyrobits/DGCluster)|
 | 9    | HSAN      |[Hard Sample Aware Network for Contrastive Deep Graph Clustering](https://arxiv.org/abs/2212.08665)|[code](https://github.com/yueliu1999/HSAN)|

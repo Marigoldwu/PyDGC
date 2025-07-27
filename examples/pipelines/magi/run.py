@@ -16,7 +16,7 @@ FULL = ["wiki", "cora", "acm", "cite", "dblp", "pubmed", "blog", "flickr", "roma
 BATCH = ["arxiv"]
 for dataset in datasets:
     args = parse_arguments(dataset)
-    if dataset.lower() in BATCH:
+    if args.dataset_name.lower() in BATCH:
         pipeline = MAGIBatchPipeline(args)
     else:
         pipeline = MAGIPipeline(args)

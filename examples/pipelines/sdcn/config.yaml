@@ -47,6 +47,8 @@ WIKI:
         hom: true
         com: true
         pur: true
+        sc: true
+        gre: true
 CORA:
     device: cuda
     logger:
@@ -96,6 +98,8 @@ CORA:
         hom: true
         com: true
         pur: true
+        sc: true
+        gre: true
 ACM:
     device: cuda
     logger:
@@ -145,6 +149,8 @@ ACM:
         hom: true
         com: true
         pur: true
+        sc: true
+        gre: true
 CITE:
     device: cuda
     logger:
@@ -194,6 +200,8 @@ CITE:
         hom: true
         com: true
         pur: true
+        sc: true
+        gre: true
 DBLP:
     device: cuda
     logger:
@@ -243,6 +251,8 @@ DBLP:
         hom: true
         com: true
         pur: true
+        sc: true
+        gre: true
 PUBMED:
     device: cuda
     logger:
@@ -292,6 +302,8 @@ PUBMED:
         hom: true
         com: true
         pur: true
+        sc: true
+        gre: true
 ARXIV:
     device: cuda
     logger:
@@ -341,6 +353,8 @@ ARXIV:
         hom: true
         com: true
         pur: true
+        sc: true
+        gre: true
 BLOG:
     device: cuda
     logger:
@@ -390,6 +404,8 @@ BLOG:
         hom: true
         com: true
         pur: true
+        sc: true
+        gre: true
 FLICKR:
     device: cuda
     logger:
@@ -439,6 +455,8 @@ FLICKR:
         hom: true
         com: true
         pur: true
+        sc: true
+        gre: true
 ROMAN:
     device: cuda
     logger:
@@ -488,6 +506,8 @@ ROMAN:
         hom: true
         com: true
         pur: true
+        sc: true
+        gre: true
 USPS_3:
     device: cuda
     logger:
@@ -537,6 +557,8 @@ USPS_3:
         hom: true
         com: true
         pur: true
+        sc: true
+        gre: true
 HHAR_3:
     device: cuda
     logger:
@@ -586,3 +608,5 @@ HHAR_3:
         hom: true
         com: true
         pur: true
+        sc: true
+        gre: true
