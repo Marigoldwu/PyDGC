@@ -9,8 +9,7 @@
   <a href="#Installation">Installation</a> |
   <a href="#Tutorial">Tutorial</a> |
   <a href="https://pydgc.readthedocs.io/latest/">Docs</a> |
-  <a href="#Citation">Citation</a> |
-  <a href="#Visualization">Visualization</a>
+  <a href="#Citation">Citation</a>
 </div>
 
 # PyDGC
@@ -227,15 +226,6 @@ class MyPipeline(BasePipeline):
 > The 12 datasets above are benchmark datasets introduced in our paper. More Datasets will be introduced.
 
 # Citation
-
-# Visualization
-<div align="center">
-<img src="https://raw.githubusercontent.com/Marigoldwu/PyDGC/master/assets/Cora.png" border="0"/>
-</div>
-
-<div align="center">
-<img src="https://raw.githubusercontent.com/Marigoldwu/PyDGC/master/assets/ACM.png" border="0"/>
-</div>
 
 # Related Repositories
 
