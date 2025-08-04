@@ -1,5 +1,5 @@
 # Deep Graph Clustering
-> Latest updated: September 24
+> Latest updated: July 25
 
 ## Related Survey
 
