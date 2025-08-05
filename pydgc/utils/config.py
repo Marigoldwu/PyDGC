@@ -9,7 +9,7 @@ AUGMENT = ["add_self_loops", "drop_edge", "drop_feature", "add_noise", "add_edge
 REQUIRED_CONFIG = [
     "device",
     {
-        "dataset": ["dir", "augmentation"]
+        "dataset": ["dir", "augmentation", "is_custom"]
     },
     {
         "logger": ["dir", "name", "mode"]
@@ -67,6 +67,7 @@ def default_cfg(dataset_name) -> CN:
     _C.dataset = CN()
     _C.dataset.name = dataset_name
     _C.dataset.dir = os.path.join("../data/", dataset_name)
+    _C.dataset.is_custom = False
     _C.dataset.augmentation = CN()
     _C.dataset.augmentation.add_self_loops = True
     _C.dataset.augmentation.drop_edge = 0.0
@@ -209,6 +210,17 @@ def check_required_cfg(cfg: CN, dataset_name, auto_complete=True):
 
     if len(missing_cfg) == 0:
         return True
+    
+    # If custom dataset, check whether to config custom_is_graph, metric, p
+    if cfg.dataset.is_custom:
+        if "custom_is_graph" not in cfg.dataset.keys():
+            raise ValueError(f"Custom dataset must config dataset.custom_is_graph")
+        else:
+            if not cfg.dataset.custom_is_graph:
+                if "metric" not in cfg.dataset.keys():
+                    raise ValueError(f"Custom non-graph dataset must config dataset.metric")
+                if "p" not in cfg.dataset.keys():
+                    raise ValueError(f"Custom non-graph dataset must config dataset.p")
 
     if auto_complete:
         print(f"Missing config items: {missing_cfg}")
@@ -233,7 +245,9 @@ def check_required_cfg(cfg: CN, dataset_name, auto_complete=True):
         raise ValueError(f"Missing config items: {missing_cfg}")
 
 
-def generate_default_cfg(datasets: str or list, save_path=None):
+from typing import Union
+
+def generate_default_cfg(datasets: Union[str, list], save_path=None):
     """Generate default config.
 
     Args:

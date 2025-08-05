@@ -22,7 +22,7 @@ from typing import Callable, List, NamedTuple, Optional, Tuple, Union
 import torch
 from torch import Tensor
 from torch_sparse import SparseTensor
-
+import time
 
 class Encoder(torch.nn.Module):
     """Encoder model for MAGI-Batch.
@@ -410,7 +410,6 @@ class MAGIBatch(DGCModel):
         self.tau = cfg.model.tau
         self.in_channels = encoder_dims[-1]
         self.project_hidden = projection_dims if projection_dims != "" else None
-        self.activation = nn.PReLU
         self.Loss = Loss(temperature=self.tau)
 
         self.project = None
@@ -435,10 +434,10 @@ class MAGIBatch(DGCModel):
     def reset_parameters(self):
         pass
 
-    def forward(self, data) -> Any:
+    def forward(self, data, n_id) -> Any:
         x = data.x.to(self.device)
         adjs = data.adjs
-        x = self.encoder(x, adjs=adjs)
+        x = self.encoder(x[n_id], adjs=adjs)
         if self.project is not None:
             for i in range(len(self.project_hidden)):
                 x = self.project[i](x)
@@ -468,6 +467,7 @@ class MAGIBatch(DGCModel):
 
         optimizer = torch.optim.Adam(self.parameters(), lr=float(cfg.lr), weight_decay=float(cfg.weight_decay))
         # train
+        time_train = time.time()
         for epoch in range(1, cfg.max_epoch + 1):
             self.train()
             total_loss = total_examples = 0
@@ -480,7 +480,7 @@ class MAGIBatch(DGCModel):
                 data.adjs = adjs
                 adj_ = get_mask(adj_batch)
                 optimizer.zero_grad()
-                out = self.forward(data)
+                out = self.forward(data, n_id)
                 out = F.normalize(out, p=2, dim=1)
                 loss = self.Loss(out, adj_)
 
@@ -499,6 +499,9 @@ class MAGIBatch(DGCModel):
                         self.best_embedding = embedding
                         self.best_predicted_labels = predicted_labels
                         self.best_results = results
+            time_cost = time.time() - time_train
+            if time_cost // 60 > cfg.max_duration:
+                break
         if not self.cfg.evaluate.each:
             embedding, predicted_labels, results = self.evaluate(data)
             self.nmi_curve = None
@@ -526,7 +529,7 @@ class MAGIBatch(DGCModel):
                     adjs = [adjs]
                 adjs = [adj.to(self.device) for adj in adjs]
                 data.adjs = adjs
-                out = self.forward(data)
+                out = self.forward(data, n_id)
                 z.append(out.detach().cpu().float())
             embedding = torch.cat(z, dim=0)
             embedding = F.normalize(embedding, p=2, dim=1)

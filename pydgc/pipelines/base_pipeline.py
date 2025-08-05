@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 import time
-import os.path as osp
-import traceback
-from argparse import Namespace
-
 import torch
+import traceback
 import numpy as np
+import os.path as osp
 
+from argparse import Namespace
+from abc import ABC, abstractmethod
 from yacs.config import CfgNode as CN
 
 from ..models import DGCModel
-from abc import ABC, abstractmethod
 from ..datasets import load_dataset
 from ..utils.logger import create_logger
 from ..utils.visualization import DGCVisual
@@ -93,7 +92,15 @@ class BasePipeline(ABC):
         try:
             if not self.cfg:
                 raise ValueError("Please load config before loading data!")
-            dataset = load_dataset(self.cfg.dataset.dir, self.dataset_name)
+            if not self.cfg.dataset.is_custom:
+                dataset = load_dataset(self.cfg.dataset.dir, self.dataset_name)
+            else:
+                dataset = load_dataset(self.cfg.dataset.dir, 
+                                       self.dataset_name, 
+                                       p=self.cfg.dataset.p, 
+                                       is_custom=self.cfg.dataset.is_custom, 
+                                       custom_is_graph=self.cfg.dataset.custom_is_graph, 
+                                       metric=self.cfg.dataset.metric)
             self.cfg.dataset.n_clusters = dataset.num_classes
             # if self.dataset_name.lower() == "arxiv":
             #     data = dataset[0]

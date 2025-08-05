@@ -311,8 +311,9 @@ ARXIV:
         batchsize: 2048
         lr: 1e-2
         weight_decay: 0
+        max_duration: 60
         kmeans:
-            device: cuda
+            device: cpu
             batch: -1
     visualize:
         tsne: true

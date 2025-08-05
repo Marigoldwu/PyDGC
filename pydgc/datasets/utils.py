@@ -10,7 +10,7 @@ from ogb.nodeproppred import PygNodePropPredDataset
 from sklearn.neighbors import kneighbors_graph
 from torch_geometric.data import Data, InMemoryDataset, Dataset, download_google_url
 from torch_geometric.graphgym.loader import set_dataset_attr
-from torch_geometric.utils import index_to_mask, to_undirected
+from torch_geometric.utils import index_to_mask, to_undirected, add_remaining_self_loops
 from torch_geometric.datasets import (Planetoid, Coauthor, Amazon, WebKB, Actor, CitationFull,
                                       CoraFull, AttributedGraphDataset, NELL, Reddit, Reddit2, Yelp, AmazonProducts,
                                       LastFMAsia, Airports, HeterophilousGraphDataset)
@@ -194,10 +194,13 @@ class DGCGraphDataset(UserDataset):
         super().__init__(root, dataset_name)
 
     def download(self) -> None:
-        file_id = '1QQK4-5hMcP5MitE3vu6hnBydiunQEaPh' if self.dataset_name == 'ACM' else '1n614RUq-SLh_b3xxffaP5bgt1lBxM_OJ'
-        folder = osp.join(self.root, 'raw')
-        filename = f'{self.dataset_name}.npz'
-        download_google_url(file_id, folder, filename)
+        if self.dataset_name in ["ACM", "DBLP"]:
+            file_id = '1QQK4-5hMcP5MitE3vu6hnBydiunQEaPh' if self.dataset_name == 'ACM' else '1n614RUq-SLh_b3xxffaP5bgt1lBxM_OJ'
+            folder = osp.join(self.root, 'raw')
+            filename = f'{self.dataset_name}.npz'
+            download_google_url(file_id, folder, filename)
+        else:
+            raise ValueError(f"Custom dataset {self.dataset_name} does not exist!")
 
 
 class DGCNonGraphDataset(NonGraphDataset):
@@ -214,15 +217,18 @@ class DGCNonGraphDataset(NonGraphDataset):
         super().__init__(root, dataset_name, neighbors, metric, p)
 
     def download(self) -> None:
-        file_id_dict = {
-            'USPS': '1d-PBz2Hk3ZHbgr4QeaZuD7Dsk1Qw21jw',
-            'HHAR': '1bCBvv3ENYScXPf0uST9tZ1diaSnK5aLg',
-            'REUT': '1b4MV5a-B3kHqDFlj59lgpzDhDjawB3gA'
-        }
-        file_id = file_id_dict[self.dataset_name]
-        folder = osp.join(self.root, 'raw')
-        filename = f'{self.dataset_name}.npz'
-        download_google_url(file_id, folder, filename)
+        if self.dataset_name in ["USPS", "HHAR", "REUT"]:
+            file_id_dict = {
+                'USPS': '1d-PBz2Hk3ZHbgr4QeaZuD7Dsk1Qw21jw',
+                'HHAR': '1bCBvv3ENYScXPf0uST9tZ1diaSnK5aLg',
+                'REUT': '1b4MV5a-B3kHqDFlj59lgpzDhDjawB3gA'
+            }
+            file_id = file_id_dict[self.dataset_name]
+            folder = osp.join(self.root, 'raw')
+            filename = f'{self.dataset_name}.npz'
+            download_google_url(file_id, folder, filename)
+        else:
+            raise ValueError(f"Custom non-graph dataset {self.dataset_name} does not exist!")
 
 
 def load_pyg(dataset_dir: str, dataset_name: str) -> Dataset:
@@ -267,6 +273,7 @@ def load_pyg(dataset_dir: str, dataset_name: str) -> Dataset:
         return LastFMAsia(dataset_dir)
     if dataset_name == "ROMAN":
         return HeterophilousGraphDataset(dataset_dir, name=DATASET_NAME_MAP[dataset_name])
+    raise ValueError(f"Unsupported pyg dataset {dataset_name}!")
 
 
 def load_dgc_graph(dataset_dir: str, dataset_name: str) -> Dataset:
@@ -314,22 +321,31 @@ def load_ogb(dataset_dir: str, dataset_name: str) -> Dataset:
     dataset = PygNodePropPredDataset(root=dataset_dir, name=dataset_name)
     splits = dataset.get_idx_split()
     split_names = ['train_mask', 'val_mask', 'test_mask']
-    for i, key in enumerate(splits.keys()):
-        mask = index_to_mask(splits[key], size=dataset.data.y.shape[0])
-        set_dataset_attr(dataset, split_names[i], mask, len(mask))
-    edge_index = to_undirected(dataset.data.edge_index)
+    if splits is not None:
+        for i, key in enumerate(splits.keys()):
+            split_idx = splits[key]
+            if not isinstance(split_idx, torch.Tensor):
+                split_idx = torch.tensor(split_idx)
+            mask = index_to_mask(split_idx, size=dataset.data.y.shape[0])
+            set_dataset_attr(dataset, split_names[i], mask, len(mask))
+    else:
+        raise ValueError("Splits returned by get_idx_split() is None.")
+    edge_index = to_undirected(add_remaining_self_loops(dataset.data.edge_index)[0])
     set_dataset_attr(dataset, 'edge_index', edge_index,
                      edge_index.shape[1])
     return dataset
 
 
-def load_dataset(dataset_dir: str, dataset_name: str, p: int = 2) -> Dataset:
+def load_dataset(dataset_dir: str, dataset_name: str, p: int = 2, is_custom: bool = False, custom_is_graph: bool = True, metric: str = 'minkowski') -> Dataset:
     """Load raw datasets.
 
     Args:
         dataset_dir (str): Dataset stored root path.
         dataset_name (str): Dataset name.
         p (int, optional): Power parameter for the Minkowski metric. Defaults to 2.
+        is_custom (bool, optional): Whether the dataset is custom. Defaults to False.
+        custom_is_graph (bool, optional): Whether the custom dataset is graph. Defaults to True.
+        metric (str, optional): Distance type for non-graph data. Defaults to 'minkowski'.
 
     Returns:
         Dataset: Raw dataset.
@@ -346,6 +362,12 @@ def load_dataset(dataset_dir: str, dataset_name: str, p: int = 2) -> Dataset:
             return load_dgc_graph(dataset_dir, dataset_name)
         elif dataset_name in NONGRAPH_SUPPORTED_DATASET:
             return load_dgc_non_graph(dataset_dir, dataset_name, neighbors=neighbors, metric=METRIC_MAP[dataset_name[:4]], p=p)
+        # load custom dataset
+        elif is_custom:
+            if custom_is_graph:
+                return load_dgc_graph(dataset_dir, dataset_name)
+            else:
+                return load_dgc_non_graph(dataset_dir, dataset_name, neighbors=neighbors, metric=metric, p=p)
         else:
             raise ValueError
     except NotADirectoryError:
@@ -354,6 +376,8 @@ def load_dataset(dataset_dir: str, dataset_name: str, p: int = 2) -> Dataset:
         print(f"Dataset name {dataset_name} is unsupported! Must be selected from {str(PYG_SUPPORTED_DATASET + DGC_SUPPORTED_DATASET + NONGRAPH_SUPPORTED_DATASET + OGB_SUPPORTED_DATASET)}")
     except Exception as e:
         print(f"Unknown error occurred: {e}")
+    # Always raise an error if no valid Dataset is returned
+    raise RuntimeError("Failed to load dataset. Please check the error messages above.")
 
 
 def preprocess_custom_data(root: str, dataset_name: str, dataset_type: str = 'graph'):

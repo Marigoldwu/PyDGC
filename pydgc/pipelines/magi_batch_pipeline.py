@@ -84,12 +84,10 @@ class MAGIBatchPipeline(BasePipeline):
     def augment_data(self):
         self.data = perturb_data(self.data, self.cfg.dataset.augmentation)
 
-        edge_index = to_undirected(add_remaining_self_loops(self.data.edge_index)[0])
+        N, E, num_features = self.data.x.shape[0], self.data.edge_index.shape[-1], self.data.x.shape[-1]
 
-        N, E, num_features = self.data.x.shape[0], edge_index.shape[-1], self.data.x.shape[-1]
-
-        adj = SparseTensor(row=edge_index[0],
-                           col=edge_index[1], sparse_sizes=(N, N))
+        adj = SparseTensor(row=self.data.edge_index[0],
+                           col=self.data.edge_index[1], sparse_sizes=(N, N))
         adj.fill_value_(1.)
         assert len(self.cfg.model.dims.encoder) == len(self.cfg.dataset.size)
 
@@ -99,4 +97,3 @@ class MAGIBatchPipeline(BasePipeline):
         model = MAGIBatch(self.logger, self.cfg)
         self.logger.model_info(model)
         return model
-

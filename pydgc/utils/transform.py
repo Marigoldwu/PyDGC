@@ -98,25 +98,25 @@ def perturb_data(data: Data, cfg: CN):
     Returns:
         Data: The perturbed data.
     """
-    if hasattr(cfg, 'drop_edge'):
+    if hasattr(cfg, 'drop_edge') and cfg.drop_edge > 0:
         drop_edge_rate = float(cfg.drop_edge) if float(cfg.drop_edge) < 0.99 else 0.99
         if cfg.drop_edge > 0:
             edge_index, edge_mask = dropout_edge(data.edge_index, drop_edge_rate)
             data.edge_index = edge_index
             data.edge_mask = edge_mask
-    if hasattr(cfg, 'drop_feature'):
+    if hasattr(cfg, 'drop_feature') and cfg.drop_feature > 0:
         drop_feature_rate = float(cfg.drop_feature) if float(cfg.drop_feature) < 0.99 else 0.99
         if cfg.drop_feature > 0:
             x, feature_mask = mask_feature(data.x, drop_feature_rate, mode='all')
             data.x = x
             data.feature_mask = feature_mask
-    if hasattr(cfg, 'add_edge'):
+    if hasattr(cfg, 'add_edge') and cfg.add_edge > 0:
         add_edge_rate = float(cfg.add_edge) if float(cfg.add_edge) < 0.99 else 0.99
         if cfg.add_edge > 0:
             edge_index, added_edges = add_random_edge(data.edge_index, add_edge_rate)
             data.edge_index = edge_index
             data.added_edges = added_edges
-    if hasattr(cfg, 'add_noise'):
+    if hasattr(cfg, 'add_noise') and cfg.add_noise > 0:
         noise_std = float(cfg.add_noise)
         if cfg.add_noise > 0:
             x = add_gaussian_noise(data.x, std_dev=noise_std)
