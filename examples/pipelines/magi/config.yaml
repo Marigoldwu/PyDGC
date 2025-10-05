@@ -331,7 +331,7 @@ ARXIV:
         hom: true
         com: true
         pur: false
-        sc: false
+        sc: true
         gre: false
 BLOG:
     device: cuda

@@ -66,10 +66,8 @@ class BasePipeline(ABC):
             self.cfg.dataset.augmentation.add_edge = float(self.args.add_edge)
         if hasattr(self.args, 'add_noise') and self.args.add_noise != ARGS_DEFAULT['add_noise']:
             self.cfg.dataset.augmentation.add_noise = float(self.args.add_noise)
-        print('rounds before check', self.cfg.train.rounds)
         if hasattr(self.args, 'rounds') and self.args.rounds != ARGS_DEFAULT['rounds']:
             self.cfg.train.rounds = int(self.args.rounds)
-        print('rounds after check', self.cfg.train.rounds)
         if hasattr(self.args, 'eval_each') and self.args.eval_each != ARGS_DEFAULT['eval_each']:
             self.cfg.evaluate.each = self.args.eval_each
 
