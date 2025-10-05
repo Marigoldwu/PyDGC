@@ -7,7 +7,7 @@ from . import AE
 from ..metrics import DGCMetric
 from torch import Tensor
 from .dgc_model import DGCModel
-from pydgc.modules import SSCLayer
+from ..modules import SSCLayer
 from typing import Tuple, Any
 from yacs.config import CfgNode as CN
 from torch_geometric.data import Data

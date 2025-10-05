@@ -10,9 +10,9 @@ import scipy.sparse as sp
 from torch import nn, Tensor
 from torch.nn import Linear
 
-from pydgc.metrics import DGCMetric
-from pydgc.models import DGCModel
-from pydgc.utils import Logger
+from ..metrics import DGCMetric
+from ..models import DGCModel
+from ..utils import Logger
 
 
 def new_graph(edge_index, weight, n, device):

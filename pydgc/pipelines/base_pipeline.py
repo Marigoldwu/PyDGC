@@ -16,6 +16,7 @@ from ..utils.visualization import DGCVisual
 from ..utils.device import auto_select_device
 from ..metrics import build_results_dict
 from ..utils import load_dataset_specific_cfg, setup_seed, get_formatted_time, dump_cfg, check_required_cfg
+from ..utils.command import ARGS_DEFAULT
 
 
 class BasePipeline(ABC):
@@ -57,17 +58,20 @@ class BasePipeline(ABC):
         if isinstance(cfg, CN):
             self.cfg = cfg
         self.cfg.dataset.name = self.dataset_name
-        if hasattr(self.args, 'drop_edge'):
+        if hasattr(self.args, 'drop_edge') and self.args.drop_edge != ARGS_DEFAULT['drop_edge']:
             self.cfg.dataset.augmentation.drop_edge = float(self.args.drop_edge)
-        if hasattr(self.args, 'drop_feature'):
+        if hasattr(self.args, 'drop_feature') and self.args.drop_feature != ARGS_DEFAULT['drop_feature']:
             self.cfg.dataset.augmentation.drop_feature = float(self.args.drop_feature)
-        if hasattr(self.args, 'add_edge'):
+        if hasattr(self.args, 'add_edge') and self.args.add_edge != ARGS_DEFAULT['add_edge']:
             self.cfg.dataset.augmentation.add_edge = float(self.args.add_edge)
-        if hasattr(self.args, 'add_noise'):
+        if hasattr(self.args, 'add_noise') and self.args.add_noise != ARGS_DEFAULT['add_noise']:
             self.cfg.dataset.augmentation.add_noise = float(self.args.add_noise)
-        if hasattr(self.args, 'rounds'):
+        print('rounds before check', self.cfg.train.rounds)
+        if hasattr(self.args, 'rounds') and self.args.rounds != ARGS_DEFAULT['rounds']:
             self.cfg.train.rounds = int(self.args.rounds)
-        self.cfg.evaluate.each = self.args.eval_each
+        print('rounds after check', self.cfg.train.rounds)
+        if hasattr(self.args, 'eval_each') and self.args.eval_each != ARGS_DEFAULT['eval_each']:
+            self.cfg.evaluate.each = self.args.eval_each
 
     def load_logger(self):
         """Load logger.

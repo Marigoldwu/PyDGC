@@ -210,17 +210,6 @@ def check_required_cfg(cfg: CN, dataset_name, auto_complete=True):
 
     if len(missing_cfg) == 0:
         return True
-    
-    # If custom dataset, check whether to config custom_is_graph, metric, p
-    if cfg.dataset.is_custom:
-        if "custom_is_graph" not in cfg.dataset.keys():
-            raise ValueError(f"Custom dataset must config dataset.custom_is_graph")
-        else:
-            if not cfg.dataset.custom_is_graph:
-                if "metric" not in cfg.dataset.keys():
-                    raise ValueError(f"Custom non-graph dataset must config dataset.metric")
-                if "p" not in cfg.dataset.keys():
-                    raise ValueError(f"Custom non-graph dataset must config dataset.p")
 
     if auto_complete:
         print(f"Missing config items: {missing_cfg}")
@@ -240,6 +229,16 @@ def check_required_cfg(cfg: CN, dataset_name, auto_complete=True):
                 cfg[item] = getattr(default_, item)
                 complete_value.append(f"{item}: {cfg[item]}")
         print(f"Complete missing config items: {complete_value}")
+        # If custom dataset, check whether to config custom_is_graph, metric, p
+        if cfg.dataset.is_custom:
+            if "custom_is_graph" not in cfg.dataset.keys():
+                raise ValueError(f"Custom dataset must config dataset.custom_is_graph")
+            else:
+                if not cfg.dataset.custom_is_graph:
+                    if "metric" not in cfg.dataset.keys():
+                        raise ValueError(f"Custom non-graph dataset must config dataset.metric")
+                    if "p" not in cfg.dataset.keys():
+                        raise ValueError(f"Custom non-graph dataset must config dataset.p")
         return cfg
     else:
         raise ValueError(f"Missing config items: {missing_cfg}")

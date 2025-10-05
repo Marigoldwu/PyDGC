@@ -6,7 +6,6 @@ from ..models import MAGIBatch
 from . import BasePipeline
 from argparse import Namespace
 from ..utils import perturb_data
-from torch_geometric.utils import to_undirected, add_remaining_self_loops
 
 
 def get_sim(batch, adj, wt=20, wl=3):

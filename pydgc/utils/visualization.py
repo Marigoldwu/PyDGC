@@ -5,7 +5,7 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-from typing import Tuple
+from typing import Tuple, Union
 
 from matplotlib.ticker import FixedLocator, FixedFormatter
 from sklearn.manifold import TSNE
@@ -28,7 +28,7 @@ class DGCVisual:
     def __init__(self,
                  save_path: str = '.',
                  save_format: str = 'png',
-                 font_family: str or list = 'sans-serif',
+                 font_family: Union[str, list] = 'sans-serif',
                  font_size: int = 20):
         time_ = get_formatted_time()
         self.save_path = os.path.join(save_path, time_)
