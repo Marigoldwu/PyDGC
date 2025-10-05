@@ -17,8 +17,9 @@
 **PyDGC**, a flexible and extensible Python library  for deep graph clustering (DGC), is compatible with frameworks such as PyG and OGB. It supports the easy integration of new models and datasets, facilitating the rapid development, reproduction, and fair comparison of DGC methods.
 
 ## News
-- 🔥*2025.07*: API documentation is released.
-- 🔥*2025.07*: PyDGC is now available on PyPI.
+- 🔥*2025.09.19*: Our paper "DGCBench: A Deep Graph Clustering Benchmark" is accepted by NeurIPS D&B 2025.
+- *2025.07*: API documentation is released.
+- *2025.07*: PyDGC is now available on PyPI.
 - *2025.05*: Release source code of PyDGC.
 
 ## What is DGC?
