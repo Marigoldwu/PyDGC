@@ -1,5 +1,8 @@
 
-
+<div align="center">
+<h1><a href="https://openreview.net/forum?id=dKVUUZfcW9">DGCBench: A Deep Graph Clustering Benchmark</a></h1>
+【<u><a href="">Accepted by NeurIPS D&B Track 2025</a></u>】
+</div>
 <div align="center">
 <img src="https://raw.githubusercontent.com/Marigoldwu/PyDGC/master/assets/logo.png" border="0" width=600px/>
 </div>
@@ -227,6 +230,16 @@ class MyPipeline(BasePipeline):
 > The 12 datasets above are benchmark datasets introduced in our paper. More Datasets will be introduced.
 
 # Citation
+
+```python
+@inproceedings{wu2025dgcbench,
+  title={{DGCB}ench:  A Deep Graph Clustering Benchmark},
+  author={Benyu Wu and Yue Liu and Qiaoyu Tan and Xinwang Liu and Wei Du and Jun Wang and Guoxian Yu},
+  booktitle={The Thirty-ninth Annual Conference on Neural Information Processing Systems Datasets and Benchmarks Track},
+  year={2025},
+  url={https://openreview.net/forum?id=dKVUUZfcW9}
+}
+```
 
 # Related Repositories
 
