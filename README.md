@@ -51,7 +51,7 @@ Timeline of representative models.
 ### Overview of Pipeline
 
 <div align="center">
-<img src="https://raw.githubusercontent.com/Marigoldwu/PyDGC/master/assets/Pipelines.png" border="0" width=800px/>
+<img src="https://github.com/Marigoldwu/PyDGC/raw/refs/heads/main/assets/Pipelines.png" border="0" width=800px/>
 </div>
 
 # Installation
