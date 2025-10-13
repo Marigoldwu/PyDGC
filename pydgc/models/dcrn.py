@@ -781,8 +781,8 @@ class DCRN(DGCModel):
 
         self.logger.flag(flag)
         self.reset_parameters()
-        self.ae.load_state_dict(torch.load(pretrain_ae_file_name, map_location=self.device))
-        self.igae.load_state_dict(torch.load(pretrain_igae_file_name, map_location=self.device))
+        self.ae.load_state_dict(torch.load(pretrain_ae_file_name, map_location=self.device, weights_only=True))
+        self.igae.load_state_dict(torch.load(pretrain_igae_file_name, map_location=self.device, weights_only=True))
         params_to_optimize = []
         params_to_optimize.extend(self.ae.parameters())
         params_to_optimize.extend(self.igae.parameters())
@@ -826,8 +826,8 @@ class DCRN(DGCModel):
             self.pretrain(data, cfg.pretrain.both, flag='PRETRAIN AE and IGAE')
 
         self.logger.flag(flag)
-        self.ae.load_state_dict(torch.load(pretrain_ae_file_name, map_location=self.device))
-        self.igae.load_state_dict(torch.load(pretrain_igae_file_name, map_location=self.device))
+        self.ae.load_state_dict(torch.load(pretrain_ae_file_name, map_location=self.device, weights_only=True))
+        self.igae.load_state_dict(torch.load(pretrain_igae_file_name, map_location=self.device, weights_only=True))
 
         X = data.x.to(self.device).float()
         A = data.adj

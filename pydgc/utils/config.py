@@ -24,7 +24,7 @@ REQUIRED_CONFIG = [
         "evaluate": ["each", "acc", "nmi", "ari", "f1", "hom", "com", "pur", "sc", "gre"]
     },
     {
-        "visualize": ["tsne", "umap", "heatmap", "loss", "dir", "when"]
+        "visualize": ["tsne", "umap", "heatmap", "loss", "dir", "when", "font_family", "font_size", "palette", "color_map", "save_format"]
     }
 ]
 
@@ -103,6 +103,11 @@ def default_cfg(dataset_name) -> CN:
     _C.visualize.loss = True
     _C.visualize.dir = os.path.join("./visualization/", dataset_name)
     _C.visualize.when = 'end'
+    _C.visualize.font_family = ['sans-serif']
+    _C.visualize.font_size = 24
+    _C.visualize.palette = "viridis"
+    _C.visualize.color_map = "YlGnBu"
+    _C.visualize.save_format = "png"
     _C.freeze()
     return _C.clone()
 
@@ -228,7 +233,7 @@ def check_required_cfg(cfg: CN, dataset_name, auto_complete=True):
             else:
                 cfg[item] = getattr(default_, item)
                 complete_value.append(f"{item}: {cfg[item]}")
-        print(f"Complete missing config items: {complete_value}")
+        print(f"Auto-complete missing config items with default configurations: {complete_value}")
         # If custom dataset, check whether to config custom_is_graph, metric, p
         if cfg.dataset.is_custom:
             if "custom_is_graph" not in cfg.dataset.keys():

@@ -63,7 +63,7 @@ It is recommended to use conda to create a virtual python environment.
   conda activate DGCbench
   ```
 
-It is recommended to install GPU or CPU version of PyTorch according to the device in advance, version >=2.0.1.
+It is recommended to install GPU or CPU version of PyTorch according to the device in advance, version >=2.0.1. Then, torch_cluster, torch_sparse, torch_scatter may need to be installed according to the documentation of PyG [Installation-from-Wheels](https://pytorch-geometric.readthedocs.io/en/latest/install/installation.html#installation-from-wheels).
 
 - (Plan 1) Install with Pip
 

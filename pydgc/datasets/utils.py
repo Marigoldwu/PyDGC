@@ -354,14 +354,17 @@ def load_dataset(dataset_dir: str, dataset_name: str, p: int = 2, is_custom: boo
         dataset_dir = dataset_dir.split('_')[0] if dataset_dir.__contains__('_') else dataset_dir
         neighbors = int(dataset_name.split('_')[-1]) if dataset_name.__contains__('_') else 1
         dataset_name = dataset_name.split('_')[0] if dataset_name.__contains__('_') else dataset_name
-        if dataset_name in OGB_SUPPORTED_DATASET:
-            return load_ogb(dataset_dir, DATASET_NAME_MAP[dataset_name])
-        elif dataset_name in PYG_SUPPORTED_DATASET:
-            return load_pyg(dataset_dir, dataset_name)
-        elif dataset_name in DGC_SUPPORTED_DATASET:
-            return load_dgc_graph(dataset_dir, dataset_name)
-        elif dataset_name in NONGRAPH_SUPPORTED_DATASET:
-            return load_dgc_non_graph(dataset_dir, dataset_name, neighbors=neighbors, metric=METRIC_MAP[dataset_name[:4]], p=p)
+        if not is_custom:
+            if dataset_name in OGB_SUPPORTED_DATASET:
+                return load_ogb(dataset_dir, DATASET_NAME_MAP[dataset_name])
+            elif dataset_name in PYG_SUPPORTED_DATASET:
+                return load_pyg(dataset_dir, dataset_name)
+            elif dataset_name in DGC_SUPPORTED_DATASET:
+                return load_dgc_graph(dataset_dir, dataset_name)
+            elif dataset_name in NONGRAPH_SUPPORTED_DATASET:
+                return load_dgc_non_graph(dataset_dir, dataset_name, neighbors=neighbors, metric=METRIC_MAP[dataset_name[:4]], p=p)
+            else:
+                raise ValueError(f"Built-in dataset name {dataset_name} is unsupported! Must be selected from {str(PYG_SUPPORTED_DATASET + DGC_SUPPORTED_DATASET + NONGRAPH_SUPPORTED_DATASET + OGB_SUPPORTED_DATASET)}")
         # load custom dataset
         elif is_custom:
             if custom_is_graph:

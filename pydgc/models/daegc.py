@@ -157,7 +157,7 @@ class DAEGC(DGCModel):
         pretrain_file_name = os.path.join(cfg.pretrain.dir, f'gate.pth')
         if not os.path.exists(pretrain_file_name):
             self.pretrain(data, cfg.pretrain, flag='PRETRAIN GATE')
-        self.gate.load_state_dict(torch.load(pretrain_file_name, map_location='cpu'))
+        self.gate.load_state_dict(torch.load(pretrain_file_name, map_location='cpu', weights_only=True))
 
         optimizer = torch.optim.Adam(self.parameters(), lr=float(cfg.lr), weight_decay=float(cfg.weight_decay))
 

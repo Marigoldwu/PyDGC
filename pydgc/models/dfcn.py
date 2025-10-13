@@ -522,8 +522,8 @@ class DFCN(DGCModel):
 
         self.logger.flag(flag)
         self.reset_parameters()
-        self.ae.load_state_dict(torch.load(pretrain_ae_file_name, map_location=self.device))
-        self.igae.load_state_dict(torch.load(pretrain_igae_file_name, map_location=self.device))
+        self.ae.load_state_dict(torch.load(pretrain_ae_file_name, map_location=self.device, weights_only=True))
+        self.igae.load_state_dict(torch.load(pretrain_igae_file_name, map_location=self.device, weights_only=True))
         params_to_optimize = []
         params_to_optimize.extend(self.ae.parameters())
         params_to_optimize.extend(self.igae.parameters())
@@ -565,8 +565,8 @@ class DFCN(DGCModel):
 
         self.logger.flag(flag)
         self.reset_parameters()
-        self.ae.load_state_dict(torch.load(pretrain_ae_file_name, map_location=self.device))
-        self.igae.load_state_dict(torch.load(pretrain_igae_file_name, map_location=self.device))
+        self.ae.load_state_dict(torch.load(pretrain_ae_file_name, map_location=self.device, weights_only=True))
+        self.igae.load_state_dict(torch.load(pretrain_igae_file_name, map_location=self.device, weights_only=True))
 
         data.x = data.x.to(self.device)
         data.adj = data.adj.to(self.device)

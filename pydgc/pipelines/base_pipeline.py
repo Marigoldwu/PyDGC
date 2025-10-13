@@ -158,18 +158,18 @@ class BasePipeline(ABC):
             self.cfg (CN): Config object.
         """
         cfg = self.cfg.visualize
-        plot = DGCVisual(save_path=cfg.dir, font_family=['Times New Roman', 'SimSun'], font_size=24)
+        plot = DGCVisual(save_path=cfg.dir, font_family=cfg.font_family, font_size=cfg.font_size)
         if cfg.tsne:
             self.logger.flag(f"TSNE START")
-            plot.plot_clustering(self.embeddings.cpu().numpy(), self.predicted_labels, palette='Set2', method='tsne', filename='tsne_plot')
+            plot.plot_clustering(self.embeddings.cpu().numpy(), self.predicted_labels, palette=cfg.palette, method='tsne', filename='tsne_plot')
             self.logger.flag(f"TSNE END")
         if cfg.umap:
             self.logger.flag(f"UMAP START")
-            plot.plot_clustering(self.embeddings.cpu().numpy(), self.predicted_labels, palette='Set2', method='umap', filename='umap_plot')
+            plot.plot_clustering(self.embeddings.cpu().numpy(), self.predicted_labels, palette=cfg.palette, method='umap', filename='umap_plot')
             self.logger.flag(f"UMAP END")
         if cfg.heatmap:
             self.logger.flag(f"HEATMAP START")
-            plot.plot_heatmap(self.embeddings.cpu().numpy(), self.predicted_labels, method='inner_product', show_axis=False, show_color_bar=False)
+            plot.plot_heatmap(self.embeddings.cpu().numpy(), self.predicted_labels, method='inner_product', color_map=cfg.color_map, show_axis=False, show_color_bar=False)
             self.logger.flag(f"HEATMAP END")
         if cfg.loss:
             self.logger.flag(f"LOSS START")

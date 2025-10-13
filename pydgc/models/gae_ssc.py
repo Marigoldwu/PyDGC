@@ -66,7 +66,7 @@ class GAESSC(DGCModel):
         pretrain_file_name = os.path.join(cfg.pretrain.dir, f'gae_{self.cfg.model.gnn_type}.pth')
         if not os.path.exists(pretrain_file_name):
             self.pretrain(data, cfg.pretrain, flag='PRETRAIN GAE')
-        self.gae.load_state_dict(torch.load(pretrain_file_name, map_location=self.device))
+        self.gae.load_state_dict(torch.load(pretrain_file_name, map_location=self.device, weights_only=True))
 
         optimizer = torch.optim.Adam(self.parameters(), lr=float(cfg.lr))
 
