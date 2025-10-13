@@ -418,7 +418,7 @@
     </li>
     <li>
       <b>【GMIM】</b>
-      <i>Deep Graph Clustering via Mutual Information Maximization and Mixture Model. <b>KBS</b>.</i>
+      <i>Deep Graph Clustering via Mutual Information Maximization and Mixture Model. <b>KIS</b>.</i>
       <img src='./assets/paper.png' /> <a href='https://link.springer.com/article/10.1007/s10115-024-02097-4'
         target='_blank'>Article</a>
     </li>
