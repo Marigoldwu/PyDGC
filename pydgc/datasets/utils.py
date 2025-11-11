@@ -18,15 +18,15 @@ from torch_geometric.datasets import (Planetoid, Coauthor, Amazon, WebKB, Actor,
 PYG_SUPPORTED_DATASET = ["CORA", "CITE", "CITESEER", "PUBMED", "COCS", "COPS", "AMAC", "AMAP", "CORNELL",
                          "TEXAS", "WISC", "ACTOR", "DBLPFULL", "CORAFULL", "WIKI", "BLOG", "PPI",
                          "FLICKR", "FACEBOOK", "TWEIBO", "MAG", "NELL", "REDDIT", "REDDIT2",
-                         "YELP", "AMP", "LFMA", "BAT", "EAT", "ROMAN"]
-DGC_SUPPORTED_DATASET = ["ACM", "DBLP", "UAT"]
+                         "YELP", "AMP", "LFMA", "BAT", "EAT", "UAT", "ROMAN"]
+DGC_SUPPORTED_DATASET = ["ACM", "DBLP"]
 NONGRAPH_SUPPORTED_DATASET = ["USPS", "HHAR", "REUT"]
 OGB_SUPPORTED_DATASET = ["ARXIV"]
 
 DATASET_NAME_MAP = {
     "ACM": 'ACM',
     "DBLP": 'DBLP',
-    "UAT": 'UAT',
+    "UAT": 'Usa',
     "BAT": 'Brazil',
     "EAT": 'Europe',
     "USPS": 'USPS',

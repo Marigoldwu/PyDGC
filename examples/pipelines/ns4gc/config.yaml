@@ -574,3 +574,99 @@ ROMAN:
         pur: true
         sc: true
         gre: true
+AMAP:
+    device: cuda
+    logger:
+        name: AMAP
+        mode: both
+        dir: ./log/AMAP/
+    dataset:
+        dir: ../data/AMAP/
+        augmentation:
+            add_self_loops: false
+            pd1: 0.5
+            pd2: 0.5
+            pm1: 0.1
+            pm2: 0.1
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+    model:
+        dims: [ 256, 64 ]
+    train:
+        seed: 0
+        rounds: 10
+        max_epoch: 200
+        lr: 1e-3
+        weight_decay: 1e-5
+        lam: 1.0
+        gam: 1.0
+        s: 0.6
+        tau: 0.1
+    visualize:
+        tsne: false
+        umap: false
+        heatmap: false
+        loss: false
+        dir: ./visualization/AMAP/
+        when: end
+    evaluate:
+        each: true
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: false
+        com: false
+        pur: false
+        sc: false
+        gre: false
+UAT:
+    device: cuda
+    logger:
+        name: UAT
+        mode: both
+        dir: ./log/UAT/
+    dataset:
+        dir: ../data/UAT/
+        augmentation:
+            add_self_loops: false
+            pd1: 0.5
+            pd2: 0.5
+            pm1: 0.1
+            pm2: 0.1
+            drop_edge: 0.0
+            drop_feature: 0.0
+            add_edge: 0.0
+            add_noise: 0.0
+    model:
+        dims: [ 256, 64 ]
+    train:
+        seed: 0
+        rounds: 10
+        max_epoch: 200
+        lr: 1e-3
+        weight_decay: 1e-5
+        lam: 1.0
+        gam: 1.0
+        s: 0.6
+        tau: 0.1
+    visualize:
+        tsne: false
+        umap: false
+        heatmap: false
+        loss: false
+        dir: ./visualization/UAT/
+        when: end
+    evaluate:
+        each: true
+        acc: true
+        nmi: true
+        ari: true
+        f1: true
+        hom: false
+        com: false
+        pur: false
+        sc: false
+        gre: false
