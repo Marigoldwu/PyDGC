@@ -243,6 +243,8 @@ class MyPipeline(BasePipeline):
 
 # Related Repositories
 
-ADGC: [Awesome-Deep-Graph-Clustering](https://github.com/yueliu1999/Awesome-Deep-Graph-Clustering)
+- [Awesome-Deep-Graph-Clustering](https://github.com/yueliu1999/Awesome-Deep-Graph-Clustering)
+
+- [Awesome-LLM-for-Clustering](https://github.com/fuyw-aisw/Awesome-LLM-for-Clustering/)
 
 Older version of this repository: [A-Unified-Framework-for-Attribute-Graph-Clustering](https://github.com/Marigoldwu/PyDGC/releases/tag/v0.0.1)

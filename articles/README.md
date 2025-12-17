@@ -1,10 +1,10 @@
 # Deep Graph Clustering
-> Latest updated: July 25
+> Latest updated: Dec. 2025
 
-## Related Survey
+## Related Survey Articles
 
 <details open> 
-  <summary><b>&nbsp;Deep Graph Clustering (4)</b></summary>
+  <summary><b>&nbsp;Deep Graph Clustering (6)</b></summary>
   <ul>
     <li>
       <i>A Survey of Deep Graph Clustering: Taxonomy, Challenge, Application, and Open Resource. <b>arXiv'23</b>.</i>
@@ -24,9 +24,47 @@
         target='_blank'>Article</a>
     </li>
     <li>
-      <i>Deep Learning-Based Attribute Graph Clustering: An Overview. <b>Big Data and Security'24</b>.</i>
+      <i>Deep Learning-Based Attribute Graph Clustering: An Overview. <b>ICBDS'24</b>.</i>
       <img src='./assets/paper.png' /> <a href='https://link.springer.com/10.1007/978-981-97-4387-2_16'
         target='_blank'>Article</a>
+    </li>
+    <li>
+      <i>Graph Clustering: A Survey: Methods, Challenges, and Perspectives. <b>CENet'25</b>.</i>
+      <img src='./assets/paper.png' /> <a href='https://link.springer.com/chapter/10.1007/978-981-96-4229-8_6' target='_blank'>Article</a>
+    </li>
+    <li>
+      <i>Clustering on Attributed Graphs: From Single-view to Multi-view. <b>ACM COMPUT SURV'25</b>.</i>
+      <img src='./assets/paper.png' /> <a href='https://dl.acm.org/doi/abs/10.1145/3714407' target='_blank'>Article</a>
+    </li>
+  </ul>
+</details>
+
+<details open> 
+  <summary><b>&nbsp;Deep Graph Anomaly Detection (2)</b></summary>
+  <ul>
+    <li>
+      <i>A Comprehensive Survey on Community Detection with Deep Learning. <b>TNNLS'22</b>.</i>
+      <img src='./assets/paper.png' /> <a href='https://ieeexplore.ieee.org/abstract/document/9732192' target='_blank'>Article</a>
+    </li>
+    <li>
+      <i>A Comprehensive Survey on Graph Anomaly Detection with Deep Learning. <b>TKDE'21</b>.</i>
+      <img src='./assets/paper.png' /> <a href='https://ieeexplore.ieee.org/abstract/document/9565320' target='_blank'>Article</a>
+    </li>
+  </ul>
+</details>
+
+<details open> 
+  <summary><b>&nbsp;Deep Clustering (2)</b></summary>
+  <ul>
+    <li>
+      <i>A Comprehensive Survey on Deep Clustering: Taxonomy, Challenges, and Future Directions. <b>ACM COMPUT SURV'24</b>.</i>
+      <img src='./assets/paper.png' /> <a href='http://arxiv.org/abs/2206.07579' target='_blank'>Article</a>
+      <img src='./assets/code.png' /> <a href='https://github.com/zhoushengisnoob/DeepClustering'
+        target='_blank'>Code</a>
+    </li>
+    <li>
+      <i>Deep Clustering: A Comprehensive Survey. <b>TNNLS'24</b>.</i>
+      <img src='./assets/paper.png' /> <a href='https://ieeexplore.ieee.org/abstract/document/10585323' target='_blank'>Article</a>
     </li>
   </ul>
 </details>
@@ -56,7 +94,9 @@
 
 ## Theoretical Research
 
-### Generative Graph Self-supervised Learning-based
+### Single-View Deep Graph Clustering
+
+#### Generative Graph Self-supervised Learning-based
 
 <details open> <!--2024-->
   <summary><b>&nbsp;2024 (9)</b></summary>
