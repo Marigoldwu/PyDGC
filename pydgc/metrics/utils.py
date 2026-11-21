@@ -195,7 +195,7 @@ class DGCMetric:
         results = {}
         if cfg is None:
             results['ACC'] = self.accuracy()
-            results['NMI'] = self.accuracy()
+            results['NMI'] = self.nmi_score()
         else:
             if hasattr(cfg, 'evaluate'):
                 cfg = cfg.evaluate
